@@ -10,8 +10,9 @@ let cookiesLabel = "Cookie";
 let comment = "Santa hasn't eaten any cookies yet.";
 function updateCookiesCount(adjustment: number) {
 	lastAdjustmentPositive = adjustment > 0;
-	cookiesCount = cookiesCount + adjustment;
+	cookiesCount += adjustment;
 
+	cookiesLabel = cookiesCount > 1 ? "Cookies" : "Cookie";
 	if (cookiesCount >= 100) {
 		comment = "Santa is definitely sick now.";
 	} else if (cookiesCount >= 50) {
@@ -22,10 +23,6 @@ function updateCookiesCount(adjustment: number) {
 		comment = "Santa has eaten a lot of cookies!";
 	} else if (cookiesCount >= 5) {
 		comment = "Santa has eaten a few cookies.";
-	} else if (cookiesCount === 2) {
-		cookiesLabel = "Cookies";
-	} else if (cookiesCount === 1) {
-		cookiesLabel = "Cookie";
 	} else if (cookiesCount > 0) {
 		comment = "Santa has eaten some cookies.";
 	} else {
@@ -97,7 +94,11 @@ function updateCookiesCount(adjustment: number) {
 				</p>
 			{/key}
 		</div>
-		<Button class="w-full" on:click={() => cookiesCount = 0} disabled={cookiesCount === 0}>
+		<Button
+			class="w-full"
+			on:click={() => updateCookiesCount(-cookiesCount)}
+			disabled={cookiesCount === 0}
+		>
 			Reset
 		</Button>
 	</Card.Footer>
