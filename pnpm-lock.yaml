@@ -32,6 +32,9 @@ devDependencies:
   clsx:
     specifier: ^2.0.0
     version: 2.0.0
+  cmdk-sv:
+    specifier: ^0.0.12
+    version: 0.0.12(svelte@4.2.8)
   eslint:
     specifier: ^8.55.0
     version: 8.55.0
@@ -1277,6 +1280,16 @@ packages:
   /clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
     engines: {node: '>=6'}
+    dev: true
+
+  /cmdk-sv@0.0.12(svelte@4.2.8):
+    resolution: {integrity: sha512-d+eILSOb2W+/3U/j7xGTgGRrZkFB/z4Xlvj0ADrWhf34y9YLzJon3JCGP2hMil5IrVm0P/+IFIeCF5l3//kcjA==}
+    peerDependencies:
+      svelte: ^4.0.0
+    dependencies:
+      bits-ui: 0.9.9(svelte@4.2.8)
+      nanoid: 5.0.4
+      svelte: 4.2.8
     dev: true
 
   /code-red@1.0.4:
