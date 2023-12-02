@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
-import { fontFamily } from "tailwindcss/defaultTheme";
+import { fontFamily, screens } from "tailwindcss/defaultTheme";
 
 export default {
 	darkMode: ["class"],
@@ -13,6 +13,10 @@ export default {
 			screens: {
 				"2xl": "1400px"
 			}
+		},
+		screens: {
+			xs: "475px",
+			...screens
 		},
 		extend: {
 			colors: {

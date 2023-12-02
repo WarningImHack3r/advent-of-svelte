@@ -38,12 +38,12 @@ onMount(() => {
 		<!-- Left part -->
 		<a href="/" class="flex items-center gap-2">
 			<img src="https://advent.sveltesociety.dev/favicon.png" alt="Advent of Svelte" class="h-8" />
-			<div>
-				<h2 class="xs:text-xl font-semibold">Advent of Svelte</h2>
-				<h3 class="text-xs text-muted-foreground">by WarningImHack3r</h3>
+			<div class="hidden xs:block">
+				<h2 class="font-semibold xs:text-xl">Advent of Svelte</h2>
+				<h3 class="hidden text-xs text-muted-foreground sm:block">by WarningImHack3r</h3>
 			</div>
 		</a>
-		<div class="ml-4">
+		<div class="xs:ml-4">
 			<DropdownMenu.Root bind:open={yearSwitcherOpen} positioning={{ placement: "bottom-start" }}>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button builders={[builder]} variant="ghost" class="gap-1">
@@ -68,6 +68,7 @@ onMount(() => {
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</div>
+
 		<!-- Right part -->
 		<div class="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
 			<nav class="flex items-center space-x-1">

@@ -38,7 +38,7 @@ function closeAndFocusTrigger(triggerId: string) {
 		{:then kids}
 			<Popover.Root bind:open={open} let:ids>
 				<Popover.Trigger asChild let:builder>
-					<div class="flex items-center justify-between">
+					<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 						<Button
 							builders={[builder]}
 							variant="outline"
