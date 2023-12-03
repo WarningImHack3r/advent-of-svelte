@@ -5,7 +5,10 @@ export const load: PageServerLoad = async ({ fetch }) => {
 		streamed: {
 			kids: fetch("https://advent.sveltesociety.dev/data/2023/day-one.json").then(res =>
 				res.json()
-			) as Promise<{ name: string; tally: number }[]>
+			) as Promise<{ name: string; tally: number }[]>,
+			presents: fetch("https://advent.sveltesociety.dev/data/2023/day-three.json").then(res =>
+				res.json()
+			) as Promise<{ name: string; weight: number }[]>
 		}
 	};
 };
