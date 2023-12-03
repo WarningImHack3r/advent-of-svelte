@@ -3,17 +3,19 @@ import "../app.pcss";
 import type { LayoutData } from "./$types";
 import { onMount } from "svelte";
 import { page } from "$app/stores";
-import { ChevronDown, Github } from "lucide-svelte";
-import { Button } from "$lib/components/ui/button";
+import { ChevronDown, Github, Moon, Monitor, Sun } from "lucide-svelte";
 import { ModeWatcher, resetMode, setMode } from "mode-watcher";
-import { Moon, Monitor, Sun } from "lucide-svelte";
+import Snowflakes from "$lib/components/Snowflakes.svelte";
+import { Button } from "$lib/components/ui/button";
 import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 
 export let data: LayoutData;
 
+// Year selector
 let selectedYear = $page.route.id?.replaceAll("/", "") ?? data.years[data.years.length - 1];
 let yearSwitcherOpen = false;
 
+// Theme selector
 let theme: "light" | "dark" | "system";
 let themeSwitcherOpen = false;
 
@@ -30,6 +32,7 @@ onMount(() => {
 	<title>Advent of Svelte {$page.route.id?.replace("/", "")} | WarningImHack3r</title>
 </svelte:head>
 
+<Snowflakes />
 <ModeWatcher />
 <header
 	class="sticky top-0 z-40 w-full border-b bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60"
