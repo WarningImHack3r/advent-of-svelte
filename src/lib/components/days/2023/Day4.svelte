@@ -7,6 +7,10 @@ import * as Card from "$lib/components/ui/card";
 
 let heartRate = 0;
 let data: { id: number; heartRate: number }[] = [];
+type ArrayElement<ArrayType extends readonly unknown[]> =
+	ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
+const x = (d: ArrayElement<typeof data>) => d.id;
+const y = (d: ArrayElement<typeof data>) => d.heartRate;
 async function getHeartRate() {
 	const response = await fetch("https://advent.sveltesociety.dev/data/2023/day-four.json").then(
 		res => res.json() as Promise<{ heartRate: number }>
@@ -54,12 +58,7 @@ onDestroy(() => {
 		<Heart class="h-12 w-12 text-pink-500 motion-safe:animate-pulse" />
 		<div class="absolute bottom-8 right-0 w-full overflow-x-hidden" dir="rtl">
 			<VisXYContainer data={data} width={data.length * 10} height={40}>
-				<VisLine
-					x={(d) => d.id}
-					y={(d) => d.heartRate}
-					duration={0}
-					color={() => "rgb(236 72 153 / .2)"}
-				/>
+				<VisLine x={x} y={y} duration={0} color={"rgb(236 72 153 / .2)"} />
 			</VisXYContainer>
 		</div>
 	</Card.Content>

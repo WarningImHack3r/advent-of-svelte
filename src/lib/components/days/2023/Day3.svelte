@@ -47,7 +47,7 @@ $: setTimeout(() => {
 			</span>
 		{:then presents}
 			<div class="flex flex-col gap-4 lg:flex-row">
-				<Card.Root class="min-w-max">
+				<Card.Root class="min-w-max border-2 bg-accent/25">
 					<Card.Header>
 						<Card.Title>Current weight</Card.Title>
 					</Card.Header>
@@ -105,7 +105,7 @@ $: setTimeout(() => {
 									{#if selectedPresents.includes(present)}
 										<CheckSquare2 class="h-4 w-4 text-primary" />
 									{:else}
-										<Square class="h-4 w-4" />
+										<Square class="h-4 w-4 text-primary" />
 									{/if}
 									<span>{present.name}</span>
 								</div>
