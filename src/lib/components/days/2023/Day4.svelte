@@ -20,7 +20,10 @@ onMount(async () => {
 	data = [{ id: 0, heartRate }];
 	interval = setInterval(async () => {
 		heartRate = await getHeartRate();
-		data = [...data, { id: data.length, heartRate }];
+		data = [
+			...(data.length > 75 ? data.slice(1) : data),
+			{ id: (data[data.length - 1]?.id ?? 0) + 1, heartRate }
+		];
 	}, 1000);
 });
 
@@ -29,7 +32,7 @@ onDestroy(() => {
 });
 </script>
 
-<Card.Root>
+<Card.Root class="flex flex-col">
 	<Card.Header>
 		<Card.Title class="flex items-center gap-2">
 			<HeartPulse class="text-primary" />
@@ -37,7 +40,7 @@ onDestroy(() => {
 		</Card.Title>
 		<Card.Description>Check live Santa's heart rate with the SHRM™!</Card.Description>
 	</Card.Header>
-	<Card.Content class="relative flex flex-col items-center justify-center gap-2">
+	<Card.Content class="relative flex flex-1 flex-col items-center justify-center gap-2">
 		<div class="grid grid-cols-1 grid-rows-1">
 			{#key heartRate}
 				<span
@@ -49,7 +52,7 @@ onDestroy(() => {
 			{/key}
 		</div>
 		<Heart class="h-12 w-12 text-pink-500 motion-safe:animate-pulse" />
-		<div class="absolute bottom-4 right-0 w-full overflow-x-hidden" dir="rtl">
+		<div class="absolute bottom-8 right-0 w-full overflow-x-hidden" dir="rtl">
 			<VisXYContainer data={data} width={data.length * 10} height={40}>
 				<VisLine
 					x={(d) => d.id}
