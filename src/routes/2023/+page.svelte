@@ -3,6 +3,7 @@ import type { PageData } from "./$types";
 import Day1 from "$lib/components/days/2023/Day1.svelte";
 import Day2 from "$lib/components/days/2023/Day2.svelte";
 import Day3 from "$lib/components/days/2023/Day3.svelte";
+import Day4 from "$lib/components/days/2023/Day4.svelte";
 
 export let data: PageData;
 </script>
@@ -16,5 +17,6 @@ export let data: PageData;
 		<Day1 kids={data.streamed.kids} />
 		<Day2 />
 		<Day3 presents={data.streamed.presents} />
+		<Day4 />
 	</div>
 </div>

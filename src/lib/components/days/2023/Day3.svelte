@@ -1,6 +1,6 @@
 <script lang="ts">
 import { blur, fly } from "svelte/transition";
-import { CheckSquare2, Loader2, Square } from "lucide-svelte";
+import { CheckSquare2, Loader2, Square, Weight } from "lucide-svelte";
 import * as Card from "$lib/components/ui/card";
 
 export let presents: Promise<{ name: string; weight: number }[]>;
@@ -33,7 +33,10 @@ $: setTimeout(() => {
 
 <Card.Root>
 	<Card.Header>
-		<Card.Title>Sleigh Load Balancer</Card.Title>
+		<Card.Title class="flex items-center gap-2">
+			<Weight class="text-primary" />
+			Sleigh Load Balancer
+		</Card.Title>
 		<Card.Description>Choose which present to include in your run with the SLB™!</Card.Description>
 	</Card.Header>
 	<Card.Content>

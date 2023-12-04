@@ -24,7 +24,10 @@ function closeAndFocusTrigger(triggerId: string) {
 
 <Card.Root>
 	<Card.Header>
-		<Card.Title>Tally Tracker</Card.Title>
+		<Card.Title class="flex items-center gap-2">
+			<Gift class="text-primary" />
+			Tally Tracker
+		</Card.Title>
 		<Card.Description>
 			Search for a child to check if they've been nice or naughty this year.
 		</Card.Description>

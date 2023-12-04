@@ -1,6 +1,6 @@
 <script lang="ts">
 import { blur, fade, fly } from "svelte/transition";
-import { Minus, Plus } from "lucide-svelte";
+import { Cookie, Minus, Plus } from "lucide-svelte";
 import { Button } from "$lib/components/ui/button";
 import * as Card from "$lib/components/ui/card";
 
@@ -33,7 +33,10 @@ function updateCookiesCount(adjustment: number) {
 
 <Card.Root>
 	<Card.Header class="pb-4">
-		<Card.Title>Cookie Counter</Card.Title>
+		<Card.Title class="flex items-center gap-2">
+			<Cookie class="text-primary" />
+			Cookie Counter
+		</Card.Title>
 		<Card.Description>Keep track of how many cookies Santa has eaten!</Card.Description>
 	</Card.Header>
 	<Card.Content class="pb-2">
