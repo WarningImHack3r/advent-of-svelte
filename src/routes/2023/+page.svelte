@@ -13,12 +13,12 @@ export let data: PageData;
 	<h2 class="text-3xl font-bold tracking-tight">Santa's Dashboard</h2>
 	<div
 		class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4
-		lg:[&>*:nth-child(odd)]:col-span-2"
+		lg:[&>*:nth-child(1)]:col-span-2 lg:[&>*:nth-child(4)]:col-span-2 lg:[&>*:nth-child(5)]:col-span-2"
 	>
 		<Day1 kids={data.streamed.kids} />
 		<Day2 />
-		<Day3 presents={data.streamed.presents} />
 		<Day4 />
+		<Day3 presents={data.streamed.presents} />
 		<Day5 />
 	</div>
 </div>
