@@ -6,8 +6,9 @@ import { page } from "$app/stores";
 import { ChevronDown, Github, Moon, Monitor, Sun } from "lucide-svelte";
 import { ModeWatcher, resetMode, setMode } from "mode-watcher";
 import Snowflakes from "$lib/components/Snowflakes.svelte";
-import { Button } from "$lib/components/ui/button";
+import { Button, buttonVariants } from "$lib/components/ui/button";
 import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+import { cn } from "$lib/utils";
 
 export let data: LayoutData;
 
@@ -47,7 +48,7 @@ onMount(() => {
 			</div>
 		</a>
 		<div class="xs:ml-4">
-			<DropdownMenu.Root bind:open={yearSwitcherOpen} positioning={{ placement: "bottom-start" }}>
+			<DropdownMenu.Root bind:open={yearSwitcherOpen}>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button builders={[builder]} variant="ghost" class="gap-1">
 						<span class="text-muted-foreground">
@@ -60,7 +61,7 @@ onMount(() => {
 						<span class="sr-only">Change theme</span>
 					</Button>
 				</DropdownMenu.Trigger>
-				<DropdownMenu.Content>
+				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
 						{#each data.years as year}
 							<DropdownMenu.RadioItem class="cursor-pointer" value={year}>
@@ -142,3 +143,47 @@ onMount(() => {
 <div class="flex-1">
 	<slot />
 </div>
+
+<footer class="w-full border-t bg-background">
+	<div class="container my-4 flex h-12 items-center xs:my-0">
+		<p class="text-sm text-muted-foreground">
+			Built by <a
+				href="https://github.com/WarningImHack3r"
+				target="_blank"
+				class={cn(
+					buttonVariants({
+						variant: "link"
+					}),
+					"h-auto p-0"
+				)}
+			>
+				WarningImHack3r
+			</a>.
+			<a
+				href="https://advent.sveltesociety.dev"
+				target="_blank"
+				class={cn(
+					buttonVariants({
+						variant: "link"
+					}),
+					"h-auto p-0 italic"
+				)}
+			>
+				Advent of Svelte
+			</a>
+			challenges by the
+			<a
+				href="https://sveltesociety.dev"
+				target="_blank"
+				class={cn(
+					buttonVariants({
+						variant: "link"
+					}),
+					"h-auto p-0 text-orange-500"
+				)}
+			>
+				Svelte Society
+			</a> team.
+		</p>
+	</div>
+</footer>
