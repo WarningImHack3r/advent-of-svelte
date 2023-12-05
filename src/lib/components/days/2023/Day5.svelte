@@ -18,6 +18,19 @@ function stringFromTaskType(task: Task["task"]) {
 	}
 }
 
+function findMostProductiveElf(tasks: Task[]) {
+	let obj: Record<string, number> = {};
+	let maxCount, maxElf;
+	for (let task of tasks) {
+		obj[task.elf] = ++obj[task.elf] || 1;
+		if (!maxCount || obj[task.elf]! > maxCount) {
+			maxElf = task.elf;
+			maxCount = obj[task.elf];
+		}
+	}
+	return maxElf;
+}
+
 let tasks: Task[] = [];
 async function getElfTasks() {
 	return await fetch("https://advent.sveltesociety.dev/data/2023/day-five.json").then(
@@ -37,12 +50,7 @@ $: if (tasks.length > 0) {
 	const totalPresents = tasks.filter(task => task.task === "WRAPPED_PRESENT").length;
 	toysPerHour = (totalToys / (totalMinutes / 60)).toFixed(2);
 	minutesPerToy = (totalMinutes / totalToys).toFixed(2);
-	mostProductiveElf = [...new Set(tasks.map(task => task.elf))]
-		.map(elf => ({
-			elf,
-			toys: tasks.filter(task => task.elf === elf && task.task === "CREATED_TOY").length
-		}))
-		.sort((a, b) => b.toys - a.toys)[0]!.elf;
+	mostProductiveElf = findMostProductiveElf(tasks) || "--";
 	completionRate = ((totalPresents / totalToys) * 100).toFixed(2);
 	const latestTask = tasks[tasks.length - 1]!;
 	lastUpdate =
