@@ -5,6 +5,7 @@ import Day2 from "$lib/components/days/2023/Day2.svelte";
 import Day3 from "$lib/components/days/2023/Day3.svelte";
 import Day4 from "$lib/components/days/2023/Day4.svelte";
 import Day5 from "$lib/components/days/2023/Day5.svelte";
+import Day6 from "$lib/components/days/2023/Day6.svelte";
 
 export let data: PageData;
 </script>
@@ -20,5 +21,6 @@ export let data: PageData;
 		<Day4 />
 		<Day3 presents={data.streamed.presents} />
 		<Day5 />
+		<Day6 />
 	</div>
 </div>

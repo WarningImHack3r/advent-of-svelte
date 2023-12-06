@@ -86,6 +86,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.3.6
     version: 3.3.6
+  tailwindcss-3d:
+    specifier: ^1.0.4
+    version: 1.0.4(tailwindcss@3.3.6)
   tslib:
     specifier: ^2.6.2
     version: 2.6.2
@@ -3025,6 +3028,10 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
 
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
+
   /lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
@@ -4024,6 +4031,16 @@ packages:
       tailwindcss: '*'
     dependencies:
       tailwind-merge: 1.14.0
+      tailwindcss: 3.3.6
+    dev: true
+
+  /tailwindcss-3d@1.0.4(tailwindcss@3.3.6):
+    resolution: {integrity: sha512-sANPhLopZLSWz3qugdkSynPTEH52rq0i/NdQnxoKGKuuiBybppUeeOhpUGG+eX5NcgZcJEXHG4SeDbc8Q0H00w==}
+    peerDependencies:
+      tailwindcss: '>=3.2.0'
+    dependencies:
+      '@swc/helpers': 0.5.3
+      lodash: 4.17.21
       tailwindcss: 3.3.6
     dev: true
 

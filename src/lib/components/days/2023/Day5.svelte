@@ -106,7 +106,7 @@ onDestroy(() => {
 });
 </script>
 
-<Card.Root>
+<Card.Root class="flex flex-col">
 	<Card.Header>
 		<Card.Title class="flex items-center gap-2">
 			<Gauge class="text-primary" />
@@ -116,9 +116,9 @@ onDestroy(() => {
 			Keep an eye on your elves' productivity with this dashboard.
 		</Card.Description>
 	</Card.Header>
-	<Card.Content>
+	<Card.Content class="relative flex flex-1 items-center">
 		<!-- Highlighted stats -->
-		<div class="grid grid-cols-2 gap-8">
+		<div class="mb-10 grid grid-cols-2 gap-8">
 			<!-- toys/hour, time/toy, most productive elf, completion rate -->
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{toysPerHour}</span>
@@ -139,7 +139,7 @@ onDestroy(() => {
 		</div>
 		<!-- Last activity marquee -->
 		<div
-			class="-mx-6 -mb-6 mt-6 rounded-b-lg border-t bg-background px-3 py-1.5 font-mono text-primary"
+			class="absolute bottom-0 left-0 right-0 rounded-b-lg border-t bg-background px-3 py-1.5 font-mono text-primary"
 		>
 			Last update: {lastUpdate}
 		</div>

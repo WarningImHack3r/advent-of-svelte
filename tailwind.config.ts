@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 import plugin from "tailwindcss/plugin";
 import { fontFamily, screens } from "tailwindcss/defaultTheme";
+import tailwindCss3d from "tailwindcss-3d";
 
 export default {
 	darkMode: ["class"],
@@ -69,7 +70,8 @@ export default {
 			addVariant("child", "& > *");
 			addVariant("child-hover", "& > *:hover");
 			addVariant("child-focus", "& > *:focus");
-		})
+		}),
+		tailwindCss3d
 	],
 	future: {
 		hoverOnlyWhenSupported: true
