@@ -2,18 +2,25 @@
 import "../app.pcss";
 import type { LayoutData } from "./$types";
 import { onMount } from "svelte";
+import { goto } from "$app/navigation";
 import { page } from "$app/stores";
 import { ChevronDown, Github, Moon, Monitor, Sun } from "lucide-svelte";
 import { ModeWatcher, resetMode, setMode } from "mode-watcher";
+import { cn } from "$lib/utils";
 import Snowflakes from "$lib/components/Snowflakes.svelte";
 import { Button, buttonVariants } from "$lib/components/ui/button";
 import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-import { cn } from "$lib/utils";
 
 export let data: LayoutData;
 
 // Year selector
-let selectedYear = $page.route.id?.replaceAll("/", "") ?? data.years[data.years.length - 1];
+let selectedYear = "Choose a year";
+$: if ($page.route.id) {
+	const currentPage = $page.route.id.split("/")[1];
+	if (currentPage && data.years.includes(currentPage)) {
+		selectedYear = currentPage;
+	}
+}
 let yearSwitcherOpen = false;
 
 // Theme selector
@@ -58,13 +65,17 @@ onMount(() => {
 							class={"h-4 w-4 opacity-50 transition-transform" +
 									(yearSwitcherOpen ? " rotate-180" : "")}
 						/>
-						<span class="sr-only">Change theme</span>
+						<span class="sr-only">Go to another year</span>
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
 						{#each data.years as year}
-							<DropdownMenu.RadioItem class="cursor-pointer" value={year}>
+							<DropdownMenu.RadioItem
+								class="cursor-pointer"
+								value={year}
+								on:click={() => goto(`/${year}`)}
+							>
 								{year}
 							</DropdownMenu.RadioItem>
 						{/each}

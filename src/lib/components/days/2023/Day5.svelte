@@ -52,18 +52,45 @@ $: if (tasks.length > 0) {
 	minutesPerToy = (totalMinutes / totalToys).toFixed(2);
 	mostProductiveElf = findMostProductiveElf(tasks) || "--";
 	completionRate = ((totalPresents / totalToys) * 100).toFixed(2);
+
 	const latestTask = tasks[tasks.length - 1]!;
+	let dateDiff = new Date().getTime() - new Date(latestTask.date).getTime();
+	let relevantUnit: Intl.RelativeTimeFormatUnit;
+	switch (true) {
+		case dateDiff < 1000 * 60:
+			dateDiff /= 1000;
+			relevantUnit = "seconds";
+			break;
+		case dateDiff < 1000 * 60 * 60:
+			dateDiff /= 1000 * 60;
+			relevantUnit = "minutes";
+			break;
+		case dateDiff < 1000 * 60 * 60 * 24:
+			dateDiff /= 1000 * 60 * 60;
+			relevantUnit = "hours";
+			break;
+		case dateDiff < 1000 * 60 * 60 * 24 * 7:
+			dateDiff /= 1000 * 60 * 60 * 24;
+			relevantUnit = "days";
+			break;
+		case dateDiff < 1000 * 60 * 60 * 24 * 7 * 4:
+			dateDiff /= 1000 * 60 * 60 * 24 * 7;
+			relevantUnit = "weeks";
+			break;
+		case dateDiff < 1000 * 60 * 60 * 24 * 7 * 4 * 12:
+			dateDiff /= 1000 * 60 * 60 * 24 * 7 * 4;
+			relevantUnit = "months";
+			break;
+		default:
+			dateDiff /= 1000 * 60 * 60 * 24 * 7 * 4 * 12;
+			relevantUnit = "years";
+			break;
+	}
+	const taskSuffixString = ` - ${latestTask.elf} ${stringFromTaskType(latestTask.task)}`;
 	lastUpdate =
 		new Intl.RelativeTimeFormat("en", {
 			style: "short"
-		}).format(
-			-Math.ceil(new Date().getTime() / 1000 - new Date(latestTask.date).getTime() / 1000),
-			"seconds"
-		) +
-		" - " +
-		latestTask.elf +
-		" " +
-		stringFromTaskType(latestTask.task);
+		}).format(-Math.ceil(dateDiff), relevantUnit) + taskSuffixString;
 }
 
 let interval: ReturnType<typeof setInterval>;
