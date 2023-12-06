@@ -155,8 +155,8 @@ onMount(() => {
 	<slot />
 </div>
 
-<footer class="w-full border-t bg-background">
-	<div class="container my-4 flex h-12 items-center xs:my-0">
+<footer class="w-full border-t bg-background py-4 xs:py-0">
+	<div class="container flex h-12 items-center">
 		<p class="text-sm text-muted-foreground">
 			Built by <a
 				href="https://github.com/WarningImHack3r"
