@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "vite",
+		"dev:expose": "vite --host",
 		"build": "vite build",
 		"preview": "vite preview",
 		"deps:install": "pnpm i",

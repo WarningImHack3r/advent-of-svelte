@@ -51,7 +51,7 @@ onMount(() => {
 			<img src="https://advent.sveltesociety.dev/favicon.png" alt="Advent of Svelte" class="h-8" />
 			<div class="hidden xs:block">
 				<h2 class="font-semibold xs:text-xl">Advent of Svelte</h2>
-				<h3 class="hidden text-xs text-muted-foreground sm:block">by WarningImHack3r</h3>
+				<h3 class="text-xs text-muted-foreground">by WarningImHack3r</h3>
 			</div>
 		</a>
 		<div class="xs:ml-4">

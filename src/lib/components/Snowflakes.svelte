@@ -10,6 +10,7 @@ let particles: {
 	radius: number;
 	density: number;
 }[] = [];
+let frame: ReturnType<typeof requestAnimationFrame>;
 let timeout: ReturnType<typeof setTimeout>;
 
 function resize() {
@@ -24,7 +25,8 @@ function resize() {
 
 function debounceResize() {
 	clearTimeout(timeout);
-	timeout = setTimeout(resize, 100);
+	cancelAnimationFrame(frame);
+	timeout = setTimeout(startSnow, 100);
 }
 
 function regenerateParticles() {
@@ -105,7 +107,7 @@ function startSnow() {
 				}
 			}
 		}
-		requestAnimationFrame(() => {
+		frame = requestAnimationFrame(() => {
 			timeout = setTimeout(draw, 1000 / 60);
 		});
 	}

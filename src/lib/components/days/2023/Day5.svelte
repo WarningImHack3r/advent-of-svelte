@@ -118,7 +118,7 @@ onDestroy(() => {
 	</Card.Header>
 	<Card.Content class="relative flex flex-1 items-center">
 		<!-- Highlighted stats -->
-		<div class="mb-10 grid grid-cols-2 gap-8">
+		<div class="mb-16 grid grid-cols-2 gap-8 sm:mb-10">
 			<!-- toys/hour, time/toy, most productive elf, completion rate -->
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{toysPerHour}</span>
