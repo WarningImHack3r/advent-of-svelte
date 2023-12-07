@@ -1,5 +1,4 @@
 <script lang="ts">
-import { onMount } from "svelte";
 import { crossfade } from "svelte/transition";
 import { Languages, Play, Square } from "lucide-svelte";
 import { cn } from "$lib/utils";
@@ -75,7 +74,8 @@ function translateToMorseCode(message: string) {
 		.join(" ");
 }
 
-let message = "Hello World!";
+let message = "";
+$: morseMessage = translateToMorseCode(message);
 $: if (message || !message) {
 	stop();
 }
@@ -90,16 +90,12 @@ const [send, receive] = crossfade({
 });
 const key = "morse-code-translator";
 
-let audioContext: AudioContext;
 let oscillator: OscillatorNode;
 let gainNode: GainNode;
-onMount(() => {
-	audioContext = new AudioContext();
-});
 
 function play() {
-	if (!audioContext) return;
 	if (isPlaying) stop();
+ const audioContext = new AudioContext();
 	oscillator = audioContext.createOscillator();
 	oscillator.frequency.value = 800;
 	gainNode = audioContext.createGain();
@@ -108,7 +104,6 @@ function play() {
 	oscillator.connect(gainNode);
 	gainNode.connect(audioContext.destination);
 
-	const morseCode = translateToMorseCode(message);
 	const timeUnit = 100;
 	const dot = timeUnit;
 	const dash = timeUnit * 3;
@@ -117,7 +112,7 @@ function play() {
 	const wordSpace = timeUnit * 7;
 
 	let time = audioContext.currentTime;
-	for (const char of morseCode) {
+	for (const char of morseMessage) {
 		switch (char) {
 			case ".":
 				gainNode.gain.setValueAtTime(0.5, time);
@@ -139,33 +134,32 @@ function play() {
 	}
 
 	let total = time - audioContext.currentTime;
-	totalTime = `0:${Math.round(total).toLocaleString(undefined, {
+	totalTime = `${Math.floor(total / 60)}:${Math.floor(total % 60).toLocaleString(undefined, {
 		minimumIntegerDigits: 2,
 		useGrouping: false
 	})}`;
 	intervalId = setInterval(() => {
 		let elapsed = audioContext.currentTime - (time - total);
-		elapsedTime = `0:${Math.round(elapsed).toLocaleString(undefined, {
+		elapsedTime = `${Math.floor(elapsed / 60)}:${Math.floor(elapsed % 60).toLocaleString(undefined, {
 			minimumIntegerDigits: 2,
 			useGrouping: false
 		})}`;
 		if (elapsed >= total) {
 			clearInterval(intervalId);
 		}
-	}, 500);
+	}, 1000);
 
 	isPlaying = true;
 	oscillator.start(audioContext.currentTime);
 	oscillator.stop(time);
-	oscillator.onended = () => {
-		isPlaying = false;
-	};
+	oscillator.onended = () => stop();
 }
 
 function stop() {
 	if (!oscillator || !gainNode || !isPlaying) return;
 	isPlaying = false;
 	clearInterval(intervalId);
+	elapsedTime = "0:00";
 	oscillator.stop();
 	oscillator.disconnect();
 	gainNode.disconnect();
@@ -181,48 +175,50 @@ function stop() {
 		<Card.Description>Translate your message to Morse code to send it to Sven.</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex flex-col gap-4">
-		<Input placeholder="Your message" bind:value={message} />
+		<Input placeholder="Your message" class="bg-background" bind:value={message} />
 		<div>
 			{#if message.length > 0}
 				<p class="text-sm text-muted-foreground">Your message in Morse code:</p>
 			{/if}
-			<pre class="mt-1 whitespace-pre-wrap">{translateToMorseCode(message)}</pre>
-			<Separator class="my-4" />
-			<div class="flex flex-col">
-				<p class="mb-2 text-sm text-muted-foreground">Play your Morse message:</p>
-				<div class="flex items-center gap-1">
-					<div class="grid grid-cols-1 grid-rows-1">
+			<pre class="mt-1 whitespace-pre-wrap">{morseMessage}</pre>
+			{#if morseMessage}
+				<Separator class="my-4" />
+				<div class="flex flex-col">
+					<p class="mb-2 text-sm text-muted-foreground">Play your Morse message:</p>
+					<div class="flex items-center gap-1">
+						<div class="grid grid-cols-1 grid-rows-1">
+							{#if isPlaying}
+								<button
+									class={cn(buttonVariants({
+										variant: "ghost",
+										size: "icon",
+									}), "col-start-1 col-end-1 row-start-1 row-end-1")}
+									in:send={{ key }}
+									out:receive={{ key }}
+									on:click={stop}
+								>
+									<Square class="text-primary" />
+								</button>
+							{:else}
+								<button
+									class={cn(buttonVariants({
+										variant: "ghost",
+										size: "icon",
+									}), "col-start-1 col-end-1 row-start-1 row-end-1")}
+									in:send={{ key }}
+									out:receive={{ key }}
+									on:click={play}
+								>
+									<Play class="text-primary" />
+								</button>
+							{/if}
+						</div>
 						{#if isPlaying}
-							<button
-								class={cn(buttonVariants({
-									variant: "ghost",
-									size: "icon",
-								}), "col-start-1 col-end-1 row-start-1 row-end-1")}
-								in:send={{ key }}
-								out:receive={{ key }}
-								on:click={stop}
-							>
-								<Square class="text-primary" />
-							</button>
-						{:else}
-							<button
-								class={cn(buttonVariants({
-									variant: "ghost",
-									size: "icon",
-								}), "col-start-1 col-end-1 row-start-1 row-end-1")}
-								in:send={{ key }}
-								out:receive={{ key }}
-								on:click={play}
-							>
-								<Play class="text-primary" />
-							</button>
+							<p class="tabular-nums text-muted-foreground">{elapsedTime}/{totalTime}</p>
 						{/if}
 					</div>
-					{#if isPlaying}
-						<p class="tabular-nums text-muted-foreground">{elapsedTime}/{totalTime}</p>
-					{/if}
 				</div>
-			</div>
+			{/if}
 		</div>
 	</Card.Content>
 </Card.Root>
