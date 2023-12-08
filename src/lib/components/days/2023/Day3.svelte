@@ -31,7 +31,7 @@ $: setTimeout(() => {
 }, 25);
 </script>
 
-<Card.Root>
+<Card.Root class="flex flex-col">
 	<Card.Header>
 		<Card.Title class="flex items-center gap-2">
 			<Weight class="text-primary" />
@@ -39,7 +39,7 @@ $: setTimeout(() => {
 		</Card.Title>
 		<Card.Description>Choose which present to include in your run with the SLB™!</Card.Description>
 	</Card.Header>
-	<Card.Content>
+	<Card.Content class="my-auto pr-0">
 		{#await presents}
 			<span class="flex items-center">
 				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
@@ -47,7 +47,7 @@ $: setTimeout(() => {
 			</span>
 		{:then presents}
 			<div class="flex flex-col gap-4 lg:flex-row">
-				<Card.Root class="min-w-max border-2 bg-accent/25">
+				<Card.Root class="mr-6 min-w-max border-2 bg-accent/25 lg:mr-0">
 					<Card.Header>
 						<Card.Title>Current weight</Card.Title>
 					</Card.Header>
@@ -81,7 +81,7 @@ $: setTimeout(() => {
 						</div>
 					</Card.Content>
 				</Card.Root>
-				<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto">
+				<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
 					{#each presents as present}
 						<div
 							class="relative rounded-lg border bg-card text-card-foreground shadow-sm"

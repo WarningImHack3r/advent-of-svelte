@@ -95,7 +95,7 @@ let gainNode: GainNode;
 
 function play() {
 	if (isPlaying) stop();
- const audioContext = new AudioContext();
+	const audioContext = new AudioContext();
 	oscillator = audioContext.createOscillator();
 	oscillator.frequency.value = 800;
 	gainNode = audioContext.createGain();
@@ -140,10 +140,13 @@ function play() {
 	})}`;
 	intervalId = setInterval(() => {
 		let elapsed = audioContext.currentTime - (time - total);
-		elapsedTime = `${Math.floor(elapsed / 60)}:${Math.floor(elapsed % 60).toLocaleString(undefined, {
-			minimumIntegerDigits: 2,
-			useGrouping: false
-		})}`;
+		elapsedTime = `${Math.floor(elapsed / 60)}:${Math.floor(elapsed % 60).toLocaleString(
+			undefined,
+			{
+				minimumIntegerDigits: 2,
+				useGrouping: false
+			}
+		)}`;
 		if (elapsed >= total) {
 			clearInterval(intervalId);
 		}
@@ -152,7 +155,7 @@ function play() {
 	isPlaying = true;
 	oscillator.start(audioContext.currentTime);
 	oscillator.stop(time);
-	oscillator.onended = () => stop();
+	oscillator.onended = stop;
 }
 
 function stop() {

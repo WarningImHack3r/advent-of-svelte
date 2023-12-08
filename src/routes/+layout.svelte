@@ -45,7 +45,7 @@ onMount(() => {
 <header
 	class="sticky top-0 z-40 w-full border-b bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<div class="container flex h-14 items-center">
+	<div class="mx-auto flex h-14 w-full items-center px-8">
 		<!-- Left part -->
 		<a href="/" class="flex items-center gap-2">
 			<img src="https://advent.sveltesociety.dev/favicon.png" alt="Advent of Svelte" class="h-8" />
@@ -102,10 +102,10 @@ onMount(() => {
 						<Button builders={[builder]} variant="ghost" size="icon" class="w-14 gap-1">
 							<div class="flex items-center">
 								<Sun
-									class="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+									class="h-5 w-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
 								/>
 								<Moon
-									class="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+									class="absolute h-5 w-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
 								/>
 							</div>
 							<ChevronDown
@@ -151,12 +151,10 @@ onMount(() => {
 	</div>
 </header>
 
-<div class="flex-1">
-	<slot />
-</div>
+<slot />
 
-<footer class="w-full border-t bg-background py-4 xs:py-0">
-	<div class="container flex h-12 items-center">
+<footer class="mt-auto w-full border-t bg-background py-4 xs:py-0">
+	<div class="mx-auto flex h-12 w-full items-center px-8">
 		<p class="text-sm text-muted-foreground">
 			Built by <a
 				href="https://github.com/WarningImHack3r"
