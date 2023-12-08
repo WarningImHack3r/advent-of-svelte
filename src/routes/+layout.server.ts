@@ -12,9 +12,10 @@ function getRoutes() {
 	return [
 		...new Set(
 			files
-				.map(file => file.split("/").slice(0, -1).join("/").replace("/src/routes", ""))
+				.map(file => file.split("/").slice(3, -1))
 				.filter(Boolean)
-				.map(route => route.replace(/^\//, ""))
+				.filter(route => route.length === 1)
+				.flat()
 		)
 	];
 }
