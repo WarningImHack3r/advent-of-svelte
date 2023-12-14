@@ -6,8 +6,6 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"moduleDetection": "force",
-		"moduleResolution": "bundler",
-		"noEmit": true,
 		"noUncheckedIndexedAccess": true,
 		"resolveJsonModule": true,
 		"skipLibCheck": true,
