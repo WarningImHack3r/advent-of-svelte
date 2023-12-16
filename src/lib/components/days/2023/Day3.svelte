@@ -1,6 +1,7 @@
 <script lang="ts">
 import { blur, fly } from "svelte/transition";
-import { CheckSquare2, Loader2, Square, Weight } from "lucide-svelte";
+import { CheckSquare2, Square, Weight } from "lucide-svelte";
+import { Skeleton } from "$lib/components/ui/skeleton";
 import * as Card from "$lib/components/ui/card";
 
 export let presents: Promise<{ name: string; weight: number }[]>;
@@ -20,14 +21,14 @@ $: setTimeout(() => {
 		sleighWeight > MAX_WEIGHT
 			? "Too heavy!"
 			: sleighWeight > MAX_WEIGHT / 2
-			  ? sleighWeight > MAX_WEIGHT * 0.9
+				? sleighWeight > MAX_WEIGHT * 0.9
 					? sleighWeight > MAX_WEIGHT * 0.99
 						? "Ready to go!"
 						: "Almost there!"
 					: "Kids will be happy!"
-			  : sleighWeight > 0
-			    ? "Let's pack more!"
-			    : "Empty sleigh";
+				: sleighWeight > 0
+					? "Let's pack more!"
+					: "Empty sleigh";
 }, 25);
 </script>
 
@@ -41,10 +42,14 @@ $: setTimeout(() => {
 	</Card.Header>
 	<Card.Content class="my-auto pr-0">
 		{#await presents}
-			<span class="flex items-center">
-				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
-				Loading...
-			</span>
+			<div class="flex flex-col gap-4 lg:flex-row">
+				<Skeleton class="mr-6 aspect-square h-44 lg:mr-0" />
+				<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
+					{#each Array(8) as _}
+						<Skeleton class="h-full w-32" />
+					{/each}
+				</div>
+			</div>
 		{:then presents}
 			<div class="flex flex-col gap-4 lg:flex-row">
 				<Card.Root class="mr-6 min-w-max border-2 bg-accent/25 lg:mr-0">

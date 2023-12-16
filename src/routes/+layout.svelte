@@ -37,7 +37,7 @@ onMount(() => {
 </script>
 
 <svelte:head>
-	<title>Advent of Svelte {$page.route.id?.replace("/", "")} | WarningImHack3r</title>
+	<title>Advent of Svelte {$page.route.id?.split("/")[1]} | WarningImHack3r</title>
 </svelte:head>
 
 <Snowflakes />

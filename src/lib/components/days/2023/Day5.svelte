@@ -89,7 +89,7 @@ $: if (tasks.length > 0) {
 	const taskSuffixString = ` - ${latestTask.elf} ${stringFromTaskType(latestTask.task)}`;
 	lastUpdate =
 		new Intl.RelativeTimeFormat("en", {
-			style: "short"
+			style: "long"
 		}).format(-Math.ceil(dateDiff), relevantUnit) + taskSuffixString;
 }
 

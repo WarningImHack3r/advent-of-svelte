@@ -1,8 +1,9 @@
 <script lang="ts">
 import { tick } from "svelte";
-import { Check, ChevronsUpDown, Frown, Gift, Loader2 } from "lucide-svelte";
+import { Check, ChevronsUpDown, Frown, Gift } from "lucide-svelte";
 import { cn } from "$lib/utils";
 import { Button } from "$lib/components/ui/button";
+import { Skeleton } from "$lib/components/ui/skeleton";
 import * as Card from "$lib/components/ui/card";
 import * as Command from "$lib/components/ui/command";
 import * as Popover from "$lib/components/ui/popover";
@@ -34,10 +35,13 @@ function closeAndFocusTrigger(triggerId: string) {
 	</Card.Header>
 	<Card.Content>
 		{#await kids}
-			<span class="flex items-center">
-				<Loader2 class="mr-2 h-4 w-4 animate-spin" />
-				Loading...
-			</span>
+			<div class="flex flex-col gap-4">
+				<div class="flex items-center justify-between">
+					<Skeleton class="h-10 w-1/3" />
+					<Skeleton class="h-6 w-1/2" />
+				</div>
+				<Skeleton class="h-32 w-full" />
+			</div>
 		{:then kids}
 			<Popover.Root bind:open={open} let:ids>
 				<Popover.Trigger asChild let:builder>

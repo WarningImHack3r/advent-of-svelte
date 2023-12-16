@@ -11,19 +11,21 @@ import Day7 from "$lib/components/days/2023/Day7.svelte";
 
 export let data: PageData;
 
-let currentDashboard = "Santa's";
+const dashboards = {
+	santa: "Santa's",
+	elves: "Elves"
+};
+let currentDashboard: keyof typeof dashboards = "santa";
 </script>
 
 <div class="container py-8">
-	<h2 class="text-3xl font-bold tracking-tight">{currentDashboard} Dashboard</h2>
-	<Tabs.Root class="mt-8">
+	<h2 class="text-3xl font-bold tracking-tight">{dashboards[currentDashboard]} Dashboard</h2>
+	<Tabs.Root bind:value={currentDashboard} class="mt-8">
 		<Tabs.List>
-			<Tabs.Trigger value="santa's" on:click={() => currentDashboard = "Santa's"}>
-				Santa
-			</Tabs.Trigger>
-			<Tabs.Trigger value="elves" on:click={() => currentDashboard = "Elves"}>Elves</Tabs.Trigger>
+			<Tabs.Trigger value="santa">Santa</Tabs.Trigger>
+			<Tabs.Trigger value="elves">Elves</Tabs.Trigger>
 		</Tabs.List>
-		<Tabs.Content value="santa's">
+		<Tabs.Content value="santa">
 			<div
 				class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4
 				lg:[&>*:nth-child(2)]:col-span-2"
