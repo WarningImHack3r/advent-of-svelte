@@ -6,6 +6,7 @@ import { buttonVariants } from "$lib/components/ui/button";
 import { Input } from "$lib/components/ui/input";
 import { Separator } from "$lib/components/ui/separator";
 import * as Card from "$lib/components/ui/card";
+import { onDestroy } from "svelte";
 
 // Morse
 const morseCode: Record<string, string> = {
@@ -167,6 +168,8 @@ function stop() {
 	oscillator.disconnect();
 	gainNode.disconnect();
 }
+
+onDestroy(() => clearInterval(intervalId));
 </script>
 
 <Card.Root>

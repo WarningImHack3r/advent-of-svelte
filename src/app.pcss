@@ -49,6 +49,10 @@
 }
 
 @layer base {
+	::selection {
+		@apply bg-primary text-primary-foreground;
+	}
+
 	* {
 		@apply border-border;
 	}
