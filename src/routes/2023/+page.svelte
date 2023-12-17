@@ -8,6 +8,7 @@ import Day4 from "$lib/components/days/2023/Day4.svelte";
 import Day5 from "$lib/components/days/2023/Day5.svelte";
 import Day6 from "$lib/components/days/2023/Day6.svelte";
 import Day7 from "$lib/components/days/2023/Day7.svelte";
+import Day8 from "$lib/components/days/2023/Day8.svelte";
 
 export let data: PageData;
 
@@ -34,6 +35,7 @@ let currentDashboard: keyof typeof dashboards = "santa";
 				<Day3 presents={data.streamed.presents} />
 				<Day4 />
 				<Day7 />
+				<Day8 />
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="elves">
