@@ -131,7 +131,7 @@ onDestroy(() => clearInterval(interval));
 		<Card.Header class="flex flex-row items-center gap-4">
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} size="icon" class="mr-6">
+					<Button builders={[builder]} size="icon" href="." class="mr-6">
 						<ChevronLeft />
 					</Button>
 				</Tooltip.Trigger>
@@ -158,14 +158,14 @@ onDestroy(() => clearInterval(interval));
 						<button
 							type="button"
 							on:click={() => {
-						if (firstCard === null) {
-							firstCard = number;
-							firstCardIndex = index;
-						} else if (secondCard === null) {
-							secondCard = number;
-							secondCardIndex = index;
-						}
-					}}
+								if (firstCard === null) {
+									firstCard = number;
+									firstCardIndex = index;
+								} else if (secondCard === null) {
+									secondCard = number;
+									secondCardIndex = index;
+								}
+							}}
 							class="aspect-[7/10] h-32 shadow-lg duration-200 perspective-1000 [&:not(:disabled)]:hover:scale-105"
 							class:brightness-75={firstCard !== null && secondCard !== null && !isFlipped}
 							disabled={!ready ? true : firstCard !== null && secondCard !== null ? true : isFlipped}
@@ -196,51 +196,55 @@ onDestroy(() => clearInterval(interval));
 				</div>
 				{#if timerStarted}
 					<!-- Scoreboard -->
-					<div class="text-xl">
-						<h2 class="mb-8 border-b pb-2 text-3xl font-semibold tracking-tight">Game info</h2>
-						<!-- Duration -->
-						<p>
-							<span class="font-bold">Game duration:</span>
-							<span class="tabular-nums">
-								{Math.floor(timer / 60)}:{Math.floor(timer % 60).toLocaleString(undefined, {
-							minimumIntegerDigits: 2,
-						})}
-							</span>
-						</p>
-						<!-- Tries -->
-						<p><span class="font-bold">Tries:</span> {tries}</p>
-						<!-- Score -->
-						<p><span class="font-bold">Score:</span> {score}</p>
-						<!-- High score -->
-						<p>
-							<span class="font-bold">High score:</span>
-							{localStorageHighScore ?? 0}
-						</p>
-						<AlertDialog.Root>
-							<AlertDialog.Trigger asChild let:builder>
-								<Button
-									builders={[builder]}
-									variant="destructive"
-									class="mt-8 lg:mt-16"
-									disabled={tries < 1}
-								>
-									Restart game
-								</Button>
-							</AlertDialog.Trigger>
-							<AlertDialog.Content>
-								<AlertDialog.Header>
-									<AlertDialog.Title>Restart game</AlertDialog.Title>
-									<AlertDialog.Description>
-										Are you sure you want to restart the game? All progress will be lost.
-									</AlertDialog.Description>
-								</AlertDialog.Header>
-								<AlertDialog.Footer>
-									<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-									<AlertDialog.Action on:click={() => resetGame(true)}>Restart</AlertDialog.Action>
-								</AlertDialog.Footer>
-							</AlertDialog.Content>
-						</AlertDialog.Root>
-					</div>
+					<Card.Root class="bg-accent/50">
+						<Card.Content class="pt-6 text-xl">
+							<h2 class="mb-8 border-b pb-2 text-3xl font-semibold tracking-tight">Game info</h2>
+							<!-- Duration -->
+							<p>
+								<span class="font-bold">Game duration:</span>
+								<span class="tabular-nums">
+									{Math.floor(timer / 60)}:{Math.floor(timer % 60).toLocaleString(undefined, {
+										minimumIntegerDigits: 2,
+									})}
+								</span>
+							</p>
+							<!-- Tries -->
+							<p><span class="font-bold">Tries:</span> {tries}</p>
+							<!-- Score -->
+							<p><span class="font-bold">Score:</span> {score}</p>
+							<!-- High score -->
+							<p>
+								<span class="font-bold">High score:</span>
+								{localStorageHighScore ?? 0}
+							</p>
+							<AlertDialog.Root>
+								<AlertDialog.Trigger asChild let:builder>
+									<Button
+										builders={[builder]}
+										variant="destructive"
+										class="mt-8 lg:mt-16"
+										disabled={tries < 1}
+									>
+										Restart game
+									</Button>
+								</AlertDialog.Trigger>
+								<AlertDialog.Content>
+									<AlertDialog.Header>
+										<AlertDialog.Title>Restart game</AlertDialog.Title>
+										<AlertDialog.Description>
+											Are you sure you want to restart the game? All progress will be lost.
+										</AlertDialog.Description>
+									</AlertDialog.Header>
+									<AlertDialog.Footer>
+										<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+										<AlertDialog.Action on:click={() => resetGame(true)}>
+											Restart
+										</AlertDialog.Action>
+									</AlertDialog.Footer>
+								</AlertDialog.Content>
+							</AlertDialog.Root>
+						</Card.Content>
+					</Card.Root>
 				{:else if gameStarted}
 					<!-- Win screen -->
 					<div class="flex flex-col items-center justify-center text-center">
@@ -249,8 +253,8 @@ onDestroy(() => clearInterval(interval));
 							<span class="font-bold">Game duration:</span>
 							<span class="tabular-nums">
 								{Math.floor(timer / 60)}:{Math.floor(timer % 60).toLocaleString(undefined, {
-							minimumIntegerDigits: 2,
-						})}
+									minimumIntegerDigits: 2,
+								})}
 							</span>
 						</p>
 						<p><span class="font-bold">Tries:</span> {tries}</p>
@@ -268,38 +272,40 @@ onDestroy(() => clearInterval(interval));
 					</div>
 				{:else}
 					<!-- Game configuration -->
-					<div class="text-xl">
-						<h2 class="mb-8 border-b pb-2 text-3xl font-semibold tracking-tight">
-							Game configuration
-						</h2>
-						<!-- Grid size -->
-						<p><span class="font-bold">Grid size:</span> {gridWidth}x{gridHeight}</p>
-						<Slider
-							max={Object.keys(gridPossibilities).length - 1}
-							step={1}
-							value={[Object.keys(gridPossibilities).indexOf(`${gridWidth}x${gridHeight}`)]}
-							onValueChange={([value]) => {
-							[gridWidth, gridHeight] = gridPossibilities[Object.keys(gridPossibilities)[value]];
-							resetGame();
-						}}
-							class="mt-4"
-						/>
-						<!-- Cooldown -->
-						<p class="mt-8"><span class="font-bold">Cooldown:</span> {cooldown / 1000}s</p>
-						<Slider
-							min={500}
-							max={5000}
-							step={500}
-							value={[cooldown]}
-							onValueChange={([value]) => {
-							cooldown = value;
-						}}
-							class="mt-4"
-						/>
-						<p class="mt-16 text-lg italic text-muted-foreground">
-							Start the game by flipping a card.
-						</p>
-					</div>
+					<Card.Root class="bg-accent/50">
+						<Card.Content class="pt-6 text-xl">
+							<h2 class="mb-8 border-b pb-2 text-3xl font-semibold tracking-tight">
+								Game configuration
+							</h2>
+							<!-- Grid size -->
+							<p><span class="font-bold">Grid size:</span> {gridWidth}x{gridHeight}</p>
+							<Slider
+								max={Object.keys(gridPossibilities).length - 1}
+								step={1}
+								value={[Object.keys(gridPossibilities).indexOf(`${gridWidth}x${gridHeight}`)]}
+								onValueChange={([value]) => {
+									[gridWidth, gridHeight] = gridPossibilities[Object.keys(gridPossibilities)[value]];
+									resetGame();
+								}}
+								class="mt-4"
+							/>
+							<!-- Cooldown -->
+							<p class="mt-8"><span class="font-bold">Cooldown:</span> {cooldown / 1000}s</p>
+							<Slider
+								min={500}
+								max={5000}
+								step={500}
+								value={[cooldown]}
+								onValueChange={([value]) => {
+									cooldown = value;
+								}}
+								class="mt-4"
+							/>
+							<p class="mt-12 text-lg italic text-muted-foreground">
+								Start the game by flipping a card.
+							</p>
+						</Card.Content>
+					</Card.Root>
 				{/if}
 			</div>
 		</Card.Content>
