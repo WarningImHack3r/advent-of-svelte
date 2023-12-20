@@ -94,7 +94,7 @@ $: setTimeout(() => {
 						>
 							<input
 								type="checkbox"
-								class="peer absolute left-0 top-0 h-full w-full cursor-pointer opacity-0"
+								class="peer absolute left-0 top-0 size-full cursor-pointer opacity-0"
 								on:change={(e) => {
 									const checked = e.target?.checked ?? false;
 									wasLastAdded = checked;
@@ -108,9 +108,9 @@ $: setTimeout(() => {
 							<div class="flex min-w-max flex-col px-6 py-4 peer-checked:text-primary">
 								<div class="flex items-center gap-2">
 									{#if selectedPresents.includes(present)}
-										<CheckSquare2 class="h-4 w-4 text-primary" />
+										<CheckSquare2 class="size-4 text-primary" />
 									{:else}
-										<Square class="h-4 w-4 text-primary" />
+										<Square class="size-4 text-primary" />
 									{/if}
 									<span>{present.name}</span>
 								</div>

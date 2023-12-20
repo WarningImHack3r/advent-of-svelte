@@ -55,7 +55,7 @@ onDestroy(() => {
 				</span>
 			{/key}
 		</div>
-		<Heart class="h-12 w-12 text-pink-500 motion-safe:animate-pulse" />
+		<Heart class="size-12 text-pink-500 motion-safe:animate-pulse" />
 		<div class="absolute bottom-8 right-0 w-full overflow-x-hidden" dir="rtl">
 			<VisXYContainer data={data} width={data.length * 10} height={40}>
 				<VisLine x={x} y={y} duration={0} color={"rgb(236 72 153 / .2)"} />

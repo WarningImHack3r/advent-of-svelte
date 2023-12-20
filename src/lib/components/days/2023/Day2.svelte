@@ -44,11 +44,11 @@ function updateCookiesCount(adjustment: number) {
 			<Button
 				variant="outline"
 				size="icon"
-				class="h-8 w-8 shrink-0 rounded-full"
+				class="size-8 shrink-0 rounded-full"
 				on:click={() => updateCookiesCount(-1)}
 				disabled={cookiesCount <= 0}
 			>
-				<Minus class="h-4 w-4" />
+				<Minus class="size-4" />
 				<span class="sr-only">Decrease</span>
 			</Button>
 			<div class="flex-1 text-center">
@@ -77,10 +77,10 @@ function updateCookiesCount(adjustment: number) {
 			<Button
 				variant="outline"
 				size="icon"
-				class="h-8 w-8 shrink-0 rounded-full"
+				class="size-8 shrink-0 rounded-full"
 				on:click={() => updateCookiesCount(1)}
 			>
-				<Plus class="h-4 w-4" />
+				<Plus class="size-4" />
 				<span class="sr-only">Increase</span>
 			</Button>
 		</div>

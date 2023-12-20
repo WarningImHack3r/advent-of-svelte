@@ -62,7 +62,7 @@ onMount(() => {
 							{selectedYear}
 						</span>
 						<ChevronDown
-							class={"h-4 w-4 opacity-50 transition-transform" +
+							class={"size-4 opacity-50 transition-transform" +
 									(yearSwitcherOpen ? " rotate-180" : "")}
 						/>
 						<span class="sr-only">Go to another year</span>
@@ -94,7 +94,7 @@ onMount(() => {
 					variant="ghost"
 					class="aspect-square p-0"
 				>
-					<Github class="h-5 w-5" />
+					<Github class="size-5" />
 					<span class="sr-only">GitHub</span>
 				</Button>
 				<DropdownMenu.Root bind:open={themeSwitcherOpen}>
@@ -102,14 +102,14 @@ onMount(() => {
 						<Button builders={[builder]} variant="ghost" size="icon" class="w-14 gap-1">
 							<div class="flex items-center">
 								<Sun
-									class="h-5 w-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+									class="size-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
 								/>
 								<Moon
-									class="absolute h-5 w-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
+									class="absolute size-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
 								/>
 							</div>
 							<ChevronDown
-								class={"h-4 w-4 opacity-50 transition-transform" +
+								class={"size-4 opacity-50 transition-transform" +
 									(themeSwitcherOpen ? " rotate-180" : "")}
 							/>
 							<span class="sr-only">Change theme</span>
@@ -124,7 +124,7 @@ onMount(() => {
 								value="light"
 								on:click={() => setMode("light")}
 							>
-								<Sun class="mr-2 h-4 w-4" />
+								<Sun class="mr-2 size-4" />
 								<span>Light</span>
 							</DropdownMenu.RadioItem>
 							<DropdownMenu.RadioItem
@@ -132,7 +132,7 @@ onMount(() => {
 								value="dark"
 								on:click={() => setMode("dark")}
 							>
-								<Moon class="mr-2 h-4 w-4" />
+								<Moon class="mr-2 size-4" />
 								<span>Dark</span>
 							</DropdownMenu.RadioItem>
 							<DropdownMenu.RadioItem
@@ -140,7 +140,7 @@ onMount(() => {
 								value="system"
 								on:click={() => resetMode()}
 							>
-								<Monitor class="mr-2 h-4 w-4" />
+								<Monitor class="mr-2 size-4" />
 								<span>System</span>
 							</DropdownMenu.RadioItem>
 						</DropdownMenu.RadioGroup>

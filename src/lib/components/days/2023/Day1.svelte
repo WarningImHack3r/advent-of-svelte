@@ -54,7 +54,7 @@ function closeAndFocusTrigger(triggerId: string) {
 							class="w-52 justify-between"
 						>
 							{kids.find(f => f.name === search)?.name ?? "Select a child..."}
-							<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
+							<ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
 						</Button>
 						<p class="text-muted-foreground">
 							<span class="font-semibold text-accent-foreground">
@@ -81,7 +81,7 @@ function closeAndFocusTrigger(triggerId: string) {
 									}}
 								>
 									<Check class={cn(
-											"mr-2 h-4 w-4",
+											"mr-2 size-4",
 											search !== kid.name && "text-transparent"
 										)} />
 									{kid.name}
@@ -104,9 +104,9 @@ function closeAndFocusTrigger(triggerId: string) {
 							</Card.Description>
 						</div>
 						{#if tally > 0}
-							<Gift class="h-6 w-6 text-primary" />
+							<Gift class="size-6 text-primary" />
 						{:else}
-							<Frown class="h-6 w-6 text-red-500" />
+							<Frown class="size-6 text-red-500" />
 						{/if}
 					</Card.Header>
 					<Card.Content>

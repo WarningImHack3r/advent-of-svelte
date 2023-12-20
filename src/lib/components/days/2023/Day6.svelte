@@ -44,8 +44,8 @@ onDestroy(() => clearTimeout(timeout));
 	<Card.Content class="flex flex-1 flex-col items-center justify-center">
 		<button
 			type="button"
-			class="transform-style-3d before:-translate-z-1 after:-translate-z-2 relative my-4 flex aspect-square h-52 select-none flex-col items-center justify-center gap-1 rounded-full bg-accent text-center text-2xl font-light tracking-tight shadow-md
-			duration-300 before:absolute before:inset-0 before:scale-110 before:animate-pulse before:rounded-full before:bg-accent/75 before:shadow-md before:content-[''] after:absolute after:inset-0 after:scale-[1.2] after:animate-pulse after:rounded-full after:bg-accent/50 after:shadow-md after:content-[''] hover:scale-105 active:scale-95"
+			class="relative my-4 flex aspect-square h-52 select-none flex-col items-center justify-center gap-1 rounded-full bg-accent text-center text-2xl font-light tracking-tight shadow-md duration-300 transform-style-3d before:absolute
+			before:inset-0 before:animate-pulse before:rounded-full before:bg-accent/75 before:shadow-md before:content-[''] before:-translate-z-1 before:scale-110 after:absolute after:inset-0 after:animate-pulse after:rounded-full after:bg-accent/50 after:shadow-md after:content-[''] after:-translate-z-2 after:scale-[1.2] hover:scale-105 active:scale-95"
 			class:text-6xl={bpmText !== defaultBPMText}
 			class:!font-semibold={bpmText !== defaultBPMText}
 			on:click={countBPM}

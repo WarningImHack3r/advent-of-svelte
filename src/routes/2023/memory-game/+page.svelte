@@ -171,17 +171,17 @@ onDestroy(() => clearInterval(interval));
 							disabled={!ready ? true : firstCard !== null && secondCard !== null ? true : isFlipped}
 						>
 							<div
-								class="relative h-full w-full transition-transform duration-700 transform-style-3d"
+								class="relative size-full transition-transform duration-700 transform-style-3d"
 								class:rotate-y-180={isFlipped}
 							>
 								<!-- Back -->
 								<div
-									class="absolute flex h-full w-full flex-col items-center justify-center rounded-lg bg-accent backface-hidden"
+									class="absolute flex size-full flex-col items-center justify-center rounded-lg bg-accent backface-hidden"
 								>
-									<Club class="h-12 w-12 text-primary drop-shadow-lg" />
+									<Club class="size-12 text-primary drop-shadow-lg" />
 								</div>
 								<!-- Front -->
-								<div class="absolute h-full w-full rotate-y-180 backface-hidden">
+								<div class="absolute size-full rotate-y-180 backface-hidden">
 									{#await fetch(`https://advent.sveltesociety.dev/data/2023/day-eight/${number}.png`)}
 										<Skeleton class="rounded-lg" />
 									{:then res}

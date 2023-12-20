@@ -16,7 +16,7 @@ import * as Card from "$lib/components/ui/card";
 	<Card.Content class="flex flex-1 items-center justify-center">
 		<Button href="{$page.route.id ?? ''}/memory-game" class="group w-full">
 			Play
-			<Play class="ml-2 h-4 w-4 duration-300 group-hover:scale-110" />
+			<Play class="ml-2 size-4 duration-300 group-hover:scale-110" />
 		</Button>
 	</Card.Content>
 </Card.Root>
