@@ -65,7 +65,7 @@ function updateCookiesCount(adjustment: number) {
 				<div class="grid grid-cols-1 grid-rows-1">
 					{#key cookiesLabel}
 						<span
-							class="col-start-1 col-end-1 row-start-1 row-end-1 text-[0.70rem] uppercase text-muted-foreground"
+							class="col-start-1 col-end-1 row-start-1 row-end-1 text-xs uppercase text-muted-foreground"
 							transition:fade
 						>
 							{cookiesLabel}

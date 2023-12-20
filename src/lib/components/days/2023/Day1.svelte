@@ -51,7 +51,7 @@ function closeAndFocusTrigger(triggerId: string) {
 							variant="outline"
 							role="combobox"
 							aria-expanded={open}
-							class="w-[200px] justify-between"
+							class="w-52 justify-between"
 						>
 							{kids.find(f => f.name === search)?.name ?? "Select a child..."}
 							<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -67,7 +67,7 @@ function closeAndFocusTrigger(triggerId: string) {
 						</p>
 					</div>
 				</Popover.Trigger>
-				<Popover.Content class="w-[200px] p-0">
+				<Popover.Content class="w-52 p-0">
 					<Command.Root>
 						<Command.Input placeholder="Search children..." />
 						<Command.Empty>No child found.</Command.Empty>
