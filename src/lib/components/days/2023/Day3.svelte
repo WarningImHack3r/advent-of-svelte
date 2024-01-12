@@ -1,35 +1,35 @@
 <script lang="ts">
-import { blur, fly } from "svelte/transition";
-import { CheckSquare2, Square, Weight } from "lucide-svelte";
-import { Skeleton } from "$lib/components/ui/skeleton";
-import * as Card from "$lib/components/ui/card";
+	import { blur, fly } from "svelte/transition";
+	import { CheckSquare2, Square, Weight } from "lucide-svelte";
+	import { Skeleton } from "$lib/components/ui/skeleton";
+	import * as Card from "$lib/components/ui/card";
 
-export let presents: Promise<{ name: string; weight: number }[]>;
+	export let presents: Promise<{ name: string; weight: number }[]>;
 
-const MAX_WEIGHT = 100;
-let selectedPresents: Awaited<typeof presents> = [];
-let sleighWeight = 0;
-$: sleighWeight =
-	Math.round(
-		(selectedPresents.reduce((acc, present) => acc + present.weight, 0) + Number.EPSILON) * 100
-	) / 100;
+	const MAX_WEIGHT = 100;
+	let selectedPresents: Awaited<typeof presents> = [];
+	let sleighWeight = 0;
+	$: sleighWeight =
+		Math.round(
+			(selectedPresents.reduce((acc, present) => acc + present.weight, 0) + Number.EPSILON) * 100
+		) / 100;
 
-let wasLastAdded = false;
-let weightLabel = "";
-$: setTimeout(() => {
-	weightLabel =
-		sleighWeight > MAX_WEIGHT
-			? "Too heavy!"
-			: sleighWeight > MAX_WEIGHT / 2
-				? sleighWeight > MAX_WEIGHT * 0.9
-					? sleighWeight > MAX_WEIGHT * 0.99
-						? "Ready to go!"
-						: "Almost there!"
-					: "Kids will be happy!"
-				: sleighWeight > 0
-					? "Let's pack more!"
-					: "Empty sleigh";
-}, 25);
+	let wasLastAdded = false;
+	let weightLabel = "";
+	$: setTimeout(() => {
+		weightLabel =
+			sleighWeight > MAX_WEIGHT
+				? "Too heavy!"
+				: sleighWeight > MAX_WEIGHT / 2
+					? sleighWeight > MAX_WEIGHT * 0.9
+						? sleighWeight > MAX_WEIGHT * 0.99
+							? "Ready to go!"
+							: "Almost there!"
+						: "Kids will be happy!"
+					: sleighWeight > 0
+						? "Let's pack more!"
+						: "Empty sleigh";
+	}, 25);
 </script>
 
 <Card.Root class="flex flex-col">
@@ -75,10 +75,11 @@ $: setTimeout(() => {
 							{#key weightLabel}
 								<span
 									class="col-start-1 col-end-1 row-start-1 row-end-1 text-center text-sm text-muted-foreground"
-									class:text-primary={sleighWeight <= MAX_WEIGHT && sleighWeight > MAX_WEIGHT * 0.99}
+									class:text-primary={sleighWeight <= MAX_WEIGHT &&
+										sleighWeight > MAX_WEIGHT * 0.99}
 									class:text-red-500={sleighWeight > MAX_WEIGHT}
-									in:fly={{y: -20 * (wasLastAdded ? 1 : -1)}}
-									out:fly={{y: 20 * (wasLastAdded ? 1 : -1)}}
+									in:fly={{ y: -20 * (wasLastAdded ? 1 : -1) }}
+									out:fly={{ y: 20 * (wasLastAdded ? 1 : -1) }}
 								>
 									{weightLabel}
 								</span>
@@ -95,7 +96,7 @@ $: setTimeout(() => {
 							<input
 								type="checkbox"
 								class="peer absolute left-0 top-0 size-full cursor-pointer opacity-0"
-								on:change={(e) => {
+								on:change={e => {
 									const checked = e.target?.checked ?? false;
 									wasLastAdded = checked;
 									if (checked) {

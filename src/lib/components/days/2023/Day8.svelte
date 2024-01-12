@@ -1,8 +1,8 @@
 <script lang="ts">
-import { page } from "$app/stores";
-import { Club, Play } from "lucide-svelte";
-import { Button } from "$lib/components/ui/button";
-import * as Card from "$lib/components/ui/card";
+	import { page } from "$app/stores";
+	import { Club, Play } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
 </script>
 
 <Card.Root class="flex flex-col">

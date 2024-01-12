@@ -1,22 +1,22 @@
 <script lang="ts">
-import type { PageData } from "./$types";
-import * as Tabs from "$lib/components/ui/tabs";
-import Day1 from "$lib/components/days/2023/Day1.svelte";
-import Day2 from "$lib/components/days/2023/Day2.svelte";
-import Day3 from "$lib/components/days/2023/Day3.svelte";
-import Day4 from "$lib/components/days/2023/Day4.svelte";
-import Day5 from "$lib/components/days/2023/Day5.svelte";
-import Day6 from "$lib/components/days/2023/Day6.svelte";
-import Day7 from "$lib/components/days/2023/Day7.svelte";
-import Day8 from "$lib/components/days/2023/Day8.svelte";
+	import type { PageData } from "./$types";
+	import * as Tabs from "$lib/components/ui/tabs";
+	import Day1 from "$lib/components/days/2023/Day1.svelte";
+	import Day2 from "$lib/components/days/2023/Day2.svelte";
+	import Day3 from "$lib/components/days/2023/Day3.svelte";
+	import Day4 from "$lib/components/days/2023/Day4.svelte";
+	import Day5 from "$lib/components/days/2023/Day5.svelte";
+	import Day6 from "$lib/components/days/2023/Day6.svelte";
+	import Day7 from "$lib/components/days/2023/Day7.svelte";
+	import Day8 from "$lib/components/days/2023/Day8.svelte";
 
-export let data: PageData;
+	export let data: PageData;
 
-const dashboards = {
-	santa: "Santa's",
-	elves: "Elves"
-};
-let currentDashboard: keyof typeof dashboards = "santa";
+	const dashboards = {
+		santa: "Santa's",
+		elves: "Elves"
+	};
+	let currentDashboard: keyof typeof dashboards = "santa";
 </script>
 
 <div class="container py-8">

@@ -1,129 +1,129 @@
 <script lang="ts">
-import { onDestroy, onMount } from "svelte";
-import { ChevronLeft, Club } from "lucide-svelte";
-import { Button } from "$lib/components/ui/button";
-import { Skeleton } from "$lib/components/ui/skeleton";
-import { Slider } from "$lib/components/ui/slider";
-import * as AlertDialog from "$lib/components/ui/alert-dialog";
-import * as Card from "$lib/components/ui/card";
-import * as Tooltip from "$lib/components/ui/tooltip";
+	import { onDestroy, onMount } from "svelte";
+	import { ChevronLeft, Club } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
+	import { Skeleton } from "$lib/components/ui/skeleton";
+	import { Slider } from "$lib/components/ui/slider";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog";
+	import * as Card from "$lib/components/ui/card";
+	import * as Tooltip from "$lib/components/ui/tooltip";
 
-// Grid definition
-const gridPossibilities = {
-	"2x2": [2, 2],
-	"2x3": [2, 3],
-	"4x4": [4, 4],
-	"4x5": [4, 5],
-	"5x6": [5, 6],
-	"6x6": [6, 6],
-	"6x7": [6, 7],
-	"6x8": [6, 8]
-} as const;
-let gridWidth = 4;
-let gridHeight = 4;
-let cards: number[] = [];
-$: cards = Array.from({ length: 24 }, (_, i) => i + 1) // 1 to 24
-	.sort(() => Math.random() - 0.5) // shuffle
-	.slice(0, (gridWidth * gridHeight) / 2) // take the correct amount of cards
-	.flatMap(n => [n, n]) // duplicate
-	.sort(() => Math.random() - 0.5); // reshuffle
+	// Grid definition
+	const gridPossibilities = {
+		"2x2": [2, 2],
+		"2x3": [2, 3],
+		"4x4": [4, 4],
+		"4x5": [4, 5],
+		"5x6": [5, 6],
+		"6x6": [6, 6],
+		"6x7": [6, 7],
+		"6x8": [6, 8]
+	} as const;
+	let gridWidth = 4;
+	let gridHeight = 4;
+	let cards: number[] = [];
+	$: cards = Array.from({ length: 24 }, (_, i) => i + 1) // 1 to 24
+		.sort(() => Math.random() - 0.5) // shuffle
+		.slice(0, (gridWidth * gridHeight) / 2) // take the correct amount of cards
+		.flatMap(n => [n, n]) // duplicate
+		.sort(() => Math.random() - 0.5); // reshuffle
 
-// Game state
-let firstCard: number | null = null;
-let secondCard: number | null = null;
-let firstCardIndex: number | null = null;
-let secondCardIndex: number | null = null;
-let pairsFoundIndex: number[] = [];
+	// Game state
+	let firstCard: number | null = null;
+	let secondCard: number | null = null;
+	let firstCardIndex: number | null = null;
+	let secondCardIndex: number | null = null;
+	let pairsFoundIndex: number[] = [];
 
-let ready = true;
-let gameStarted = false;
-let timerStarted = false;
-let timer = 0;
-let interval: ReturnType<typeof setInterval>;
+	let ready = true;
+	let gameStarted = false;
+	let timerStarted = false;
+	let timer = 0;
+	let interval: ReturnType<typeof setInterval>;
 
-let cooldown = 2500;
-let tries = 0;
-let score = 0;
+	let cooldown = 2500;
+	let tries = 0;
+	let score = 0;
 
-function hideCards(callback?: () => void) {
-	firstCard = null;
-	secondCard = null;
-	firstCardIndex = null;
-	secondCardIndex = null;
-	setTimeout(() => callback?.(), 700);
-}
+	function hideCards(callback?: () => void) {
+		firstCard = null;
+		secondCard = null;
+		firstCardIndex = null;
+		secondCardIndex = null;
+		setTimeout(() => callback?.(), 700);
+	}
 
-function resetGame(reshuffle = false) {
-	if (reshuffle) ready = false;
-	hideCards(() => {
-		if (reshuffle) {
-			gridWidth++;
-			gridWidth--;
-			ready = true;
+	function resetGame(reshuffle = false) {
+		if (reshuffle) ready = false;
+		hideCards(() => {
+			if (reshuffle) {
+				gridWidth++;
+				gridWidth--;
+				ready = true;
+			}
+		});
+		pairsFoundIndex = [];
+		gameStarted = false;
+		timerStarted = false;
+		clearInterval(interval);
+		timer = 0;
+		tries = 0;
+		if (score > (localStorageHighScore ?? 0)) {
+			localStorage.setItem("memory-game-high-score", score.toString());
+			localStorageHighScore = score;
 		}
+		score = 0;
+	}
+
+	function calculateScore() {
+		const baseScorePerPair = 100;
+		const timeFactor = 500;
+		const tryPenalty = 50;
+
+		const pairsFound = pairsFoundIndex.length / 2;
+		const baseScore = pairsFound * baseScorePerPair;
+		const timeScore = Math.max(0, timeFactor - timer * (timeFactor / 60));
+		const tryScore = Math.max(0, tryPenalty * (pairsFound - tries));
+
+		return Math.floor(baseScore + timeScore + tryScore);
+	}
+
+	$: if ((firstCard !== null || secondCard !== null) && !gameStarted) {
+		gameStarted = true;
+		timerStarted = true;
+		interval = setInterval(() => {
+			timer++;
+		}, 1000);
+	}
+
+	$: if (firstCard !== null && secondCard !== null) {
+		// Two cards have been flipped
+		tries++;
+		if (firstCard === secondCard) {
+			// Match
+			pairsFoundIndex = [...pairsFoundIndex, firstCardIndex!, secondCardIndex!];
+			// The score is the percentage of pairs found compared to the time it took to find them
+			score = calculateScore();
+			hideCards();
+			if (pairsFoundIndex.length === cards.length) {
+				// All pairs found
+				timerStarted = false;
+				clearInterval(interval);
+			}
+		} else {
+			// Reset
+			setTimeout(hideCards, cooldown);
+		}
+	}
+
+	let localStorageHighScore: number | null;
+	onMount(() => {
+		localStorageHighScore = localStorage.getItem("memory-game-high-score")
+			? parseInt(localStorage.getItem("memory-game-high-score")!)
+			: null;
 	});
-	pairsFoundIndex = [];
-	gameStarted = false;
-	timerStarted = false;
-	clearInterval(interval);
-	timer = 0;
-	tries = 0;
-	if (score > (localStorageHighScore ?? 0)) {
-		localStorage.setItem("memory-game-high-score", score.toString());
-		localStorageHighScore = score;
-	}
-	score = 0;
-}
 
-function calculateScore() {
-	const baseScorePerPair = 100;
-	const timeFactor = 500;
-	const tryPenalty = 50;
-
-	const pairsFound = pairsFoundIndex.length / 2;
-	const baseScore = pairsFound * baseScorePerPair;
-	const timeScore = Math.max(0, timeFactor - timer * (timeFactor / 60));
-	const tryScore = Math.max(0, tryPenalty * (pairsFound - tries));
-
-	return Math.floor(baseScore + timeScore + tryScore);
-}
-
-$: if ((firstCard !== null || secondCard !== null) && !gameStarted) {
-	gameStarted = true;
-	timerStarted = true;
-	interval = setInterval(() => {
-		timer++;
-	}, 1000);
-}
-
-$: if (firstCard !== null && secondCard !== null) {
-	// Two cards have been flipped
-	tries++;
-	if (firstCard === secondCard) {
-		// Match
-		pairsFoundIndex = [...pairsFoundIndex, firstCardIndex!, secondCardIndex!];
-		// The score is the percentage of pairs found compared to the time it took to find them
-		score = calculateScore();
-		hideCards();
-		if (pairsFoundIndex.length === cards.length) {
-			// All pairs found
-			timerStarted = false;
-			clearInterval(interval);
-		}
-	} else {
-		// Reset
-		setTimeout(hideCards, cooldown);
-	}
-}
-
-let localStorageHighScore: number | null;
-onMount(() => {
-	localStorageHighScore = localStorage.getItem("memory-game-high-score")
-		? parseInt(localStorage.getItem("memory-game-high-score")!)
-		: null;
-});
-
-onDestroy(() => clearInterval(interval));
+	onDestroy(() => clearInterval(interval));
 </script>
 
 <div class="container my-8">
@@ -154,7 +154,10 @@ onDestroy(() => clearInterval(interval));
 					style="grid-template-columns: repeat({gridWidth}, max-content);"
 				>
 					{#each cards as number, index}
-						{@const isFlipped = pairsFoundIndex.includes(index) || firstCardIndex === index || secondCardIndex === index}
+						{@const isFlipped =
+							pairsFoundIndex.includes(index) ||
+							firstCardIndex === index ||
+							secondCardIndex === index}
 						<button
 							type="button"
 							on:click={() => {
@@ -168,7 +171,11 @@ onDestroy(() => clearInterval(interval));
 							}}
 							class="aspect-[7/10] h-32 shadow-lg duration-200 perspective-1000 [&:not(:disabled)]:hover:scale-105"
 							class:brightness-75={firstCard !== null && secondCard !== null && !isFlipped}
-							disabled={!ready ? true : firstCard !== null && secondCard !== null ? true : isFlipped}
+							disabled={!ready
+								? true
+								: firstCard !== null && secondCard !== null
+									? true
+									: isFlipped}
 						>
 							<div
 								class="relative size-full transition-transform duration-700 transform-style-3d"
@@ -204,7 +211,7 @@ onDestroy(() => clearInterval(interval));
 								<span class="font-bold">Game duration:</span>
 								<span class="tabular-nums">
 									{Math.floor(timer / 60)}:{Math.floor(timer % 60).toLocaleString(undefined, {
-										minimumIntegerDigits: 2,
+										minimumIntegerDigits: 2
 									})}
 								</span>
 							</p>
@@ -253,7 +260,7 @@ onDestroy(() => clearInterval(interval));
 							<span class="font-bold">Game duration:</span>
 							<span class="tabular-nums">
 								{Math.floor(timer / 60)}:{Math.floor(timer % 60).toLocaleString(undefined, {
-									minimumIntegerDigits: 2,
+									minimumIntegerDigits: 2
 								})}
 							</span>
 						</p>
@@ -284,7 +291,8 @@ onDestroy(() => clearInterval(interval));
 								step={1}
 								value={[Object.keys(gridPossibilities).indexOf(`${gridWidth}x${gridHeight}`)]}
 								onValueChange={([value]) => {
-									[gridWidth, gridHeight] = gridPossibilities[Object.keys(gridPossibilities)[value]];
+									[gridWidth, gridHeight] =
+										gridPossibilities[Object.keys(gridPossibilities)[value]];
 									resetGame();
 								}}
 								class="mt-4"

@@ -1,26 +1,26 @@
 <script lang="ts">
-import { tick } from "svelte";
-import { Check, ChevronsUpDown, Frown, Gift } from "lucide-svelte";
-import { cn } from "$lib/utils";
-import { Button } from "$lib/components/ui/button";
-import { Skeleton } from "$lib/components/ui/skeleton";
-import * as Card from "$lib/components/ui/card";
-import * as Command from "$lib/components/ui/command";
-import * as Popover from "$lib/components/ui/popover";
+	import { tick } from "svelte";
+	import { Check, ChevronsUpDown, Frown, Gift } from "lucide-svelte";
+	import { cn } from "$lib/utils";
+	import { Button } from "$lib/components/ui/button";
+	import { Skeleton } from "$lib/components/ui/skeleton";
+	import * as Card from "$lib/components/ui/card";
+	import * as Command from "$lib/components/ui/command";
+	import * as Popover from "$lib/components/ui/popover";
 
-export let kids: Promise<{ name: string; tally: number }[]>;
-let search = "";
-let open = false;
+	export let kids: Promise<{ name: string; tally: number }[]>;
+	let search = "";
+	let open = false;
 
-// We want to refocus the trigger button when the user selects
-// an item from the list so users can continue navigating the
-// rest of the form with the keyboard.
-function closeAndFocusTrigger(triggerId: string) {
-	open = false;
-	tick().then(() => {
-		document.getElementById(triggerId)?.focus();
-	});
-}
+	// We want to refocus the trigger button when the user selects
+	// an item from the list so users can continue navigating the
+	// rest of the form with the keyboard.
+	function closeAndFocusTrigger(triggerId: string) {
+		open = false;
+		tick().then(() => {
+			document.getElementById(triggerId)?.focus();
+		});
+	}
 </script>
 
 <Card.Root>
@@ -43,7 +43,7 @@ function closeAndFocusTrigger(triggerId: string) {
 				<Skeleton class="h-32 w-full" />
 			</div>
 		{:then kids}
-			<Popover.Root bind:open={open} let:ids>
+			<Popover.Root bind:open let:ids>
 				<Popover.Trigger asChild let:builder>
 					<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 						<Button
@@ -75,15 +75,12 @@ function closeAndFocusTrigger(triggerId: string) {
 							{#each kids as kid}
 								<Command.Item
 									value={kid.name}
-									onSelect={(currentValue) => {
+									onSelect={currentValue => {
 										search = currentValue;
 										closeAndFocusTrigger(ids.trigger);
 									}}
 								>
-									<Check class={cn(
-											"mr-2 size-4",
-											search !== kid.name && "text-transparent"
-										)} />
+									<Check class={cn("mr-2 size-4", search !== kid.name && "text-transparent")} />
 									{kid.name}
 									<span class="ml-auto text-muted-foreground">{kid.tally}</span>
 								</Command.Item>

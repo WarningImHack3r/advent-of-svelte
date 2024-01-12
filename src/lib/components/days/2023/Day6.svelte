@@ -1,36 +1,36 @@
 <script lang="ts">
-import { onDestroy } from "svelte";
-import { BoomBox } from "lucide-svelte";
-import { cn } from "$lib/utils";
-import * as Card from "$lib/components/ui/card";
-import { buttonVariants } from "$lib/components/ui/button";
+	import { onDestroy } from "svelte";
+	import { BoomBox } from "lucide-svelte";
+	import { cn } from "$lib/utils";
+	import * as Card from "$lib/components/ui/card";
+	import { buttonVariants } from "$lib/components/ui/button";
 
-const christmasSongs = [
-	"https://www.youtube.com/watch?v=aAkMkVFwAoo",
-	"https://www.youtube.com/watch?v=bwNV7TAWN3M",
-	"https://www.youtube.com/watch?v=hLf0-lro8X8",
-	"https://www.youtube.com/watch?v=sE3uRRFVsmc",
-	"https://www.youtube.com/watch?v=A4zBSnMhvI0"
-];
+	const christmasSongs = [
+		"https://www.youtube.com/watch?v=aAkMkVFwAoo",
+		"https://www.youtube.com/watch?v=bwNV7TAWN3M",
+		"https://www.youtube.com/watch?v=hLf0-lro8X8",
+		"https://www.youtube.com/watch?v=sE3uRRFVsmc",
+		"https://www.youtube.com/watch?v=A4zBSnMhvI0"
+	];
 
-let lastTap = 0;
-const defaultBPMText = "Tap the button!";
-let bpmText = defaultBPMText;
-let timeout: ReturnType<typeof setTimeout>;
+	let lastTap = 0;
+	const defaultBPMText = "Tap the button!";
+	let bpmText = defaultBPMText;
+	let timeout: ReturnType<typeof setTimeout>;
 
-function countBPM() {
-	const now = Date.now();
-	const bpm = (1 / ((now - lastTap) / 1000)) * 60;
-	lastTap = now;
-	bpmText = Math.floor(bpm).toString();
+	function countBPM() {
+		const now = Date.now();
+		const bpm = (1 / ((now - lastTap) / 1000)) * 60;
+		lastTap = now;
+		bpmText = Math.floor(bpm).toString();
 
-	clearTimeout(timeout);
-	timeout = setTimeout(() => {
-		bpmText = defaultBPMText;
-	}, 5000);
-}
+		clearTimeout(timeout);
+		timeout = setTimeout(() => {
+			bpmText = defaultBPMText;
+		}, 5000);
+	}
 
-onDestroy(() => clearTimeout(timeout));
+	onDestroy(() => clearTimeout(timeout));
 </script>
 
 <Card.Root class="flex flex-col">

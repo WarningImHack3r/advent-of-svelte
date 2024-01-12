@@ -1,34 +1,34 @@
 <script lang="ts">
-import { blur, fade, fly } from "svelte/transition";
-import { Cookie, Minus, Plus } from "lucide-svelte";
-import { Button } from "$lib/components/ui/button";
-import * as Card from "$lib/components/ui/card";
+	import { blur, fade, fly } from "svelte/transition";
+	import { Cookie, Minus, Plus } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
 
-let cookiesCount = 0;
-let lastAdjustmentPositive = false;
-let cookiesLabel = "Cookie";
-let comment = "Santa hasn't eaten any cookies yet.";
-function updateCookiesCount(adjustment: number) {
-	lastAdjustmentPositive = adjustment > 0;
-	cookiesCount += adjustment;
+	let cookiesCount = 0;
+	let lastAdjustmentPositive = false;
+	let cookiesLabel = "Cookie";
+	let comment = "Santa hasn't eaten any cookies yet.";
+	function updateCookiesCount(adjustment: number) {
+		lastAdjustmentPositive = adjustment > 0;
+		cookiesCount += adjustment;
 
-	cookiesLabel = cookiesCount > 1 ? "Cookies" : "Cookie";
-	if (cookiesCount >= 100) {
-		comment = "Santa is definitely sick now.";
-	} else if (cookiesCount >= 50) {
-		comment = "Santa is going to be sick!";
-	} else if (cookiesCount >= 25) {
-		comment = "Santa is merry and full of cookies!";
-	} else if (cookiesCount >= 10) {
-		comment = "Santa has eaten a lot of cookies!";
-	} else if (cookiesCount >= 5) {
-		comment = "Santa has eaten a few cookies.";
-	} else if (cookiesCount > 0) {
-		comment = "Santa has eaten some cookies.";
-	} else {
-		comment = "Santa hasn't eaten any cookies yet.";
+		cookiesLabel = cookiesCount > 1 ? "Cookies" : "Cookie";
+		if (cookiesCount >= 100) {
+			comment = "Santa is definitely sick now.";
+		} else if (cookiesCount >= 50) {
+			comment = "Santa is going to be sick!";
+		} else if (cookiesCount >= 25) {
+			comment = "Santa is merry and full of cookies!";
+		} else if (cookiesCount >= 10) {
+			comment = "Santa has eaten a lot of cookies!";
+		} else if (cookiesCount >= 5) {
+			comment = "Santa has eaten a few cookies.";
+		} else if (cookiesCount > 0) {
+			comment = "Santa has eaten some cookies.";
+		} else {
+			comment = "Santa hasn't eaten any cookies yet.";
+		}
 	}
-}
 </script>
 
 <Card.Root>
@@ -90,8 +90,8 @@ function updateCookiesCount(adjustment: number) {
 			{#key comment}
 				<p
 					class="col-start-1 col-end-1 row-start-1 row-end-1 text-center text-sm text-muted-foreground"
-					in:fly={{y: -20 * (lastAdjustmentPositive ? 1 : -1)}}
-					out:fly={{y: 20 * (lastAdjustmentPositive ? 1 : -1)}}
+					in:fly={{ y: -20 * (lastAdjustmentPositive ? 1 : -1) }}
+					out:fly={{ y: 20 * (lastAdjustmentPositive ? 1 : -1) }}
 				>
 					{comment}
 				</p>
