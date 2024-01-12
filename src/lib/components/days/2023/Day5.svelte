@@ -1,14 +1,19 @@
-<script lang="ts">
-	import { onDestroy, onMount } from "svelte";
-	import { Gauge } from "lucide-svelte";
-	import * as Card from "$lib/components/ui/card";
-
-	type Task = {
+<script context="module" lang="ts">
+	export type Task = {
 		elf: string;
 		task: "CREATED_TOY" | "WRAPPED_PRESENT";
 		minutesTaken: number;
 		date: string;
 	};
+</script>
+
+<script lang="ts">
+	import { onDestroy, onMount } from "svelte";
+	import { page } from "$app/stores";
+	import { ArrowRight, Gauge } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+
 	function stringFromTaskType(task: Task["task"]) {
 		switch (task) {
 			case "CREATED_TOY":
@@ -105,14 +110,20 @@
 </script>
 
 <Card.Root class="flex flex-col">
-	<Card.Header>
-		<Card.Title class="flex items-center gap-2">
-			<Gauge class="text-primary" />
-			Elf Productivity Dashboard
-		</Card.Title>
-		<Card.Description>
-			Keep an eye on your elves' productivity with this dashboard.
-		</Card.Description>
+	<Card.Header class="flex flex-row justify-between gap-2">
+		<div class="flex flex-col">
+			<Card.Title class="flex items-center gap-2">
+				<Gauge class="text-primary" />
+				Elf Productivity Dashboard
+			</Card.Title>
+			<Card.Description>
+				Keep an eye on your elves' productivity with this dashboard.
+			</Card.Description>
+		</div>
+		<Button class="group hidden sm:flex" href="{$page.route.id ?? ''}/productivity-dashboard">
+			<span class="mr-2">More info</span>
+			<ArrowRight class="duration-300 group-hover:translate-x-1.5" />
+		</Button>
 	</Card.Header>
 	<Card.Content class="relative flex flex-1 items-center">
 		<!-- Highlighted stats -->
