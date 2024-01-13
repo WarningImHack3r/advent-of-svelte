@@ -9,6 +9,7 @@
 	import Day6 from "$lib/components/days/2023/Day6.svelte";
 	import Day7 from "$lib/components/days/2023/Day7.svelte";
 	import Day8 from "$lib/components/days/2023/Day8.svelte";
+	import Day9 from "$lib/components/days/2023/Day9.svelte";
 
 	export let data: PageData;
 
@@ -36,6 +37,7 @@
 				<Day4 />
 				<Day7 />
 				<Day8 />
+				<Day9 />
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="elves">

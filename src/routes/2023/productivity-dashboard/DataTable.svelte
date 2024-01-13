@@ -8,9 +8,9 @@
 		addTableFilter
 	} from "svelte-headless-table/plugins";
 	import {
-		ArrowUpAZ,
+		ArrowDownAZ,
 		ArrowUpDown,
-		ArrowUpZA,
+		ArrowDownZA,
 		ChevronDown,
 		ChevronLeft,
 		ChevronRight
@@ -126,9 +126,9 @@
 										<Button variant="ghost" class="-ml-3 px-3" on:click={props.sort.toggle}>
 											<Render of={cell.render()} />
 											{#if props.sort.order === "asc"}
-												<ArrowUpAZ class="ml-2 size-4 text-accent-foreground" />
+												<ArrowDownAZ class="ml-2 size-4 text-accent-foreground" />
 											{:else if props.sort.order === "desc"}
-												<ArrowUpZA class="ml-2 size-4 text-accent-foreground" />
+												<ArrowDownZA class="ml-2 size-4 text-accent-foreground" />
 											{:else}
 												<ArrowUpDown class="ml-2 size-4" />
 											{/if}
