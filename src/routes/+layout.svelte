@@ -5,10 +5,13 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { ChevronDown, Github, Moon, Monitor, Sun } from "lucide-svelte";
+	import { toast } from "svelte-sonner";
 	import { ModeWatcher, resetMode, setMode } from "mode-watcher";
 	import { cn } from "$lib/utils";
+	import Santa from "$lib/components/Santa.svelte";
 	import Snowflakes from "$lib/components/Snowflakes.svelte";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import { Toaster } from "$lib/components/ui/sonner";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 
 	export let data: LayoutData;
@@ -33,6 +36,15 @@
 		} else {
 			theme = "system";
 		}
+
+		const date = new Date();
+		if (date.getMonth() === 11) {
+			toast("Merry Christmas!", {
+				description: `Happy holidays and a happy new year ${date.getFullYear() + 1}!`,
+				duration: 10000,
+				icon: Santa
+			});
+		}
 	});
 </script>
 
@@ -42,6 +54,7 @@
 
 <Snowflakes />
 <ModeWatcher />
+<Toaster closeButton />
 <header
 	class="sticky top-0 z-40 w-full border-b bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >

@@ -13,7 +13,6 @@
 		const now = new Date();
 		const christmas = new Date(now.getFullYear(), 11, 24);
 		const diff = christmas.getTime() - now.getTime();
-		console.log(diff);
 
 		if (diff < 0) {
 			// if we are past the 25th of December, set the date to next year
