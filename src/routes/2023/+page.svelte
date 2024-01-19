@@ -10,6 +10,7 @@
 	import Day7 from "$lib/components/days/2023/Day7.svelte";
 	import Day8 from "$lib/components/days/2023/Day8.svelte";
 	import Day9 from "$lib/components/days/2023/Day9.svelte";
+	import Day11 from "$lib/components/days/2023/Day11.svelte";
 
 	export let data: PageData;
 
@@ -48,6 +49,7 @@
 				<Day1 kids={data.streamed.kids} />
 				<Day5 />
 				<Day6 />
+				<Day11 />
 			</div>
 		</Tabs.Content>
 	</Tabs.Root>
