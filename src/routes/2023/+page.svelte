@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
+	import { page } from "$app/stores";
+	import { ChevronRight, ScrollText } from "lucide-svelte";
+	import { Button } from "$lib/components/ui/button";
 	import * as Tabs from "$lib/components/ui/tabs";
 	import Day1 from "$lib/components/days/2023/Day1.svelte";
 	import Day2 from "$lib/components/days/2023/Day2.svelte";
@@ -22,7 +25,16 @@
 </script>
 
 <div class="container py-8">
-	<h2 class="text-3xl font-bold tracking-tight">{dashboards[currentDashboard]} Dashboard</h2>
+	<div class="flex flex-col items-start justify-between gap-4 xs:flex-row xs:items-center">
+		<h2 class="text-3xl font-bold tracking-tight">{dashboards[currentDashboard]} Dashboard</h2>
+		<Button href="{$page.route.id ?? ''}/card-creator" class="group ml-auto xs:ml-0">
+			<ScrollText class="mr-2 size-6" />
+			<span class="hidden sm:block">Create your Christmas card</span>
+			<ChevronRight
+				class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1"
+			/>
+		</Button>
+	</div>
 	<Tabs.Root bind:value={currentDashboard} class="mt-8">
 		<Tabs.List>
 			<Tabs.Trigger value="santa">Santa</Tabs.Trigger>
