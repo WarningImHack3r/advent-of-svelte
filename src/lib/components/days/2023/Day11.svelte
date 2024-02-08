@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { Dices } from "lucide-svelte";
+	import Dices from "lucide-svelte/icons/dices";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import * as Card from "$lib/components/ui/card";

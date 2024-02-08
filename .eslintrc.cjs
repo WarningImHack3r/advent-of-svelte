@@ -27,5 +27,15 @@ module.exports = {
 				parser: "@typescript-eslint/parser"
 			}
 		}
-	]
+	],
+	rules: {
+		"@typescript-eslint/no-unused-vars": [
+			"error",
+			{
+				argsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_"
+			}
+		],
+		"@typescript-eslint/method-signature-style": ["error", "property"]
+	}
 };

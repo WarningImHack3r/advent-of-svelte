@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { blur, fade, fly } from "svelte/transition";
-	import { Cookie, Minus, Plus } from "lucide-svelte";
+	import Cookie from "lucide-svelte/icons/cookie";
+	import Minus from "lucide-svelte/icons/minus";
+	import Plus from "lucide-svelte/icons/plus";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 

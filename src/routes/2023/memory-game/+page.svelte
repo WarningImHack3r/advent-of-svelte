@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
-	import { ChevronLeft, Club } from "lucide-svelte";
+	import ChevronLeft from "lucide-svelte/icons/chevron-left";
+	import Club from "lucide-svelte/icons/club";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { Slider } from "$lib/components/ui/slider";

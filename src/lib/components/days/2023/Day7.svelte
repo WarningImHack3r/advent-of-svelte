@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { crossfade } from "svelte/transition";
-	import { Languages, Play, Square } from "lucide-svelte";
+	import Languages from "lucide-svelte/icons/languages";
+	import Play from "lucide-svelte/icons/play";
+	import Square from "lucide-svelte/icons/square";
 	import { cn } from "$lib/utils";
 	import { buttonVariants } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";

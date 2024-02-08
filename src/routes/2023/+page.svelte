@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 	import { page } from "$app/stores";
-	import { ChevronRight, ScrollText } from "lucide-svelte";
+	import ChevronRight from "lucide-svelte/icons/chevron-right";
+	import ScrollText from "lucide-svelte/icons/scroll-text";
 	import { Button } from "$lib/components/ui/button";
 	import * as Tabs from "$lib/components/ui/tabs";
 	import Day1 from "$lib/components/days/2023/Day1.svelte";

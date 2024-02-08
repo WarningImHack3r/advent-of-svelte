@@ -2,7 +2,6 @@ import type { LayoutServerLoad } from "./$types";
 
 /**
  * Scans the given directory for subroutes. Does not include dynamic routes.
- * @param path the path to scan routes from
  * @returns an array of routes
  */
 function getRoutes() {

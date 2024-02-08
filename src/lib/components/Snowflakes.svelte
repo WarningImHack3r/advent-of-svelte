@@ -55,8 +55,14 @@
 		function draw() {
 			ctx.clearRect(0, 0, width, height);
 
+			const colorScheme = window
+				.getComputedStyle(document.documentElement)
+				.getPropertyValue("color-scheme");
+			const darkMode = colorScheme
+				? colorScheme === "dark"
+				: window.matchMedia("(prefers-color-scheme: dark)").matches;
 			for (let particle of particles) {
-				ctx.fillStyle = "rgba(255, 255, 255, 0.4)";
+				ctx.fillStyle = darkMode ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)";
 				ctx.beginPath();
 				ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, true);
 				ctx.fill();
