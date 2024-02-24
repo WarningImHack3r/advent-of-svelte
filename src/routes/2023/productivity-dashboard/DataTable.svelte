@@ -94,7 +94,7 @@
 
 <div>
 	<div class="flex items-center py-4">
-		<Input class="max-w-sm" placeholder="Filter elves..." bind:value={$filterValue} />
+		<Input name="filter" class="max-w-sm" placeholder="Filter elves..." bind:value={$filterValue} />
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
 				<Button variant="outline" class="ml-auto" builders={[builder]}>

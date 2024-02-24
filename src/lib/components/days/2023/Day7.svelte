@@ -183,7 +183,7 @@
 		<Card.Description>Translate your message to Morse code to send it to Sven.</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex flex-col gap-4">
-		<Input placeholder="Your message" class="bg-background" bind:value={message} />
+		<Input name="message" placeholder="Your message" class="bg-background" bind:value={message} />
 		<div>
 			{#if message.length > 0}
 				<p class="text-sm text-muted-foreground">Your message in Morse code:</p>

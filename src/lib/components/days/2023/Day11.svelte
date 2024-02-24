@@ -75,6 +75,8 @@
 			}}
 		>
 			<Input
+				name="first-last-name"
+				autocomplete="name"
 				placeholder="Your first and last name"
 				class="flex-1 bg-background"
 				bind:value={realName}

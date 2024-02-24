@@ -129,12 +129,13 @@
 							</Card.Content>
 						</Card.Root>
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
-							{#each presents as present}
+							{#each presents as present, i}
 								<div
 									class="relative rounded-lg border bg-card text-card-foreground shadow-sm"
 									class:border-primary={selectedPresents.includes(present)}
 								>
 									<input
+										name="Present {i + 1}"
 										type="checkbox"
 										class="peer absolute left-0 top-0 size-full cursor-pointer opacity-0"
 										on:change={e => {

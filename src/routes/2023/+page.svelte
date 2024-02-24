@@ -27,7 +27,10 @@
 
 <div class="container py-8">
 	<div class="flex flex-col items-start justify-between gap-4 xs:flex-row xs:items-center">
-		<h2 class="text-3xl font-bold tracking-tight">{dashboards[currentDashboard]} Dashboard</h2>
+		<h2 class="text-3xl font-bold tracking-tight">
+			<span class="text-primary">{dashboards[currentDashboard]}</span>
+			Dashboard
+		</h2>
 		<Button href="{$page.route.id ?? ''}/card-creator" class="group ml-auto xs:ml-0">
 			<ScrollText class="mr-2 size-6" />
 			<span class="hidden sm:block">Create your Christmas card</span>
