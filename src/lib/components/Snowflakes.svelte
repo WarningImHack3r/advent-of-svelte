@@ -1,5 +1,12 @@
+<script context="module" lang="ts">
+	import { localStorageStore } from "$lib/localStorageStore";
+
+	export let maxParticles = localStorageStore("snowMaxParticles", 100);
+	export let speed = localStorageStore("snowSpeed", 1_000);
+</script>
+
 <script lang="ts">
-	import { onDestroy, onMount, tick } from "svelte";
+	import { onMount, tick } from "svelte";
 
 	let width: number;
 	let height: number;
@@ -30,15 +37,13 @@
 	}
 
 	function regenerateParticles() {
-		const maxParticles = 100;
-
 		const newParticles: typeof particles = [];
-		for (let i = 0; i < maxParticles; i++) {
+		for (let i = 0; i < $maxParticles; i++) {
 			newParticles.push({
 				x: Math.random() * width,
 				y: Math.random() * height,
 				radius: 1 + Math.random() * 2,
-				density: Math.random() * maxParticles
+				density: Math.random() * $maxParticles
 			});
 		}
 		return newParticles;
@@ -49,6 +54,7 @@
 
 		particles = regenerateParticles();
 
+		if (!snowflakes) return;
 		const ctx = snowflakes.getContext("2d")!;
 
 		// Draw the flakes
@@ -73,9 +79,8 @@
 		// Move the snowflakes
 		let angle = 0;
 		let margin = 50;
-		const speed = 3000;
 		function update(time = Date.now()) {
-			angle = time / speed;
+			angle = time / 3000;
 			for (let [i, particle] of particles.entries()) {
 				// Updating X and Y coordinates
 				particle.y += 1 + Math.cos(angle + particle.density) + particle.radius / 2;
@@ -114,7 +119,7 @@
 				}
 			}
 			frame = requestAnimationFrame(() => {
-				timeout = setTimeout(draw, 1000 / 60);
+				timeout = setTimeout(draw, 1000 / 60 / ($speed / 1000));
 			});
 		}
 
@@ -122,14 +127,18 @@
 		draw();
 	}
 
-	onMount(async () => {
+	onMount(() => {
 		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-		await tick();
+		tick().then(startSnow);
 
-		startSnow();
+		maxParticles.subscribe(debounceResize);
+		speed.subscribe(debounceResize);
+
+		return () => {
+			clearTimeout(timeout);
+			cancelAnimationFrame(frame);
+		};
 	});
-
-	onDestroy(() => clearTimeout(timeout));
 </script>
 
 <svelte:window on:resize={debounceResize} />

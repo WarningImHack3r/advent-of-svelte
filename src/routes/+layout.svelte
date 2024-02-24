@@ -8,14 +8,18 @@
 	import ChevronDown from "lucide-svelte/icons/chevron-down";
 	import Moon from "lucide-svelte/icons/moon";
 	import Monitor from "lucide-svelte/icons/monitor";
+	import Settings2 from "lucide-svelte/icons/settings-2";
 	import Sun from "lucide-svelte/icons/sun";
 	import { toast } from "svelte-sonner";
 	import { ModeWatcher, resetMode, setMode } from "mode-watcher";
 	import { cn } from "$lib/utils";
 	import Santa from "$lib/components/Santa.svelte";
-	import Snowflakes from "$lib/components/Snowflakes.svelte";
+	import Snowflakes, { maxParticles, speed } from "$lib/components/Snowflakes.svelte";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
 	import { Toaster } from "$lib/components/ui/sonner";
+	import * as Dialog from "$lib/components/ui/dialog";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 
 	export let data: LayoutData;
@@ -29,6 +33,11 @@
 		}
 	}
 	let yearSwitcherOpen = false;
+
+	// Settings
+	let settingsOpen = false;
+	let unsavedMaxParticles = $maxParticles;
+	let unsavedSpeed = $speed;
 
 	// Theme selector
 	type Theme = {
@@ -126,6 +135,57 @@
 		<!-- Right part -->
 		<div class="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
 			<nav class="flex items-center space-x-1">
+				<Dialog.Root bind:open={settingsOpen}>
+					<Dialog.Trigger class={cn(buttonVariants({ variant: "ghost" }), "aspect-square p-0")}>
+						<Settings2 class="size-5" />
+						<span class="sr-only">Settings</span>
+					</Dialog.Trigger>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>Settings</Dialog.Title>
+							<Dialog.Description>Tweak the website to your liking.</Dialog.Description>
+						</Dialog.Header>
+						<!-- Snowflakes quantity and speed -->
+						<h3 class="border-b pb-1">Snowflakes background</h3>
+						<div class="grid w-full max-w-sm items-center gap-1.5">
+							<Label for="quantity">
+								Quantity
+								<span class="text-sm text-muted-foreground">(default: 100)</span>
+							</Label>
+							<Input
+								type="number"
+								id="quantity"
+								bind:value={unsavedMaxParticles}
+								placeholder="Snowflakes quantity"
+							/>
+						</div>
+						<div class="grid w-full max-w-sm items-center gap-1.5">
+							<Label for="speed">
+								Speed
+								<span class="text-sm text-muted-foreground">(default: 1000)</span>
+							</Label>
+							<Input
+								type="number"
+								id="speed"
+								bind:value={unsavedSpeed}
+								placeholder="Snowflakes speed"
+							/>
+						</div>
+						<Dialog.Footer class="mt-4">
+							<Button variant="secondary" on:click={() => (settingsOpen = false)}>Cancel</Button>
+							<Button
+								type="submit"
+								on:click={() => {
+									settingsOpen = false;
+									$maxParticles = unsavedMaxParticles;
+									$speed = unsavedSpeed;
+								}}
+							>
+								Save changes
+							</Button>
+						</Dialog.Footer>
+					</Dialog.Content>
+				</Dialog.Root>
 				<Button
 					href="https://github.com/WarningImHack3r/advent-of-svelte"
 					target="_blank"
