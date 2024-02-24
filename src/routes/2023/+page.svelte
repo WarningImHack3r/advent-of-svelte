@@ -47,7 +47,7 @@
 				lg:[&>*:nth-child(2)]:col-span-2"
 			>
 				<Day2 />
-				<Day3 presents={data.streamed.presents} />
+				<Day3 presents={data.streamed.presents} presents_v2={data.streamed.presents_v2} />
 				<Day4 />
 				<Day7 />
 				<Day8 />
