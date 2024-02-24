@@ -78,17 +78,23 @@
 					</span>
 				{/if}
 				{#if days !== 0 || hours !== 0 || minutes !== 0}
-					<span class="tabular-nums tracking-tighter">{minutes < 0 ? "--" : minutes}</span><span
-						class="text-3xl font-light text-muted-foreground"
-					>
-						m
-					</span>
+					<span class="tabular-nums tracking-tighter"
+						>{minutes < 0
+							? "--"
+							: minutes.toLocaleString("en", {
+									minimumIntegerDigits: 2,
+									useGrouping: false
+								})}</span
+					><span class="text-3xl font-light text-muted-foreground">m</span>
 				{/if}
-				<span class="tabular-nums tracking-tighter">{seconds < 0 ? "--" : seconds}</span><span
-					class="text-3xl font-light text-muted-foreground"
-				>
-					s
-				</span>
+				<span class="tabular-nums tracking-tighter"
+					>{seconds < 0
+						? "--"
+						: seconds.toLocaleString("en", {
+								minimumIntegerDigits: 2,
+								useGrouping: false
+							})}</span
+				><span class="text-3xl font-light text-muted-foreground">s</span>
 			{/if}
 		</div>
 	</Card.Content>

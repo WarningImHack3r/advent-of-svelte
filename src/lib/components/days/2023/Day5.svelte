@@ -111,8 +111,8 @@
 </script>
 
 <Card.Root class="flex flex-col">
-	<Card.Header class="flex flex-row justify-between gap-2">
-		<div class="flex flex-col">
+	<Card.Header class="flex flex-row items-center justify-between gap-2">
+		<div class="flex flex-col gap-1.5">
 			<Card.Title class="flex items-center gap-2">
 				<Gauge class="text-primary" />
 				Elf Productivity Dashboard
@@ -129,7 +129,6 @@
 	<Card.Content class="relative flex flex-1 items-center">
 		<!-- Highlighted stats -->
 		<div class="mb-16 grid w-full grid-cols-2 gap-8 xs:max-md:mb-10 lg:mb-10">
-			<!-- toys/hour, time/toy, most productive elf, completion rate -->
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{toysPerHour}</span>
 				<span class="uppercase text-muted-foreground">toys per hour</span>

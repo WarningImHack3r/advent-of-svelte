@@ -21,7 +21,7 @@
 	const dashboards = {
 		santa: "Santa's",
 		elves: "Elves"
-	};
+	} as const;
 	let currentDashboard: keyof typeof dashboards = "santa";
 </script>
 
