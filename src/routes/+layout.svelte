@@ -36,7 +36,9 @@
 
 	// Settings
 	let settingsOpen = false;
+	let isMaxParticlesValid = true;
 	let unsavedMaxParticles = $maxParticles;
+	let isSpeedValid = true;
 	let unsavedSpeed = $speed;
 
 	// Theme selector
@@ -155,7 +157,12 @@
 							<Input
 								type="number"
 								id="quantity"
+								min="10"
+								max="1000"
 								bind:value={unsavedMaxParticles}
+								on:input={e => {
+									isMaxParticlesValid = e.target?.checkValidity() ?? false;
+								}}
 								placeholder="Snowflakes quantity"
 							/>
 						</div>
@@ -167,7 +174,12 @@
 							<Input
 								type="number"
 								id="speed"
+								min="250"
+								max="5000"
 								bind:value={unsavedSpeed}
+								on:input={e => {
+									isSpeedValid = e.target?.checkValidity() ?? false;
+								}}
 								placeholder="Snowflakes speed"
 							/>
 						</div>
@@ -175,6 +187,7 @@
 							<Button variant="secondary" on:click={() => (settingsOpen = false)}>Cancel</Button>
 							<Button
 								type="submit"
+								disabled={!isMaxParticlesValid || !isSpeedValid}
 								on:click={() => {
 									settingsOpen = false;
 									$maxParticles = unsavedMaxParticles;
