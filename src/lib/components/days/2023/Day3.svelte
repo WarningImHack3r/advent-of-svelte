@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { blur, fly } from "svelte/transition";
-	import CheckSquare2 from "lucide-svelte/icons/check-square-2";
+	import SquareCheck from "lucide-svelte/icons/square-check";
 	import Square from "lucide-svelte/icons/square";
 	import Weight from "lucide-svelte/icons/weight";
 	import { Skeleton } from "$lib/components/ui/skeleton";
@@ -151,7 +151,7 @@
 									<div class="flex min-w-max flex-col px-6 py-4 peer-checked:text-primary">
 										<div class="flex items-center gap-2">
 											{#if selectedPresents.includes(present)}
-												<CheckSquare2 class="size-4 text-primary" />
+												<SquareCheck class="size-4 text-primary" />
 											{:else}
 												<Square class="size-4 text-primary" />
 											{/if}
