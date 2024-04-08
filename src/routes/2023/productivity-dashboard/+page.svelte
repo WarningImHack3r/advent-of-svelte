@@ -122,6 +122,7 @@
 					<!-- Stats -->
 					<Skeleton class="h-10 w-28" />
 					<div class="mt-8 flex flex-wrap justify-center gap-8">
+						<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 						{#each Array(8) as _}
 							<Skeleton class="h-28 w-56" />
 						{/each}

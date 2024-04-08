@@ -179,8 +179,7 @@
 
 	function transformDraggedElement<T extends Item = { item?: PossibleItem }>(
 		element: HTMLElement | undefined,
-		data: T | undefined,
-		_index: number | undefined
+		data: T | undefined
 	) {
 		if (!element || !data || !data.item) return;
 		switch (data.item.type) {
