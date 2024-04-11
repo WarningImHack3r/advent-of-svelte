@@ -194,6 +194,7 @@
 										<Skeleton class="rounded-lg" />
 									{:then res}
 										<img src={res.url} alt="Card {number}" />
+										<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 									{:catch _}
 										<div class="rounded-lg bg-background">{number}</div>
 									{/await}

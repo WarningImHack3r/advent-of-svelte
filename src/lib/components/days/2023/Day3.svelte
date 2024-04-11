@@ -86,6 +86,7 @@
 					<div class="flex flex-col gap-4 lg:flex-row">
 						<Skeleton class="mr-6 aspect-square h-44 lg:mr-0" />
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
+							<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 							{#each Array(8) as _}
 								<Skeleton class="h-full w-32" />
 							{/each}
@@ -172,6 +173,7 @@
 			<Card.Content class="flex flex-col gap-8 pb-0 xs:flex-row">
 				{#await autoCompute()}
 					<div class="flex flex-1 flex-col gap-2 overflow-hidden">
+						<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
 						{#each Array(2) as _}
 							<Skeleton class="h-[5.6rem] w-full" />
 						{/each}
