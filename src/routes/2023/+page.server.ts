@@ -1,6 +1,4 @@
-import type { PageServerLoad } from "./$types";
-
-export const load: PageServerLoad = async ({ fetch }) => {
+export async function load({ fetch }) {
 	return {
 		streamed: {
 			kids: fetch("https://advent.sveltesociety.dev/data/2023/day-one.json").then(res =>
@@ -14,4 +12,4 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			) as Promise<{ name: string; weight: number }[]>
 		}
 	};
-};
+}

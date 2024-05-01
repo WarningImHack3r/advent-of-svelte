@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
 	import { page } from "$app/stores";
 	import ChevronRight from "lucide-svelte/icons/chevron-right";
 	import ScrollText from "lucide-svelte/icons/scroll-text";
@@ -16,7 +15,7 @@
 	import Day9 from "$lib/components/days/2023/Day9.svelte";
 	import Day11 from "$lib/components/days/2023/Day11.svelte";
 
-	export let data: PageData;
+	export let data;
 
 	const dashboards = {
 		santa: "Santa's",

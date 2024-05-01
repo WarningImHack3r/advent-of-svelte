@@ -1,7 +1,6 @@
-import type { PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-export const load: PageServerLoad = async ({ parent }) => {
+export async function load({ parent }) {
 	const { years } = await parent();
-	redirect(302, years[years.length - 1] ?? "/");
-};
+	redirect(302, years.at(-1)?.year ?? "/");
+}

@@ -1,11 +1,12 @@
 <script lang="ts">
 	import "../app.pcss";
-	import type { LayoutData } from "./$types";
 	import { onMount, type SvelteComponent } from "svelte";
 	import type { SvelteHTMLElements } from "svelte/elements";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
+	import ArrowUpRight from "lucide-svelte/icons/arrow-up-right";
 	import ChevronDown from "lucide-svelte/icons/chevron-down";
+	import Hammer from "lucide-svelte/icons/hammer";
 	import Moon from "lucide-svelte/icons/moon";
 	import Monitor from "lucide-svelte/icons/monitor";
 	import Settings2 from "lucide-svelte/icons/settings-2";
@@ -21,14 +22,16 @@
 	import { Toaster } from "$lib/components/ui/sonner";
 	import * as Dialog from "$lib/components/ui/dialog";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Tooltip from "$lib/components/ui/tooltip";
 
-	export let data: LayoutData;
+	export let data;
 
 	// Year selector
 	let selectedYear = "Choose a year";
+	const maxComponents = 24;
 	$: if ($page.route.id) {
 		const currentPage = $page.route.id.split("/")[1];
-		if (currentPage && data.years.includes(currentPage)) {
+		if (currentPage && data.years.map(route => route.year).includes(currentPage)) {
 			selectedYear = currentPage;
 		}
 	}
@@ -107,26 +110,48 @@
 		<div class="xs:ml-4">
 			<DropdownMenu.Root bind:open={yearSwitcherOpen}>
 				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="ghost" class="gap-1">
-						<span class="text-muted-foreground">
-							{selectedYear}
-						</span>
+					<Button builders={[builder]} variant="ghost" class="gap-1 text-muted-foreground">
+						{#if (data.years.find(year => year.year === selectedYear)?.components ?? maxComponents) < maxComponents}
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<Hammer class="mr-1 size-4" />
+								</Tooltip.Trigger>
+								<Tooltip.Content>Work in progress!</Tooltip.Content>
+							</Tooltip.Root>
+						{/if}
+						{selectedYear}
 						<ChevronDown
-							class={"size-4 opacity-50 transition-transform" +
-								(yearSwitcherOpen ? " rotate-180" : "")}
+							class={"size-4 transition-transform" + (yearSwitcherOpen ? " rotate-180" : "")}
 						/>
 						<span class="sr-only">Go to another year</span>
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
-						{#each data.years as year}
+						{#each data.years as { year, components }}
 							<DropdownMenu.RadioItem
-								class="cursor-pointer"
+								class={"flex cursor-pointer flex-col items-start [&>*:first-child]:top-2 [&>*:not(:nth-child(2))]:z-10" +
+									(components > 0 && components < maxComponents
+										? " transition-colors duration-300"
+										: "")}
 								value={year}
 								on:click={() => goto(`/${year}`)}
 							>
-								{year}
+								<div
+									class={"absolute inset-0 rounded-sm" +
+										(components > 0 && components < maxComponents ? " bg-accent/75" : "")}
+									style="width: {(components / maxComponents) * 100}%"
+								></div>
+								<span>{year}</span>
+								<span class="text-muted-foreground">
+									{#if components === maxComponents}
+										Completed!
+									{:else if components === 0}
+										Not started
+									{:else}
+										Progress: {components} / {maxComponents}
+									{/if}
+								</span>
 							</DropdownMenu.RadioItem>
 						{/each}
 					</DropdownMenu.RadioGroup>
@@ -137,6 +162,18 @@
 		<!-- Right part -->
 		<div class="flex flex-1 items-center justify-end space-x-2 sm:space-x-4">
 			<nav class="flex items-center space-x-1">
+				<Button
+					href="https://github.com/WarningImHack3r/advent-of-code"
+					target="_blank"
+					rel="noreferrer"
+					variant="ghost"
+					class="group mr-6 text-muted-foreground max-md:hidden"
+				>
+					My Advent of Code
+					<ArrowUpRight
+						class="ml-2 size-4 transition-transform duration-300 group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1"
+					/>
+				</Button>
 				<Dialog.Root bind:open={settingsOpen}>
 					<Dialog.Trigger class={cn(buttonVariants({ variant: "ghost" }), "aspect-square p-0")}>
 						<Settings2 class="size-5" />
