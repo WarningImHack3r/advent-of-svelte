@@ -187,7 +187,7 @@
 				element.innerHTML = `<img src="${data.item.image}" alt="${data.item.name}" class="h-full" />`;
 				break;
 			case "text":
-				element.innerHTML = `<textarea placeholder="Enter your text here" class="h-full w-full resize-none rounded-2xl bg-transparent p-2" />`;
+				element.innerHTML = `<textarea placeholder="Enter your text here" class="size-full resize-none rounded-2xl bg-transparent p-2" />`;
 				break;
 		}
 	}
@@ -232,7 +232,7 @@
 
 <div class="container my-8">
 	<Card.Root>
-		<Card.Header class="flex flex-row items-center gap-4">
+		<Card.Header class="flex flex-row items-center gap-4 space-y-0">
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild let:builder>
 					<Button builders={[builder]} size="icon" href="." class="mr-6">
@@ -337,12 +337,12 @@
 											textAreaFocused(target);
 										}}
 										on:focusout={textAreaUnfocused}
-										class="h-full w-full resize-none rounded-2xl bg-transparent p-2"
+										class="size-full resize-none rounded-2xl bg-transparent p-2"
 									/>
 								{/if}
 								<!--{:else}-->
 								<!-- DEBUG -->
-								<!--								<div class="h-full w-full rounded-full bg-black" />-->
+								<!--								<div class="size-full rounded-full bg-black" />-->
 							{/if}
 						</div>
 					{/each}

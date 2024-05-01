@@ -143,10 +143,4 @@
 
 <svelte:window on:resize={debounceResize} />
 
-<canvas
-	aria-hidden="true"
-	bind:this={snowflakes}
-	{width}
-	{height}
-	class="pointer-events-none fixed inset-0 -z-10 h-screen w-screen"
-></canvas>
+<canvas aria-hidden="true" bind:this={snowflakes} {width} {height} class={$$props.class}></canvas>

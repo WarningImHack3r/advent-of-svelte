@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import ChevronRight from "lucide-svelte/icons/chevron-right";
-	import ScrollText from "lucide-svelte/icons/scroll-text";
+	import Paintbrush from "lucide-svelte/icons/paintbrush";
 	import { Button } from "$lib/components/ui/button";
 	import * as Tabs from "$lib/components/ui/tabs";
 	import Day1 from "$lib/components/days/2023/Day1.svelte";
@@ -24,15 +24,15 @@
 	let currentDashboard: keyof typeof dashboards = "santa";
 </script>
 
-<div class="container py-8">
-	<div class="flex flex-col items-start justify-between gap-4 xs:flex-row xs:items-center">
+<div class="container my-8">
+	<div class="flex items-center justify-between gap-4">
 		<h2 class="text-3xl font-bold tracking-tight">
 			<span class="text-primary">{dashboards[currentDashboard]}</span>
 			Dashboard
 		</h2>
-		<Button href="{$page.route.id ?? ''}/card-creator" class="group ml-auto xs:ml-0">
-			<ScrollText class="mr-2 size-6" />
-			<span class="hidden sm:block">Create your Christmas card</span>
+		<Button href={$page.url + "/diy"} class="group ml-auto xs:ml-0">
+			<Paintbrush class="mr-2 size-6" />
+			<span class="hidden sm:block">DIYs</span>
 			<ChevronRight
 				class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1"
 			/>

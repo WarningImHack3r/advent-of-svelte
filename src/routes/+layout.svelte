@@ -92,7 +92,7 @@
 	<title>Advent of Svelte {$page.route.id?.split("/")[1]} | WarningImHack3r</title>
 </svelte:head>
 
-<Snowflakes />
+<Snowflakes class="pointer-events-none fixed inset-0 -z-10 h-screen w-screen" />
 <ModeWatcher />
 <Toaster closeButton />
 <header
@@ -102,7 +102,7 @@
 		<!-- Left part -->
 		<a href="/" class="flex items-center gap-2">
 			<img src="https://advent.sveltesociety.dev/favicon.png" alt="Advent of Svelte" class="h-8" />
-			<div class="hidden xs:block">
+			<div class="hidden text-nowrap xs:block">
 				<h2 class="font-semibold xs:text-xl">Advent of Svelte</h2>
 				<h3 class="text-xs text-muted-foreground">by WarningImHack3r</h3>
 			</div>
@@ -129,27 +129,36 @@
 				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
 						{#each data.years as { year, components }}
+							{@const progressPercentage = (components / maxComponents) * 100}
 							<DropdownMenu.RadioItem
-								class={"flex cursor-pointer flex-col items-start [&>*:first-child]:top-2 [&>*:not(:nth-child(2))]:z-10" +
+								class={"group flex cursor-pointer flex-col items-start [&>*:first-child]:top-[0.7rem] [&>*:not(:nth-child(2))]:z-10" +
 									(components > 0 && components < maxComponents
-										? " transition-colors duration-300"
+										? " data-[highlighted]:bg-transparent"
 										: "")}
 								value={year}
 								on:click={() => goto(`/${year}`)}
 							>
-								<div
-									class={"absolute inset-0 rounded-sm" +
-										(components > 0 && components < maxComponents ? " bg-accent/75" : "")}
-									style="width: {(components / maxComponents) * 100}%"
-								></div>
-								<span>{year}</span>
+								<div class="absolute inset-0">
+									{#if components > 0 && components < maxComponents}
+										<div
+											class="h-full w-[var(--width)] rounded-sm bg-accent/75 transition-[width,_background-color] group-hover:w-full group-hover:bg-accent"
+											style="--width: {progressPercentage}%"
+										></div>
+										<div
+											class="absolute inset-0 flex items-center justify-end pr-1 text-4xl font-light text-muted-foreground/15 transition-opacity duration-300 group-hover:opacity-0"
+										>
+											{Math.ceil(progressPercentage)}%
+										</div>
+									{/if}
+								</div>
+								<span class="text-base font-semibold">{year}</span>
 								<span class="text-muted-foreground">
-									{#if components === maxComponents}
+									{#if components >= maxComponents}
 										Completed!
 									{:else if components === 0}
 										Not started
 									{:else}
-										Progress: {components} / {maxComponents}
+										<span class="font-semibold">Progress:</span> {components} / {maxComponents}
 									{/if}
 								</span>
 							</DropdownMenu.RadioItem>
@@ -241,7 +250,7 @@
 					target="_blank"
 					rel="noreferrer"
 					variant="ghost"
-					class="aspect-square p-0"
+					class="aspect-square p-0 max-sm:hidden"
 				>
 					<img src="/github.svg" alt="GitHub" class="size-5 dark:invert" />
 					<span class="sr-only">GitHub</span>
