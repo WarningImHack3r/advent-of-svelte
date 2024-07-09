@@ -49,7 +49,7 @@
 				lg:[&>*:nth-child(2)]:col-span-2"
 			>
 				<Day2 />
-				<Day3 presents={data.streamed.presents} presents_v2={data.streamed.presents_v2} />
+				<Day3 presents={data.presents} presents_v2={data.presents_v2} />
 				<Day4 />
 				<Day7 />
 				<Day8 />
@@ -61,7 +61,7 @@
 				class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4
 				lg:[&>*:nth-child(1)]:col-span-2 lg:[&>*:nth-child(2)]:col-span-2"
 			>
-				<Day1 kids={data.streamed.kids} />
+				<Day1 kids={data.kids} />
 				<Day5 />
 				<Day6 />
 				<Day11 />

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import AlarmClock from "lucide-svelte/icons/alarm-clock";
-	import { Confetti } from "svelte-confetti";
+	import { confetti } from "@neoconfetti/svelte";
 	import * as Card from "$lib/components/ui/card";
 
 	let days = -1;
@@ -37,7 +37,7 @@
 
 	onMount(() => {
 		updateTimer();
-		() => clearInterval(interval);
+		return () => clearInterval(interval);
 	});
 </script>
 
@@ -53,13 +53,16 @@
 		<div class="text-center text-4xl font-semibold">
 			{#if days === 0 && hours === 0 && minutes === 0 && seconds === 0}
 				<div class="flex flex-col items-center">
-					<Confetti
-						rounded
-						infinite
-						x={[-1, 1]}
-						y={[-0.5, 1]}
-						colorArray={["white", "hsl(var(--primary))", "orange"]}
-					/>
+					<div
+						use:confetti={{
+							particleShape: "circles",
+							particleCount: 100,
+							duration: 7_500,
+							colors: ["white", "hsl(var(--primary))", "orange"],
+							stageWidth: 400,
+							stageHeight: 170
+						}}
+					></div>
 					<span class="motion-safe:animate-bounce-and-spin-y">Christmas is here!</span>
 				</div>
 			{:else}
