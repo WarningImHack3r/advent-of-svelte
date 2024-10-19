@@ -1,14 +1,12 @@
 <script lang="ts">
+	import { onDestroy } from "svelte";
 	import { crossfade } from "svelte/transition";
-	import Languages from "lucide-svelte/icons/languages";
-	import Play from "lucide-svelte/icons/play";
-	import Square from "lucide-svelte/icons/square";
+	import { Languages, Play, Square } from "lucide-svelte";
 	import { cn } from "$lib/utils";
 	import { buttonVariants } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Separator } from "$lib/components/ui/separator";
 	import * as Card from "$lib/components/ui/card";
-	import { onDestroy } from "svelte";
 
 	// Morse
 	const morseCode: Record<string, string> = {

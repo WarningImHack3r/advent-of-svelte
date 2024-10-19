@@ -4,13 +4,7 @@
 	import type { SvelteHTMLElements } from "svelte/elements";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import ArrowUpRight from "lucide-svelte/icons/arrow-up-right";
-	import ChevronDown from "lucide-svelte/icons/chevron-down";
-	import Hammer from "lucide-svelte/icons/hammer";
-	import Moon from "lucide-svelte/icons/moon";
-	import Monitor from "lucide-svelte/icons/monitor";
-	import Settings2 from "lucide-svelte/icons/settings-2";
-	import Sun from "lucide-svelte/icons/sun";
+	import { ArrowUpRight, ChevronDown, Hammer, Moon, Monitor, Settings2, Sun } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { ModeWatcher, resetMode, setMode } from "mode-watcher";
 	import { cn } from "$lib/utils";

@@ -1,6 +1,5 @@
 <script lang="ts">
-	import ChevronLeft from "lucide-svelte/icons/chevron-left";
-	import Snowflake from "lucide-svelte/icons/snowflake";
+	import { ChevronLeft, Snowflake } from "lucide-svelte";
 	import Snowflakes from "$lib/components/Snowflakes.svelte";
 	import Day15 from "$lib/components/days/2023/Day15.svelte";
 	import { Button } from "$lib/components/ui/button";

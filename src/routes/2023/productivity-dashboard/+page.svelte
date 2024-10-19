@@ -1,6 +1,5 @@
 <script lang="ts">
-	import ChevronLeft from "lucide-svelte/icons/chevron-left";
-	import Gauge from "lucide-svelte/icons/gauge";
+	import { ChevronLeft, Gauge } from "lucide-svelte";
 	import {
 		VisAxis,
 		VisBulletLegend,

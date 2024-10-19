@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { tick } from "svelte";
-	import Check from "lucide-svelte/icons/check";
-	import ChevronsUpDown from "lucide-svelte/icons/chevrons-up-down";
-	import Frown from "lucide-svelte/icons/frown";
-	import Gift from "lucide-svelte/icons/gift";
+	import { Check, ChevronsUpDown, Frown, Gift } from "lucide-svelte";
 	import { cn } from "$lib/utils";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";

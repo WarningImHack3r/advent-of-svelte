@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import Club from "lucide-svelte/icons/club";
-	import Play from "lucide-svelte/icons/play";
+	import { Club, Play } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 </script>

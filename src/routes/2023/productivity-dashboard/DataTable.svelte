@@ -7,12 +7,14 @@
 		addSortBy,
 		addTableFilter
 	} from "svelte-headless-table/plugins";
-	import ArrowDownAZ from "lucide-svelte/icons/arrow-down-a-z";
-	import ArrowUpDown from "lucide-svelte/icons/arrow-up-down";
-	import ArrowDownZA from "lucide-svelte/icons/arrow-down-z-a";
-	import ChevronDown from "lucide-svelte/icons/chevron-down";
-	import ChevronLeft from "lucide-svelte/icons/chevron-left";
-	import ChevronRight from "lucide-svelte/icons/chevron-right";
+	import {
+		ArrowDownAZ,
+		ArrowUpDown,
+		ArrowDownZA,
+		ChevronDown,
+		ChevronLeft,
+		ChevronRight
+	} from "lucide-svelte";
 	import type { Task } from "$lib/components/days/2023/Day5.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";

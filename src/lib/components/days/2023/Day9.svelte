@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import AlarmClock from "lucide-svelte/icons/alarm-clock";
+	import { AlarmClock } from "lucide-svelte";
 	import { confetti } from "@neoconfetti/svelte";
 	import * as Card from "$lib/components/ui/card";
 

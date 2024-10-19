@@ -9,8 +9,7 @@
 		SHADOW_ITEM_MARKER_PROPERTY_NAME,
 		TRIGGERS
 	} from "svelte-dnd-action";
-	import ChevronLeft from "lucide-svelte/icons/chevron-left";
-	import ScrollText from "lucide-svelte/icons/scroll-text";
+	import { ChevronLeft, ScrollText } from "lucide-svelte";
 	import defaultTheme from "tailwindcss/defaultTheme";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";

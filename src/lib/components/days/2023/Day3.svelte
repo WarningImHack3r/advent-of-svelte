@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { blur, fly } from "svelte/transition";
-	import SquareCheck from "lucide-svelte/icons/square-check";
-	import Square from "lucide-svelte/icons/square";
-	import Weight from "lucide-svelte/icons/weight";
+	import { Square, SquareCheck, Weight } from "lucide-svelte";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import * as Card from "$lib/components/ui/card";
 	import * as Tabs from "$lib/components/ui/tabs";

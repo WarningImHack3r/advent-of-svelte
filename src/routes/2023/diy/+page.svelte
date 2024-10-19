@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import type { Component } from "lucide-svelte";
-	import ChevronRight from "lucide-svelte/icons/chevron-right";
-	import ScrollText from "lucide-svelte/icons/scroll-text";
-	import Snowflake from "lucide-svelte/icons/snowflake";
+	import { ChevronRight, type Component, ScrollText, Snowflake } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Separator } from "$lib/components/ui/separator";
 	import * as Card from "$lib/components/ui/card";

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { blur } from "svelte/transition";
-	import Heart from "lucide-svelte/icons/heart";
-	import HeartPulse from "lucide-svelte/icons/heart-pulse";
+	import { Heart, HeartPulse } from "lucide-svelte";
 	import { VisLine, VisXYContainer } from "@unovis/svelte";
 	import * as Card from "$lib/components/ui/card";
 

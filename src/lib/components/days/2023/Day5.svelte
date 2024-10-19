@@ -10,8 +10,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { page } from "$app/stores";
-	import ArrowRight from "lucide-svelte/icons/arrow-right";
-	import Gauge from "lucide-svelte/icons/gauge";
+	import { ArrowRight, Gauge } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 
