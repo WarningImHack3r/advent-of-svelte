@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { readable } from "svelte/store";
-	import { createTable, Render, Subscribe } from "svelte-headless-table";
+	import { createRawSnippet } from "svelte";
 	import {
-		addHiddenColumns,
-		addPagination,
-		addSortBy,
-		addTableFilter
-	} from "svelte-headless-table/plugins";
+		type ColumnDef,
+		type ColumnFiltersState,
+		type PaginationState,
+		type SortingState,
+		type VisibilityState,
+		getCoreRowModel,
+		getFilteredRowModel,
+		getPaginationRowModel,
+		getSortedRowModel
+	} from "@tanstack/table-core";
 	import {
 		ArrowDownAZ,
 		ArrowUpDown,
@@ -17,200 +21,243 @@
 	} from "lucide-svelte";
 	import type { Task } from "$lib/components/days/2023/Day5.svelte";
 	import { Button } from "$lib/components/ui/button";
+	import { createSvelteTable, FlexRender, renderSnippet } from "$lib/components/ui/data-table";
 	import { Input } from "$lib/components/ui/input";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Pagination from "$lib/components/ui/pagination";
 	import * as Table from "$lib/components/ui/table";
 
-	export let tableData: Task[];
+	let { tableData }: { tableData: Task[] } = $props();
 
-	const table = createTable(readable(tableData), {
-		page: addPagination(),
-		sort: addSortBy({
-			initialSortKeys: [{ id: "date", order: "desc" }],
-			disableMultiSort: true
-		}),
-		filter: addTableFilter({
-			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
-		}),
-		hide: addHiddenColumns()
-	});
-	const columns = table.createColumns([
-		table.column({
-			accessor: "elf",
-			header: "Elf"
-		}),
-		table.column({
-			accessor: "task",
+	let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
+	let sorting = $state<SortingState>([]);
+	let columnFilters = $state<ColumnFiltersState>([]);
+	let columnVisibility = $state<VisibilityState>({});
+
+	const columns: ColumnDef<Task>[] = [
+		{
+			accessorKey: "elf",
+			header: ({ column }) =>
+				renderSnippet(
+					createRawSnippet(getName => ({
+						render: () =>
+							// column.toggleSorting(column.getIsSorted() === "asc")
+							`<button type="button">${getName()} sortable!</button>`
+					})),
+					"Elf"
+				)
+		},
+		{
+			accessorKey: "task",
 			header: "Task",
-			cell: ({ value }) => {
-				switch (value) {
-					case "CREATED_TOY":
-						return "created a toy";
-					case "WRAPPED_PRESENT":
-						return "wrapped a present";
-				}
-			},
-			plugins: {
-				filter: {
-					exclude: true
-				}
+			cell: ({ row }) => {
+				return renderSnippet(
+					createRawSnippet(getAmount => ({
+						render: () => `<div>${getAmount()}</div>`
+					})),
+					(() => {
+						switch (row.getValue("task")) {
+							case "CREATED_TOY":
+								return "created a toy";
+							case "WRAPPED_PRESENT":
+								return "wrapped a present";
+						}
+					})()
+				);
 			}
-		}),
-		table.column({
-			accessor: "minutesTaken",
+		},
+		{
+			accessorKey: "minutesTaken",
 			header: "Minutes Taken",
-			cell: ({ value }) => `${value} minutes`,
-			plugins: {
-				filter: {
-					exclude: true
-				}
-			}
-		}),
-		table.column({
-			accessor: "date",
+			cell: ({ row }) =>
+				renderSnippet(
+					createRawSnippet(getMinutes => ({
+						render: () => `<div>${getMinutes()}</div>`
+					})),
+					`${row.getValue("minutesTaken")} minutes`
+				)
+		},
+		{
+			accessorKey: "date",
 			header: "Date",
-			cell: ({ value }) => {
-				const d = new Date(value);
-				return `${d.toLocaleDateString()} @ ${d.toLocaleTimeString()}`;
-			},
-			plugins: {
-				filter: {
-					exclude: true
-				}
+			cell: ({ row }) => {
+				return renderSnippet(
+					createRawSnippet(getValue => {
+						const d = new Date(getValue());
+						return {
+							render: () => `${d.toLocaleDateString()} @ ${d.toLocaleTimeString()}`
+						};
+					}),
+					"" + row.getValue("date")
+				);
 			}
-		})
-	]);
-	const { flatColumns, headerRows, pageRows, pluginStates, rows, tableAttrs, tableBodyAttrs } =
-		table.createViewModel(columns);
-	const { pageIndex, pageSize } = pluginStates.page;
-	const { filterValue } = pluginStates.filter;
-	const { hiddenColumnIds } = pluginStates.hide;
-
-	const hideForId = Object.fromEntries(flatColumns.map(col => [col.id, true]));
-	$: $hiddenColumnIds = Object.entries(hideForId)
-		.filter(([, hide]) => !hide)
-		.map(([id]) => id);
-	const hidableCols: (keyof (typeof tableData)[number])[] = ["task", "minutesTaken", "date"];
+		}
+	];
+	const table = createSvelteTable({
+		get data() {
+			return tableData;
+		},
+		columns,
+		state: {
+			get pagination() {
+				return pagination;
+			},
+			get sorting() {
+				return sorting;
+			},
+			get columnFilters() {
+				return columnFilters;
+			},
+			get columnVisibility() {
+				return columnVisibility;
+			}
+		},
+		onPaginationChange: updater => {
+			if (typeof updater === "function") {
+				pagination = updater(pagination);
+			} else {
+				pagination = updater;
+			}
+		},
+		onSortingChange: updater => {
+			if (typeof updater === "function") {
+				sorting = updater(sorting);
+			} else {
+				sorting = updater;
+			}
+		},
+		onColumnFiltersChange: updater => {
+			if (typeof updater === "function") {
+				columnFilters = updater(columnFilters);
+			} else {
+				columnFilters = updater;
+			}
+		},
+		onColumnVisibilityChange: updater => {
+			if (typeof updater === "function") {
+				columnVisibility = updater(columnVisibility);
+			} else {
+				columnVisibility = updater;
+			}
+		},
+		getCoreRowModel: getCoreRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel()
+	});
 </script>
 
 <div>
 	<div class="flex items-center py-4">
-		<Input name="filter" class="max-w-sm" placeholder="Filter elves..." bind:value={$filterValue} />
+		<Input
+			class="max-w-sm"
+			placeholder="Filter elves..."
+			value={(table.getColumn("elf")?.getFilterValue() as string) ?? ""}
+			onchange={e => {
+				table.getColumn("elf")?.setFilterValue(e.currentTarget.value);
+			}}
+			oninput={e => {
+				table.getColumn("elf")?.setFilterValue(e.currentTarget.value);
+			}}
+		/>
 		<DropdownMenu.Root>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button variant="outline" class="ml-auto" builders={[builder]}>
-					Columns <ChevronDown class="ml-2 size-4" />
-				</Button>
+			<DropdownMenu.Trigger>
+				{#snippet child({ props })}
+					<Button {...props} variant="outline" class="ml-auto">
+						Columns <ChevronDown class="ml-2 size-4" />
+					</Button>
+				{/snippet}
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content>
-				{#each flatColumns as col}
-					{#if hidableCols.includes(col.id)}
-						<DropdownMenu.CheckboxItem class="cursor-pointer" bind:checked={hideForId[col.id]}>
-							{col.header}
-						</DropdownMenu.CheckboxItem>
-					{/if}
+			<DropdownMenu.Content align="end">
+				{#each table.getAllColumns().filter(col => col.getCanHide()) as column (column.id)}
+					<DropdownMenu.CheckboxItem
+						class="cursor-pointer capitalize"
+						bind:checked={() => column.getIsVisible(), v => column.toggleVisibility(!!v)}
+					>
+						{column.id}
+					</DropdownMenu.CheckboxItem>
 				{/each}
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</div>
 	<div class="rounded-md border">
-		<Table.Root {...$tableAttrs}>
+		<Table.Root>
 			<Table.Header>
-				{#each $headerRows as headerRow}
-					<Subscribe rowAttrs={headerRow.attrs()}>
-						<Table.Row>
-							{#each headerRow.cells as cell (cell.id)}
-								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
-									<Table.Head {...attrs}>
-										<Button variant="ghost" class="-ml-3 px-3" on:click={props.sort.toggle}>
-											<Render of={cell.render()} />
-											{#if props.sort.order === "asc"}
-												<ArrowDownAZ class="ml-2 size-4 text-accent-foreground" />
-											{:else if props.sort.order === "desc"}
-												<ArrowDownZA class="ml-2 size-4 text-accent-foreground" />
-											{:else}
-												<ArrowUpDown class="ml-2 size-4" />
-											{/if}
-										</Button>
-									</Table.Head>
-								</Subscribe>
-							{/each}
-						</Table.Row>
-					</Subscribe>
+				{#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+					<Table.Row>
+						{#each headerGroup.headers as header (header.id)}
+							<Table.Head>
+								{#if !header.isPlaceholder}
+									<FlexRender
+										content={header.column.columnDef.header}
+										context={header.getContext()}
+									/>
+								{/if}
+							</Table.Head>
+						{/each}
+					</Table.Row>
 				{/each}
 			</Table.Header>
-			<Table.Body {...$tableBodyAttrs}>
-				{#each $pageRows as row (row.id)}
-					<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
-						<Table.Row {...rowAttrs}>
-							{#each row.cells as cell (cell.id)}
-								<Subscribe attrs={cell.attrs()} let:attrs>
-									<Table.Cell {...attrs}>
-										{#if cell.id === "elf"}
-											<div class="font-semibold">
-												<Render of={cell.render()} />
-											</div>
-										{:else if cell.id === "task"}
-											<div class="text-muted-foreground">
-												<Render of={cell.render()} />
-											</div>
-										{:else}
-											<Render of={cell.render()} />
-										{/if}
-									</Table.Cell>
-								</Subscribe>
-							{/each}
-						</Table.Row>
-					</Subscribe>
+			<Table.Body>
+				{#each table.getRowModel().rows as row (row.id)}
+					<Table.Row data-state={row.getIsSelected() && "selected"}>
+						{#each row.getVisibleCells() as cell (cell.id)}
+							<Table.Cell>
+								<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+							</Table.Cell>
+						{/each}
+					</Table.Row>
+				{:else}
+					<Table.Row>
+						<Table.Cell colspan={columns.length} class="h-24 text-center">No results.</Table.Cell>
+					</Table.Row>
 				{/each}
 			</Table.Body>
 		</Table.Root>
 	</div>
 	<div class="flex items-center justify-end space-x-2 py-4">
 		<div class="flex-1 text-sm text-muted-foreground">
-			{#if $filterValue}
-				<strong>{$rows.length}</strong> out of <strong>{tableData.length}</strong> rows
+			{#if table.getColumn("elf")?.getFilterValue()}
+				<strong>{table.getPaginationRowModel().rows.length}</strong> out of
+				<strong>{tableData.length}</strong> rows
 			{:else}
-				<strong>{$rows.length}</strong> rows
+				<strong>{table.getRowCount()}</strong> rows
 			{/if}
 		</div>
 		<Pagination.Root
 			class="mx-0 w-auto flex-row"
-			count={$rows.length}
-			page={$pageIndex + 1}
-			perPage={$pageSize}
-			onPageChange={page => ($pageIndex = page - 1)}
-			let:pages
-			let:currentPage
+			count={tableData.length}
+			perPage={pagination.pageSize}
 		>
-			<Pagination.Content>
-				<Pagination.Item>
-					<Pagination.PrevButton>
-						<ChevronLeft class="size-4" />
-						<span class="hidden sm:block">Previous</span>
-					</Pagination.PrevButton>
-				</Pagination.Item>
-				{#each pages as page (page.key)}
-					{#if page.type === "ellipsis"}
-						<Pagination.Item>
-							<Pagination.Ellipsis />
-						</Pagination.Item>
-					{:else}
-						<Pagination.Item>
-							<Pagination.Link {page} isActive={currentPage === page.value}>
-								{page.value}
-							</Pagination.Link>
-						</Pagination.Item>
-					{/if}
-				{/each}
-				<Pagination.Item>
-					<Pagination.NextButton>
-						<span class="hidden sm:block">Next</span>
-						<ChevronRight class="size-4" />
-					</Pagination.NextButton>
-				</Pagination.Item>
-			</Pagination.Content>
+			{#snippet children({ pages, currentPage })}
+				<Pagination.Content>
+					<Pagination.Item>
+						<Pagination.PrevButton>
+							<ChevronLeft class="size-4" />
+							<span class="hidden sm:block">Previous</span>
+						</Pagination.PrevButton>
+					</Pagination.Item>
+					{#each pages as page (page.key)}
+						{#if page.type === "ellipsis"}
+							<Pagination.Item>
+								<Pagination.Ellipsis />
+							</Pagination.Item>
+						{:else}
+							<Pagination.Item isVisible={currentPage === page.value}>
+								<Pagination.Link {page} isActive={currentPage === page.value}>
+									{page.value}
+								</Pagination.Link>
+							</Pagination.Item>
+						{/if}
+					{/each}
+					<Pagination.Item>
+						<Pagination.NextButton>
+							<span class="hidden sm:block">Next</span>
+							<ChevronRight class="size-4" />
+						</Pagination.NextButton>
+					</Pagination.Item>
+				</Pagination.Content>
+			{/snippet}
 		</Pagination.Root>
 	</div>
 </div>
