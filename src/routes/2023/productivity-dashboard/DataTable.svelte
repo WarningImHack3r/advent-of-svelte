@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createRawSnippet } from "svelte";
 	import {
+		type Column,
 		type ColumnDef,
 		type ColumnFiltersState,
 		type PaginationState,
@@ -11,21 +12,20 @@
 		getPaginationRowModel,
 		getSortedRowModel
 	} from "@tanstack/table-core";
-	import {
-		ArrowDownAZ,
-		ArrowUpDown,
-		ArrowDownZA,
-		ChevronDown,
-		ChevronLeft,
-		ChevronRight
-	} from "lucide-svelte";
+	import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-svelte";
 	import type { Task } from "$lib/components/days/2023/Day5.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { createSvelteTable, FlexRender, renderSnippet } from "$lib/components/ui/data-table";
+	import {
+		createSvelteTable,
+		FlexRender,
+		renderComponent,
+		renderSnippet
+	} from "$lib/components/ui/data-table";
 	import { Input } from "$lib/components/ui/input";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Pagination from "$lib/components/ui/pagination";
 	import * as Table from "$lib/components/ui/table";
+	import SortingButton from "./SortingButton.svelte";
 
 	let { tableData }: { tableData: Task[] } = $props();
 
@@ -34,17 +34,27 @@
 	let columnFilters = $state<ColumnFiltersState>([]);
 	let columnVisibility = $state<VisibilityState>({});
 
+	function setNextSorting<T>(column: Column<T>) {
+		const next = column.getNextSortingOrder();
+		if (!next) column.clearSorting();
+		else column.toggleSorting(next === "desc");
+	}
+
 	const columns: ColumnDef<Task>[] = [
 		{
 			accessorKey: "elf",
 			header: ({ column }) =>
+				renderComponent(SortingButton, {
+					name: "Elf",
+					sortingOrder: column.getIsSorted(),
+					onclick: () => setNextSorting(column)
+				}),
+			cell: ({ row }) =>
 				renderSnippet(
 					createRawSnippet(getName => ({
-						render: () =>
-							// column.toggleSorting(column.getIsSorted() === "asc")
-							`<button type="button">${getName()} sortable!</button>`
+						render: () => `<div class="font-semibold">${getName()}</div>`
 					})),
-					"Elf"
+					row.getValue("elf")
 				)
 		},
 		{
@@ -53,7 +63,7 @@
 			cell: ({ row }) => {
 				return renderSnippet(
 					createRawSnippet(getAmount => ({
-						render: () => `<div>${getAmount()}</div>`
+						render: () => `<div class="text-muted-foreground">${getAmount()}</div>`
 					})),
 					(() => {
 						switch (row.getValue("task")) {
@@ -172,9 +182,10 @@
 				{#each table.getAllColumns().filter(col => col.getCanHide()) as column (column.id)}
 					<DropdownMenu.CheckboxItem
 						class="cursor-pointer capitalize"
+						closeOnSelect={false}
 						bind:checked={() => column.getIsVisible(), v => column.toggleVisibility(!!v)}
 					>
-						{column.id}
+						{column.id.replace(/([A-Z][a-z])/g, " $1").replace(/(\d)/g, " $1")}
 					</DropdownMenu.CheckboxItem>
 				{/each}
 			</DropdownMenu.Content>
@@ -226,8 +237,9 @@
 		</div>
 		<Pagination.Root
 			class="mx-0 w-auto flex-row"
-			count={tableData.length}
+			count={table.getFilteredRowModel().rows.length}
 			perPage={pagination.pageSize}
+			onPageChange={page => table.setPageIndex(page - 1)}
 		>
 			{#snippet children({ pages, currentPage })}
 				<Pagination.Content>
