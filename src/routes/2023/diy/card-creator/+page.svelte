@@ -35,29 +35,33 @@
 	// VARIABLES & TYPES
 	type PossibleItem = (typeof pictures)[number] | typeof textElement;
 	type RecursiveNonNullable<T> = { [K in keyof T]-?: RecursiveNonNullable<NonNullable<T[K]>> };
-	let availableItems = [
-		...pictures.map(picture => ({
-			id: `decoration`,
-			item: picture
-		})),
-		...[
-			{
-				id: `text`,
-				item: textElement
-			}
-		]
-	].map((item, index) => ({ ...item, id: `${item.id}-${index}` })) satisfies RecursiveNonNullable<
-		typeof placedItems
-	>;
+	let availableItems = $state(
+		[
+			...pictures.map(picture => ({
+				id: `decoration`,
+				item: picture
+			})),
+			...[
+				{
+					id: `text`,
+					item: textElement
+				}
+			]
+		].map((item, index) => ({ ...item, id: `${item.id}-${index}` })) satisfies RecursiveNonNullable<
+			typeof placedItems
+		>
+	);
 	let placedItems: {
 		id: string;
 		item: PossibleItem | null;
-	}[] = Array.from({ length: cardSize }, (_, i) => ({
-		id: i.toString(),
-		item: null
-	}));
+	}[] = $state(
+		Array.from({ length: cardSize }, (_, i) => ({
+			id: i.toString(),
+			item: null
+		}))
+	);
 
-	let currentCardBackground = 0;
+	let currentCardBackground = $state(0);
 	const cardBackgroundColors = [
 		"hsl(var(--primary))",
 		"darkorchid",
@@ -77,17 +81,19 @@
 		textColor: (typeof styles)["colors"][number];
 		fontSize: keyof (typeof styles)["fontSizes"];
 	};
-	let focusedTextAreaId: ReturnType<typeof crypto.randomUUID> | undefined;
-	let focusedTextArea: (typeof registeredTextAreas)[keyof typeof registeredTextAreas];
-	let textAreaFocusTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
-	$: if (focusedTextAreaId) focusedTextArea = registeredTextAreas[focusedTextAreaId]!;
 	const registeredTextAreas: Record<
 		string,
 		{
 			element: HTMLTextAreaElement;
 			settings: TextAreaSettings;
 		}
-	> = {};
+	> = $state({});
+	let focusedTextAreaId = $state<ReturnType<typeof crypto.randomUUID>>();
+	let focusedTextArea = $state<(typeof registeredTextAreas)[keyof typeof registeredTextAreas]>();
+	let textAreaFocusTimeout: ReturnType<typeof setTimeout> | undefined = undefined;
+	$effect(() => {
+		if (focusedTextAreaId) focusedTextArea = registeredTextAreas[focusedTextAreaId]!;
+	});
 
 	// CALLBACKS & UTILS
 	function idToInt(id: string) {
@@ -210,7 +216,7 @@
 		focusedTextAreaId = id;
 	}
 
-	function updateTextAreaStyle(textArea: typeof focusedTextArea) {
+	function updateTextAreaStyle(textArea: NonNullable<typeof focusedTextArea>) {
 		textArea.element.style.fontFamily = styles.fonts[textArea.settings.fontFamily].join(", ");
 		textArea.element.style.color = textArea.settings.textColor;
 		textArea.element.style.fontSize = styles.fontSizes[textArea.settings.fontSize][1].lineHeight;
@@ -232,14 +238,18 @@
 <div class="container my-8">
 	<Card.Root>
 		<Card.Header class="flex flex-row items-center gap-4 space-y-0">
-			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} size="icon" href="." class="mr-6">
-						<ChevronLeft />
-					</Button>
-				</Tooltip.Trigger>
-				<Tooltip.Content>Back to the dashboard</Tooltip.Content>
-			</Tooltip.Root>
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button {...props} size="icon" href="." class="mr-6">
+								<ChevronLeft />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content>Back to the dashboard</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 			<ScrollText class="text-primary" />
 			<div class="flex flex-col">
 				<Card.Title>Christmas Card Creator</Card.Title>
@@ -258,8 +268,8 @@
 						outline: "2px solid hsl(var(--accent))"
 					}
 				}}
-				on:consider={e => itemDropConsider(e.detail)}
-				on:finalize={e => itemDropEnd(e.detail)}
+				onconsider={e => itemDropConsider(e.detail)}
+				onfinalize={e => itemDropEnd(e.detail)}
 			>
 				{#each availableItems.filter(item => item.item) as item (item.id)}
 					{@const element = item.item}
@@ -282,14 +292,16 @@
 				<span class="font-semibold">Background color:</span>
 				{#each cardBackgroundColors.entries() as [index, borderColor]}
 					<button
-						class="h-8 w-8 rounded-full outline-4 outline-offset-2 hover:outline hover:outline-foreground"
-						class:outline={index === currentCardBackground}
-						class:outline-primary={index === currentCardBackground}
+						aria-label="Background color"
+						class={[
+							"size-8 rounded-full outline-4 outline-offset-2 hover:outline hover:outline-foreground",
+							{
+								"outline outline-primary": index === currentCardBackground
+							}
+						]}
 						style="background-color: {borderColor};"
-						on:click={() => {
-							currentCardBackground = index;
-						}}
-					/>
+						onclick={() => (currentCardBackground = index)}
+					></button>
 				{/each}
 			</div>
 			<!-- Card -->
@@ -309,20 +321,19 @@
 							outline: "2px solid hsl(var(--accent))"
 						}
 					}}
-					on:consider={e => cardDropConsider(e.detail)}
-					on:finalize={e => cardDropEnd(e.detail)}
+					onconsider={e => cardDropConsider(e.detail)}
+					onfinalize={e => cardDropEnd(e.detail)}
 				>
 					{#each placedItems as item (item.id)}
 						<div
 							animate:flip={{ duration: flipDurationMs }}
-							class="relative flex items-center justify-center"
-							class:p-4={item.item}
+							class={["relative flex items-center justify-center", item.item && "p-4"]}
 						>
 							{#if Object.hasOwn(item, SHADOW_ITEM_MARKER_PROPERTY_NAME)}
 								<div
 									in:fade={{ duration: flipDurationMs, easing: cubicIn }}
 									class="visible absolute inset-0 rounded-2xl border border-dashed border-gray-500 bg-black/30"
-								/>
+								></div>
 							{:else if item.item}
 								{@const element = item.item}
 								{#if element.type === "decoration"}
@@ -330,14 +341,14 @@
 								{:else if element.type === "text"}
 									<textarea
 										placeholder="Enter your text here"
-										on:focus={e => {
+										onfocus={e => {
 											const target = e.target;
 											if (!target) return;
 											textAreaFocused(target);
 										}}
-										on:focusout={textAreaUnfocused}
+										onfocusout={textAreaUnfocused}
 										class="size-full resize-none rounded-2xl bg-transparent p-2"
-									/>
+									></textarea>
 								{/if}
 								<!--{:else}-->
 								<!-- DEBUG -->
@@ -356,12 +367,16 @@
 							<span class="font-semibold">Font:</span>
 							{#each Object.keys(styles["fonts"]) as style}
 								<button
-									class="underline-offset-4 hover:underline hover:decoration-foreground"
-									class:underline={style === focusedTextArea.settings.fontFamily}
-									class:decoration-primary={style === focusedTextArea.settings.fontFamily}
-									class:text-primary={style === focusedTextArea.settings.fontFamily}
-									on:click={() => {
-										focusedTextArea.settings.fontFamily = style;
+									class={[
+										"underline-offset-4 hover:underline hover:decoration-foreground",
+										{
+											"text-primary underline decoration-primary":
+												style === focusedTextArea?.settings.fontFamily
+										}
+									]}
+									onclick={() => {
+										if (!focusedTextArea) return;
+										focusedTextArea.settings.fontFamily = style as TextAreaSettings["fontFamily"];
 										updateTextAreaStyle(focusedTextArea);
 										focusedTextArea.element.focus();
 									}}
@@ -374,28 +389,37 @@
 							<span class="font-semibold">Text color:</span>
 							{#each styles["colors"] as color}
 								<button
-									class="h-8 w-8 rounded-full hover:ring-4 hover:ring-foreground"
-									class:ring-4={color === focusedTextArea.settings.textColor}
-									class:ring-primary={color === focusedTextArea.settings.textColor}
+									aria-label="Text color"
+									class={[
+										"h-8 w-8 rounded-full hover:ring-4 hover:ring-foreground",
+										{
+											"ring-4 ring-primary": color === focusedTextArea?.settings.textColor
+										}
+									]}
 									style="background-color: {color};"
-									on:click={() => {
+									onclick={() => {
+										if (!focusedTextArea) return;
 										focusedTextArea.settings.textColor = color;
 										updateTextAreaStyle(focusedTextArea);
 										focusedTextArea.element.focus();
 									}}
-								/>
+								></button>
 							{/each}
 						</div>
 						<div class="flex items-center gap-4">
 							<span class="font-semibold">Font size:</span>
 							{#each Object.keys(styles["fontSizes"]) as size}
 								<button
-									class="underline-offset-4 hover:underline hover:decoration-foreground"
-									class:underline={size === focusedTextArea.settings.fontSize}
-									class:decoration-primary={size === focusedTextArea.settings.fontSize}
-									class:text-primary={size === focusedTextArea.settings.fontSize}
-									on:click={() => {
-										focusedTextArea.settings.fontSize = size;
+									class={[
+										"underline-offset-4 hover:underline hover:decoration-foreground",
+										{
+											"text-primary underline decoration-primary":
+												size === focusedTextArea?.settings.fontSize
+										}
+									]}
+									onclick={() => {
+										if (!focusedTextArea) return;
+										focusedTextArea.settings.fontSize = size as TextAreaSettings["fontSize"];
 										updateTextAreaStyle(focusedTextArea);
 										focusedTextArea.element.focus();
 									}}

@@ -17,7 +17,7 @@
 	import * as Card from "$lib/components/ui/card";
 	import * as Tooltip from "$lib/components/ui/tooltip";
 
-	let container: HTMLDivElement;
+	let container = $state<HTMLDivElement>();
 
 	function tasksToByElf(tasks: Task[]) {
 		const tasksByElf: { id: number; elf: string; numberOfTasks: number }[] = [];
@@ -70,14 +70,18 @@
 <div class="container my-8">
 	<Card.Root>
 		<Card.Header class="flex flex-row items-center gap-4">
-			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} size="icon" href="." class="mr-6">
-						<ChevronLeft />
-					</Button>
-				</Tooltip.Trigger>
-				<Tooltip.Content>Back to the dashboard</Tooltip.Content>
-			</Tooltip.Root>
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button {...props} size="icon" href="." class="mr-6">
+								<ChevronLeft />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content>Back to the dashboard</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 			<Gauge class="text-primary" />
 			<div class="flex flex-col">
 				<Card.Title>Elf Productivity Dashboard</Card.Title>
@@ -92,7 +96,7 @@
 				bind:this={container}
 				style="--vis-tooltip-background-color: hsl(var(--card)); --vis-tooltip-text-color: hsl(var(--accent-foreground));"
 			>
-				{#await fetch("https://advent.sveltesociety.dev/data/2023/day-five.json").then( res => res.json() )}
+				{#await fetch("https://advent.sveltesociety.dev/data/2023/day-five.json").then(res => res.json() as Promise<Task[]>)}
 					<!-- History -->
 					<Skeleton class="h-10 w-28" />
 					<div class="flex items-center gap-4 py-4">
@@ -171,10 +175,15 @@
 						},
 						{
 							title: "Elf with the most tasks in a day",
-							value: orderedDays.reduce((acc, day) => {
-								const max = day.tasks.reduce((a, b) => (a.numberOfTasks > b.numberOfTasks ? a : b));
-								return acc.numberOfTasks > max.numberOfTasks ? acc : max;
-							}).elf
+							value: orderedDays.reduce(
+								(acc, day) => {
+									const max = day.tasks.reduce((a, b) =>
+										a.numberOfTasks > b.numberOfTasks ? a : b
+									);
+									return acc.numberOfTasks > max.numberOfTasks ? acc : max;
+								},
+								{ elf: "", numberOfTasks: 0 }
+							).elf
 						},
 						{
 							title: "Cumulative time spent on tasks",

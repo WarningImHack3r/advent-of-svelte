@@ -4,10 +4,10 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 
-	let cookiesCount = 0;
-	let lastAdjustmentPositive = false;
-	let cookiesLabel = "Cookie";
-	let comment = "Santa hasn't eaten any cookies yet.";
+	let cookiesCount = $state(0);
+	let lastAdjustmentPositive = $state(false);
+	let cookiesLabel = $state("Cookie");
+	let comment = $state("Santa hasn't eaten any cookies yet.");
 	function updateCookiesCount(adjustment: number) {
 		lastAdjustmentPositive = adjustment > 0;
 		cookiesCount += adjustment;
@@ -45,7 +45,7 @@
 				variant="outline"
 				size="icon"
 				class="size-8 shrink-0 rounded-full"
-				on:click={() => updateCookiesCount(-1)}
+				onclick={() => updateCookiesCount(-1)}
 				disabled={cookiesCount <= 0}
 			>
 				<Minus class="size-4" />
@@ -78,7 +78,7 @@
 				variant="outline"
 				size="icon"
 				class="size-8 shrink-0 rounded-full"
-				on:click={() => updateCookiesCount(1)}
+				onclick={() => updateCookiesCount(1)}
 			>
 				<Plus class="size-4" />
 				<span class="sr-only">Increase</span>
@@ -99,7 +99,7 @@
 		</div>
 		<Button
 			class="w-full"
-			on:click={() => updateCookiesCount(-cookiesCount)}
+			onclick={() => updateCookiesCount(-cookiesCount)}
 			disabled={cookiesCount === 0}
 		>
 			Reset

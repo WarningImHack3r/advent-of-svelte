@@ -8,19 +8,13 @@
 	import * as Command from "$lib/components/ui/command";
 	import * as Popover from "$lib/components/ui/popover";
 
-	export let kids: Promise<{ name: string; tally: number }[]>;
-	let search = "";
-	let open = false;
+	type Props = {
+		kids: Promise<{ name: string; tally: number }[]>;
+	};
 
-	// We want to refocus the trigger button when the user selects
-	// an item from the list so users can continue navigating the
-	// rest of the form with the keyboard.
-	function closeAndFocusTrigger(triggerId: string) {
-		open = false;
-		tick().then(() => {
-			document.getElementById(triggerId)?.focus();
-		});
-	}
+	let { kids }: Props = $props();
+	let search = $state("");
+	let open = $state(false);
 </script>
 
 <Card.Root>
@@ -43,29 +37,31 @@
 				<Skeleton class="h-32 w-full" />
 			</div>
 		{:then kids}
-			<Popover.Root bind:open let:ids>
-				<Popover.Trigger asChild let:builder>
-					<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-						<Button
-							builders={[builder]}
-							variant="outline"
-							role="combobox"
-							aria-expanded={open}
-							class="w-52 justify-between"
-						>
-							{kids.find(f => f.name === search)?.name ?? "Select a child..."}
-							<ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
-						</Button>
-						<p class="text-muted-foreground">
-							<span class="font-semibold text-accent-foreground">
-								{kids.filter(f => f.tally > 0).length}
-							</span>
-							nice children •{" "}
-							<span class="font-semibold text-accent-foreground">
-								{kids.filter(f => f.tally < 0).length}
-							</span> naughty children
-						</p>
-					</div>
+			<Popover.Root bind:open>
+				<Popover.Trigger>
+					{#snippet child({ props })}
+						<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+							<Button
+								{...props}
+								variant="outline"
+								role="combobox"
+								aria-expanded={open}
+								class="w-52 justify-between"
+							>
+								{kids.find(f => f.name === search)?.name ?? "Select a child..."}
+								<ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
+							</Button>
+							<p class="text-muted-foreground">
+								<span class="font-semibold text-accent-foreground">
+									{kids.filter(f => f.tally > 0).length}
+								</span>
+								nice children •{" "}
+								<span class="font-semibold text-accent-foreground">
+									{kids.filter(f => f.tally < 0).length}
+								</span> naughty children
+							</p>
+						</div>
+					{/snippet}
 				</Popover.Trigger>
 				<Popover.Content class="w-52 p-0">
 					<Command.Root>
@@ -75,9 +71,9 @@
 							{#each kids as kid}
 								<Command.Item
 									value={kid.name}
-									onSelect={currentValue => {
-										search = currentValue;
-										closeAndFocusTrigger(ids.trigger);
+									onSelect={() => {
+										search = kid.name;
+										open = false;
 									}}
 								>
 									<Check class={cn("mr-2 size-4", search !== kid.name && "text-transparent")} />

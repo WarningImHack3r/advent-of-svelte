@@ -5,8 +5,8 @@
 	import { VisLine, VisXYContainer } from "@unovis/svelte";
 	import * as Card from "$lib/components/ui/card";
 
-	let heartRate = 0;
-	let data: { id: number; heartRate: number }[] = [];
+	let heartRate = $state(0);
+	let data = $state<{ id: number; heartRate: number }[]>([]);
 	type ArrayElement<ArrayType extends readonly unknown[]> =
 		ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 	const x = (d: ArrayElement<typeof data>) => d.id;

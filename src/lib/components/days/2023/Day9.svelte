@@ -4,10 +4,10 @@
 	import { confetti } from "@neoconfetti/svelte";
 	import * as Card from "$lib/components/ui/card";
 
-	let days = -1;
-	let hours = -1;
-	let minutes = -1;
-	let seconds = -1;
+	let days = $state(-1);
+	let hours = $state(-1);
+	let minutes = $state(-1);
+	let seconds = $state(-1);
 
 	function updateTimer() {
 		const now = new Date();
