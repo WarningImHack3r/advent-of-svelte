@@ -238,16 +238,18 @@
 <div class="container my-8">
 	<Card.Root>
 		<Card.Header class="flex flex-row items-center gap-4 space-y-0">
-			<Tooltip.Root>
-				<Tooltip.Trigger>
-					{#snippet child({ props })}
-						<Button {...props} size="icon" href="." class="mr-6">
-							<ChevronLeft />
-						</Button>
-					{/snippet}
-				</Tooltip.Trigger>
-				<Tooltip.Content>Back to the dashboard</Tooltip.Content>
-			</Tooltip.Root>
+			<Tooltip.Provider>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button {...props} size="icon" href="." class="mr-6">
+								<ChevronLeft />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content>Back to the dashboard</Tooltip.Content>
+				</Tooltip.Root>
+			</Tooltip.Provider>
 			<ScrollText class="text-primary" />
 			<div class="flex flex-col">
 				<Card.Title>Christmas Card Creator</Card.Title>

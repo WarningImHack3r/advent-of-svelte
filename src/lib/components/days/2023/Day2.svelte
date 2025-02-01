@@ -45,7 +45,7 @@
 				variant="outline"
 				size="icon"
 				class="size-8 shrink-0 rounded-full"
-				on:click={() => updateCookiesCount(-1)}
+				onclick={() => updateCookiesCount(-1)}
 				disabled={cookiesCount <= 0}
 			>
 				<Minus class="size-4" />
@@ -78,7 +78,7 @@
 				variant="outline"
 				size="icon"
 				class="size-8 shrink-0 rounded-full"
-				on:click={() => updateCookiesCount(1)}
+				onclick={() => updateCookiesCount(1)}
 			>
 				<Plus class="size-4" />
 				<span class="sr-only">Increase</span>
@@ -99,7 +99,7 @@
 		</div>
 		<Button
 			class="w-full"
-			on:click={() => updateCookiesCount(-cookiesCount)}
+			onclick={() => updateCookiesCount(-cookiesCount)}
 			disabled={cookiesCount === 0}
 		>
 			Reset

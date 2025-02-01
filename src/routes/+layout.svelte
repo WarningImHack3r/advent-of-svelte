@@ -252,6 +252,7 @@
 					<img src="/github.svg" alt="GitHub" class="size-5 dark:invert" />
 					<span class="sr-only">GitHub</span>
 				</Button>
+
 				<DropdownMenu.Root bind:open={themeSwitcherOpen}>
 					<DropdownMenu.Trigger>
 						{#snippet child({ props })}
@@ -265,8 +266,9 @@
 									/>
 								</div>
 								<ChevronDown
-									class={"size-4 opacity-50 transition-transform" +
-										(themeSwitcherOpen ? " rotate-180" : "")}
+									class="size-4 opacity-50 transition-transform {themeSwitcherOpen
+										? 'rotate-180'
+										: ''}"
 								/>
 								<span class="sr-only">Change theme</span>
 							</Button>
@@ -278,7 +280,7 @@
 						<DropdownMenu.RadioGroup bind:value={theme}>
 							{#each themes as availableTheme}
 								<DropdownMenu.RadioItem
-									class="cursor-pointer data-[disabled]:opacity-100"
+									class="cursor-pointer data-[disabled]:opacity-75"
 									value={availableTheme.value}
 									disabled={theme === availableTheme.value}
 									onclick={() => {

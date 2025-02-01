@@ -23,23 +23,26 @@
 	);
 
 	let wasLastAdded = $state(false);
-	let weightLabel = $state("");
-	$effect(() => {
-		setTimeout(() => {
-			weightLabel =
-				sleighWeight > MAX_WEIGHT
-					? "Too heavy!"
-					: sleighWeight > MAX_WEIGHT / 2
-						? sleighWeight > MAX_WEIGHT * 0.9
-							? sleighWeight > MAX_WEIGHT * 0.99
-								? "Ready to go!"
-								: "Almost there!"
-							: "Kids will be happy!"
-						: sleighWeight > 0
-							? "Let's pack more!"
-							: "Empty sleigh";
-		}, 25);
+	let weightLabel = $derived.by(() => {
+		return sleighWeight > MAX_WEIGHT
+			? "Too heavy!"
+			: sleighWeight > MAX_WEIGHT / 2
+				? sleighWeight > MAX_WEIGHT * 0.9
+					? sleighWeight > MAX_WEIGHT * 0.99
+						? "Ready to go!"
+						: "Almost there!"
+					: "Kids will be happy!"
+				: sleighWeight > 0
+					? "Let's pack more!"
+					: "Empty sleigh";
 	});
+
+	function arePresentsEqual(
+		first: Awaited<typeof presents>[number],
+		second: Awaited<typeof presents>[number]
+	) {
+		return first.name === second.name && first.weight === second.weight;
+	}
 
 	// Day 13
 	// Returns a promise that resolves to an array of deliveries,
@@ -68,7 +71,7 @@
 </script>
 
 <Card.Root class="flex flex-col">
-	<Tabs.Root>
+	<Tabs.Root value="manual">
 		<Card.Header class="flex items-center justify-between gap-2 xs:flex-row">
 			<div class="flex flex-col gap-1.5">
 				<Card.Title class="flex items-center gap-2">
@@ -143,13 +146,13 @@
 						</Card.Root>
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
 							{#each presents as present, i}
+								{@const CheckComponent = selectedPresents.some(selected =>
+									arePresentsEqual(selected, present)
+								)
+									? SquareCheck
+									: Square}
 								<div
-									class={[
-										"relative rounded-lg border bg-card text-card-foreground shadow-sm",
-										{
-											"border-primary": selectedPresents.includes(present)
-										}
-									]}
+									class="relative rounded-lg border bg-card text-card-foreground shadow-sm has-[:checked]:border-primary"
 								>
 									<input
 										name="Present {i + 1}"
@@ -159,19 +162,17 @@
 											const checked = e.target?.checked ?? false;
 											wasLastAdded = checked;
 											if (checked) {
-												selectedPresents = [...selectedPresents, present];
+												selectedPresents.push(present);
 											} else {
-												selectedPresents = selectedPresents.filter(p => p !== present);
+												selectedPresents = selectedPresents.filter(
+													p => !arePresentsEqual(p, present)
+												);
 											}
 										}}
 									/>
 									<div class="flex min-w-max flex-col px-6 py-4 peer-checked:text-primary">
 										<div class="flex items-center gap-2">
-											{#if selectedPresents.includes(present)}
-												<SquareCheck class="size-4 text-primary" />
-											{:else}
-												<Square class="size-4 text-primary" />
-											{/if}
+											<CheckComponent class="size-4 text-primary" />
 											<span>{present.name}</span>
 										</div>
 										<span class="text-muted-foreground">{present.weight} kg</span>
