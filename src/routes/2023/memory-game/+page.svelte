@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from "svelte";
 	import { ChevronLeft, Club } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";
@@ -101,10 +102,10 @@
 	$effect(() => {
 		if (firstCard !== null && secondCard !== null) {
 			// Two cards have been flipped
-			tries++;
+			untrack(() => tries++);
 			if (firstCard === secondCard) {
 				// Match
-				pairsFoundIndex = [...pairsFoundIndex, firstCardIndex!, secondCardIndex!];
+				pairsFoundIndex.push(firstCardIndex!, secondCardIndex!);
 				// The score is the percentage of pairs found compared to the time it took to find them
 				score = calculateScore();
 				hideCards();
