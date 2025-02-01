@@ -7,13 +7,9 @@
 
 	let firstNames: string[] = [];
 	let lastNames: string[] = [];
-	let realName = "";
-	$: if (realName) {
-		error = "";
-		elfName = "";
-	}
-	let error = "";
-	let elfName = "";
+	let realName = $state("");
+	let error = $state("");
+	let elfName = $state("");
 
 	function generateName() {
 		const [firstName, lastName] = realName.split(" ");
@@ -62,7 +58,7 @@
 	<Card.Content class="flex flex-col gap-8">
 		<form
 			class="flex items-center gap-2"
-			on:submit={e => {
+			onsubmit={e => {
 				e.preventDefault();
 
 				if (realName.length < 1) {
@@ -80,6 +76,10 @@
 				placeholder="Your first and last name"
 				class="flex-1 bg-background"
 				bind:value={realName}
+				oninput={() => {
+					error = "";
+					elfName = "";
+				}}
 			/>
 			<Button type="submit" size="icon" disabled={realName.length < 1}>
 				<Dices class="size-5" />

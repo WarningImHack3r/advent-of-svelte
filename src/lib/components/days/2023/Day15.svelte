@@ -1,10 +1,20 @@
+<script lang="ts">
+	import { type Snippet } from "svelte";
+
+	type Props = {
+		children?: Snippet;
+		[key: string]: unknown;
+	};
+
+	let { ...props }: Props = $props();
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="160 110 170 220"
 	width="200"
 	height="230"
-	class={$$props.class}
-	{...$$props}
+	{...props}
 >
 	<ellipse
 		style="stroke: currentColor; fill: none; stroke-width: 5px;"
@@ -14,7 +24,7 @@
 		ry="85"
 	/>
 	<foreignObject x="163" y="112.5" width="174.5" height="175">
-		<slot />
+		{@render props.children?.()}
 	</foreignObject>
 	<rect
 		x="180"

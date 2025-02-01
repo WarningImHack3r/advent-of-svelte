@@ -5,35 +5,41 @@
 	import * as Card from "$lib/components/ui/card";
 	import * as Tabs from "$lib/components/ui/tabs";
 
-	export let presents: Promise<{ name: string; weight: number }[]>;
-	export let presents_v2: Promise<{ name: string; weight: number }[]>;
+	type Props = {
+		presents: Promise<{ name: string; weight: number }[]>;
+		presents_v2: Promise<{ name: string; weight: number }[]>;
+	};
+
+	let { presents, presents_v2 }: Props = $props();
 
 	const MAX_WEIGHT = 100;
 
 	// Day 3
-	let selectedPresents: Awaited<typeof presents> = [];
-	let sleighWeight = 0;
-	$: sleighWeight =
+	let selectedPresents: Awaited<typeof presents> = $state([]);
+	let sleighWeight = $derived(
 		Math.round(
 			(selectedPresents.reduce((acc, present) => acc + present.weight, 0) + Number.EPSILON) * 100
-		) / 100;
+		) / 100
+	);
 
-	let wasLastAdded = false;
-	let weightLabel = "";
-	$: setTimeout(() => {
-		weightLabel =
-			sleighWeight > MAX_WEIGHT
-				? "Too heavy!"
-				: sleighWeight > MAX_WEIGHT / 2
-					? sleighWeight > MAX_WEIGHT * 0.9
-						? sleighWeight > MAX_WEIGHT * 0.99
-							? "Ready to go!"
-							: "Almost there!"
-						: "Kids will be happy!"
-					: sleighWeight > 0
-						? "Let's pack more!"
-						: "Empty sleigh";
-	}, 25);
+	let wasLastAdded = $state(false);
+	let weightLabel = $state("");
+	$effect(() => {
+		setTimeout(() => {
+			weightLabel =
+				sleighWeight > MAX_WEIGHT
+					? "Too heavy!"
+					: sleighWeight > MAX_WEIGHT / 2
+						? sleighWeight > MAX_WEIGHT * 0.9
+							? sleighWeight > MAX_WEIGHT * 0.99
+								? "Ready to go!"
+								: "Almost there!"
+							: "Kids will be happy!"
+						: sleighWeight > 0
+							? "Let's pack more!"
+							: "Empty sleigh";
+		}, 25);
+	});
 
 	// Day 13
 	// Returns a promise that resolves to an array of deliveries,
@@ -101,8 +107,12 @@
 									<div class="grid grid-cols-1 grid-rows-1">
 										{#key sleighWeight}
 											<span
-												class="col-start-1 col-end-1 row-start-1 row-end-1 text-5xl font-semibold tabular-nums tracking-tighter text-accent-foreground"
-												class:text-red-500={sleighWeight > MAX_WEIGHT}
+												class={[
+													"col-start-1 col-end-1 row-start-1 row-end-1 text-5xl font-semibold tabular-nums tracking-tighter text-accent-foreground",
+													{
+														"text-red-500": sleighWeight > MAX_WEIGHT
+													}
+												]}
 												transition:blur
 											>
 												{sleighWeight.toFixed(sleighWeight > MAX_WEIGHT ? 1 : 2)}
@@ -114,10 +124,14 @@
 								<div class="mt-2 grid grid-cols-1 grid-rows-1">
 									{#key weightLabel}
 										<span
-											class="col-start-1 col-end-1 row-start-1 row-end-1 text-center text-sm text-muted-foreground"
-											class:text-primary={sleighWeight <= MAX_WEIGHT &&
-												sleighWeight > MAX_WEIGHT * 0.99}
-											class:text-red-500={sleighWeight > MAX_WEIGHT}
+											class={[
+												"col-start-1 col-end-1 row-start-1 row-end-1 text-center text-sm text-muted-foreground",
+												{
+													"text-primary":
+														sleighWeight <= MAX_WEIGHT && sleighWeight > MAX_WEIGHT * 0.99,
+													"text-red-500": sleighWeight > MAX_WEIGHT
+												}
+											]}
 											in:fly={{ y: -20 * (wasLastAdded ? 1 : -1) }}
 											out:fly={{ y: 20 * (wasLastAdded ? 1 : -1) }}
 										>
@@ -130,14 +144,18 @@
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
 							{#each presents as present, i}
 								<div
-									class="relative rounded-lg border bg-card text-card-foreground shadow-sm"
-									class:border-primary={selectedPresents.includes(present)}
+									class={[
+										"relative rounded-lg border bg-card text-card-foreground shadow-sm",
+										{
+											"border-primary": selectedPresents.includes(present)
+										}
+									]}
 								>
 									<input
 										name="Present {i + 1}"
 										type="checkbox"
 										class="peer absolute left-0 top-0 size-full cursor-pointer opacity-0"
-										on:change={e => {
+										onchange={e => {
 											const checked = e.target?.checked ?? false;
 											wasLastAdded = checked;
 											if (checked) {

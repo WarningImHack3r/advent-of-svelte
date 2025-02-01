@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { ChevronRight, type Component, ScrollText, Snowflake } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Separator } from "$lib/components/ui/separator";
@@ -37,13 +37,13 @@
 				{#each diys as diy, index}
 					<li class="flex flex-col justify-between gap-4 sm:flex-row">
 						<div class="flex gap-6">
-							<svelte:component this={diy.icon} class="size-12 min-w-8 text-primary" />
+							<diy.icon class="size-12 min-w-8 text-primary" />
 							<div class="flex flex-col">
 								<h4 class="text-lg font-semibold">{diy.name}</h4>
 								<p class="text-muted-foreground">{diy.description}</p>
 							</div>
 						</div>
-						<Button href={$page.url + diy.url} variant="outline" class="ml-auto self-center">
+						<Button href={page.url + diy.url} variant="outline" class="ml-auto self-center">
 							Visit
 							<ChevronRight class="ml-2 size-4" />
 						</Button>

@@ -3,7 +3,7 @@
 	import { onMount, type SvelteComponent } from "svelte";
 	import type { SvelteHTMLElements } from "svelte/elements";
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { ArrowUpRight, ChevronDown, Hammer, Moon, Monitor, Settings2, Sun } from "lucide-svelte";
 	import { toast } from "svelte-sonner";
 	import { ModeWatcher, resetMode, setMode } from "mode-watcher";
@@ -18,25 +18,26 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
 
-	export let data;
+	let { data, children } = $props();
 
 	// Year selector
-	let selectedYear = "Choose a year";
-	const maxComponents = 24;
-	$: if ($page.route.id) {
-		const currentPage = $page.route.id.split("/")[1];
+	let selectedYear = $state("Choose a year");
+	$effect(() => {
+		if (!page.route.id) return;
+		const currentPage = page.route.id.split("/")[1];
 		if (currentPage && data.years.map(route => route.year).includes(currentPage)) {
 			selectedYear = currentPage;
 		}
-	}
-	let yearSwitcherOpen = false;
+	});
+	const maxComponents = 24;
+	let yearSwitcherOpen = $state(false);
 
 	// Settings
-	let settingsOpen = false;
-	let isMaxParticlesValid = true;
-	let unsavedMaxParticles = $maxParticles;
-	let isSpeedValid = true;
-	let unsavedSpeed = $speed;
+	let settingsOpen = $state(false);
+	let isMaxParticlesValid = $state(true);
+	let unsavedMaxParticles = $state($maxParticles);
+	let isSpeedValid = $state(true);
+	let unsavedSpeed = $state($speed);
 
 	// Theme selector
 	type Theme = {
@@ -61,14 +62,12 @@
 			icon: Monitor
 		}
 	];
-	let theme: "light" | "dark" | "system";
-	let themeSwitcherOpen = false;
+	let theme = $state<"light" | "dark" | "system">("system");
+	let themeSwitcherOpen = $state(false);
 
 	onMount(() => {
 		if ("mode-watcher-mode" in localStorage) {
 			theme = localStorage["mode-watcher-mode"].replace(/"/g, "");
-		} else {
-			theme = "system";
 		}
 
 		const date = new Date();
@@ -83,7 +82,7 @@
 </script>
 
 <svelte:head>
-	<title>Advent of Svelte {$page.route.id?.split("/")[1]} | WarningImHack3r</title>
+	<title>Advent of Svelte {page.route.id?.split("/")[1]} | WarningImHack3r</title>
 </svelte:head>
 
 <Snowflakes class="pointer-events-none fixed inset-0 -z-10 h-screen w-screen" />
@@ -103,22 +102,26 @@
 		</a>
 		<div class="xs:ml-4">
 			<DropdownMenu.Root bind:open={yearSwitcherOpen}>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="ghost" class="gap-1 text-muted-foreground">
-						{#if (data.years.find(year => year.year === selectedYear)?.components ?? maxComponents) < maxComponents}
-							<Tooltip.Root>
-								<Tooltip.Trigger>
-									<Hammer class="mr-1 size-4" />
-								</Tooltip.Trigger>
-								<Tooltip.Content>Work in progress!</Tooltip.Content>
-							</Tooltip.Root>
-						{/if}
-						{selectedYear}
-						<ChevronDown
-							class={"size-4 transition-transform" + (yearSwitcherOpen ? " rotate-180" : "")}
-						/>
-						<span class="sr-only">Go to another year</span>
-					</Button>
+				<DropdownMenu.Trigger>
+					{#snippet child({ props })}
+						<Button {...props} variant="ghost" class="gap-1 text-muted-foreground">
+							{#if (data.years.find(year => year.year === selectedYear)?.components ?? maxComponents) < maxComponents}
+								<Tooltip.Provider>
+									<Tooltip.Root>
+										<Tooltip.Trigger>
+											<Hammer class="mr-1 size-4" />
+										</Tooltip.Trigger>
+										<Tooltip.Content>Work in progress!</Tooltip.Content>
+									</Tooltip.Root>
+								</Tooltip.Provider>
+							{/if}
+							{selectedYear}
+							<ChevronDown
+								class={"size-4 transition-transform" + (yearSwitcherOpen ? " rotate-180" : "")}
+							/>
+							<span class="sr-only">Go to another year</span>
+						</Button>
+					{/snippet}
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
@@ -130,7 +133,7 @@
 										? " data-[highlighted]:bg-transparent"
 										: "")}
 								value={year}
-								on:click={() => goto(`/${year}`)}
+								onclick={() => goto(`/${year}`)}
 							>
 								<div class="absolute inset-0">
 									{#if components > 0 && components < maxComponents}
@@ -200,7 +203,7 @@
 								min="10"
 								max="1000"
 								bind:value={unsavedMaxParticles}
-								on:input={e => {
+								oninput={e => {
 									isMaxParticlesValid = e.target?.checkValidity() ?? false;
 								}}
 								placeholder="Snowflakes quantity"
@@ -217,18 +220,18 @@
 								min="250"
 								max="5000"
 								bind:value={unsavedSpeed}
-								on:input={e => {
+								oninput={e => {
 									isSpeedValid = e.target?.checkValidity() ?? false;
 								}}
 								placeholder="Snowflakes speed"
 							/>
 						</div>
 						<Dialog.Footer class="mt-4">
-							<Button variant="secondary" on:click={() => (settingsOpen = false)}>Cancel</Button>
+							<Button variant="secondary" onclick={() => (settingsOpen = false)}>Cancel</Button>
 							<Button
 								type="submit"
 								disabled={!isMaxParticlesValid || !isSpeedValid}
-								on:click={() => {
+								onclick={() => {
 									settingsOpen = false;
 									$maxParticles = unsavedMaxParticles;
 									$speed = unsavedSpeed;
@@ -250,22 +253,24 @@
 					<span class="sr-only">GitHub</span>
 				</Button>
 				<DropdownMenu.Root bind:open={themeSwitcherOpen}>
-					<DropdownMenu.Trigger asChild let:builder>
-						<Button builders={[builder]} variant="ghost" size="icon" class="w-14 gap-1">
-							<div class="flex items-center">
-								<Sun
-									class="size-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+					<DropdownMenu.Trigger>
+						{#snippet child({ props })}
+							<Button {...props} variant="ghost" size="icon" class="w-14 gap-1">
+								<div class="flex items-center">
+									<Sun
+										class="size-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+									/>
+									<Moon
+										class="absolute size-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
+									/>
+								</div>
+								<ChevronDown
+									class={"size-4 opacity-50 transition-transform" +
+										(themeSwitcherOpen ? " rotate-180" : "")}
 								/>
-								<Moon
-									class="absolute size-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
-								/>
-							</div>
-							<ChevronDown
-								class={"size-4 opacity-50 transition-transform" +
-									(themeSwitcherOpen ? " rotate-180" : "")}
-							/>
-							<span class="sr-only">Change theme</span>
-						</Button>
+								<span class="sr-only">Change theme</span>
+							</Button>
+						{/snippet}
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
 						<DropdownMenu.Label>Theme</DropdownMenu.Label>
@@ -276,13 +281,13 @@
 									class="cursor-pointer data-[disabled]:opacity-100"
 									value={availableTheme.value}
 									disabled={theme === availableTheme.value}
-									on:click={() => {
+									onclick={() => {
 										return availableTheme.value === "system"
 											? resetMode()
 											: setMode(availableTheme.value);
 									}}
 								>
-									<svelte:component this={availableTheme.icon} class="mr-2 size-4" />
+									<availableTheme.icon class="mr-2 size-4" />
 									<span>{availableTheme.label}</span>
 								</DropdownMenu.RadioItem>
 							{/each}
@@ -294,7 +299,7 @@
 	</div>
 </header>
 
-<slot />
+{@render children?.()}
 
 <footer class="mt-auto w-full border-t bg-background py-4 xs:py-0">
 	<div class="mx-auto flex h-12 w-full items-center px-8">

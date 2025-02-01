@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
 	import { ChevronLeft, Club } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";
@@ -19,31 +18,32 @@
 		"6x7": [6, 7],
 		"6x8": [6, 8]
 	} as const;
-	let gridWidth = 4;
-	let gridHeight = 4;
-	let cards: number[] = [];
-	$: cards = Array.from({ length: 24 }, (_, i) => i + 1) // 1 to 24
-		.sort(() => Math.random() - 0.5) // shuffle
-		.slice(0, (gridWidth * gridHeight) / 2) // take the correct amount of cards
-		.flatMap(n => [n, n]) // duplicate
-		.sort(() => Math.random() - 0.5); // reshuffle
+	let gridWidth = $state(4);
+	let gridHeight = $state(4);
+	let cards = $derived(
+		Array.from({ length: 24 }, (_, i) => i + 1) // 1 to 24
+			.sort(() => Math.random() - 0.5) // shuffle
+			.slice(0, (gridWidth * gridHeight) / 2) // take the correct amount of cards
+			.flatMap(n => [n, n]) // duplicate
+			.sort(() => Math.random() - 0.5) // reshuffle
+	);
 
 	// Game state
-	let firstCard: number | null = null;
-	let secondCard: number | null = null;
-	let firstCardIndex: number | null = null;
-	let secondCardIndex: number | null = null;
-	let pairsFoundIndex: number[] = [];
+	let firstCard = $state<number | null>(null);
+	let secondCard = $state<number | null>(null);
+	let firstCardIndex = $state<number | null>(null);
+	let secondCardIndex = $state<number | null>(null);
+	let pairsFoundIndex = $state<number[]>([]);
 
-	let ready = true;
-	let gameStarted = false;
-	let timerStarted = false;
-	let timer = 0;
-	let interval: ReturnType<typeof setInterval>;
+	let ready = $state(true);
+	let gameStarted = $state(false);
+	let timerStarted = $state(false);
+	let timer = $state(0);
+	let interval = $state<ReturnType<typeof setInterval>>();
 
-	let cooldown = 2500;
-	let tries = 0;
-	let score = 0;
+	let cooldown = $state(2500);
+	let tries = $state(0);
+	let score = $state(0);
 
 	function hideCards(callback?: () => void) {
 		firstCard = null;
@@ -88,52 +88,57 @@
 		return Math.floor(baseScore + timeScore + tryScore);
 	}
 
-	$: if ((firstCard !== null || secondCard !== null) && !gameStarted) {
-		gameStarted = true;
-		timerStarted = true;
-		interval = setInterval(() => {
-			timer++;
-		}, 1000);
-	}
-
-	$: if (firstCard !== null && secondCard !== null) {
-		// Two cards have been flipped
-		tries++;
-		if (firstCard === secondCard) {
-			// Match
-			pairsFoundIndex = [...pairsFoundIndex, firstCardIndex!, secondCardIndex!];
-			// The score is the percentage of pairs found compared to the time it took to find them
-			score = calculateScore();
-			hideCards();
-			if (pairsFoundIndex.length === cards.length) {
-				// All pairs found
-				timerStarted = false;
-				clearInterval(interval);
-			}
-		} else {
-			// Reset
-			setTimeout(hideCards, cooldown);
+	$effect(() => {
+		if ((firstCard !== null || secondCard !== null) && !gameStarted) {
+			gameStarted = true;
+			timerStarted = true;
+			interval = setInterval(() => {
+				timer++;
+			}, 1000);
 		}
-	}
+	});
 
-	let localStorageHighScore: number | null;
-	onMount(() => {
+	$effect(() => {
+		if (firstCard !== null && secondCard !== null) {
+			// Two cards have been flipped
+			tries++;
+			if (firstCard === secondCard) {
+				// Match
+				pairsFoundIndex = [...pairsFoundIndex, firstCardIndex!, secondCardIndex!];
+				// The score is the percentage of pairs found compared to the time it took to find them
+				score = calculateScore();
+				hideCards();
+				if (pairsFoundIndex.length === cards.length) {
+					// All pairs found
+					timerStarted = false;
+					clearInterval(interval);
+				}
+			} else {
+				// Reset
+				setTimeout(hideCards, cooldown);
+			}
+		}
+	});
+
+	let localStorageHighScore = $state<number | null>();
+	$effect(() => {
 		localStorageHighScore = localStorage.getItem("memory-game-high-score")
 			? parseInt(localStorage.getItem("memory-game-high-score")!)
 			: null;
+		return () => clearInterval(interval);
 	});
-
-	onDestroy(() => clearInterval(interval));
 </script>
 
 <div class="container my-8">
 	<Card.Root>
 		<Card.Header class="flex flex-row items-center gap-4">
 			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} size="icon" href="." class="mr-6">
-						<ChevronLeft />
-					</Button>
+				<Tooltip.Trigger>
+					{#snippet child({ props })}
+						<Button {...props} size="icon" href="." class="mr-6">
+							<ChevronLeft />
+						</Button>
+					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content>Back to the dashboard</Tooltip.Content>
 			</Tooltip.Root>
@@ -145,8 +150,10 @@
 		</Card.Header>
 		<Card.Content>
 			<div
-				class="mt-8 flex flex-col gap-8 lg:mb-8 lg:grid lg:grid-cols-2"
-				class:max-lg:!flex-col-reverse={!timerStarted && gameStarted}
+				class={[
+					"mt-8 flex flex-col gap-8 lg:mb-8 lg:grid lg:grid-cols-2",
+					{ "max-lg:!flex-col-reverse": !timerStarted && gameStarted }
+				]}
 			>
 				<!-- Playing field -->
 				<div
@@ -160,7 +167,7 @@
 							secondCardIndex === index}
 						<button
 							type="button"
-							on:click={() => {
+							onclick={() => {
 								if (firstCard === null) {
 									firstCard = number;
 									firstCardIndex = index;
@@ -169,8 +176,12 @@
 									secondCardIndex = index;
 								}
 							}}
-							class="aspect-[7/10] h-32 shadow-lg duration-200 perspective-1000 [&:not(:disabled)]:hover:scale-105"
-							class:brightness-75={firstCard !== null && secondCard !== null && !isFlipped}
+							class={[
+								"aspect-[7/10] h-32 shadow-lg duration-200 perspective-1000 [&:not(:disabled)]:hover:scale-105",
+								{
+									"brightness-75": firstCard !== null && secondCard !== null && !isFlipped
+								}
+							]}
 							disabled={!ready
 								? true
 								: firstCard !== null && secondCard !== null
@@ -178,8 +189,10 @@
 									: isFlipped}
 						>
 							<div
-								class="relative size-full transition-transform duration-700 transform-style-3d"
-								class:rotate-y-180={isFlipped}
+								class={[
+									"relative size-full transition-transform duration-700 transform-style-3d",
+									isFlipped && "rotate-y-180"
+								]}
 							>
 								<!-- Back -->
 								<div
@@ -225,15 +238,17 @@
 								{localStorageHighScore ?? 0}
 							</p>
 							<AlertDialog.Root>
-								<AlertDialog.Trigger asChild let:builder>
-									<Button
-										builders={[builder]}
-										variant="destructive"
-										class="mt-8 lg:mt-16"
-										disabled={tries < 1}
-									>
-										Restart game
-									</Button>
+								<AlertDialog.Trigger>
+									{#snippet child({ props })}
+										<Button
+											{...props}
+											variant="destructive"
+											class="mt-8 lg:mt-16"
+											disabled={tries < 1}
+										>
+											Restart game
+										</Button>
+									{/snippet}
 								</AlertDialog.Trigger>
 								<AlertDialog.Content>
 									<AlertDialog.Header>
@@ -244,9 +259,7 @@
 									</AlertDialog.Header>
 									<AlertDialog.Footer>
 										<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-										<AlertDialog.Action on:click={() => resetGame(true)}>
-											Restart
-										</AlertDialog.Action>
+										<AlertDialog.Action onclick={() => resetGame(true)}>Restart</AlertDialog.Action>
 									</AlertDialog.Footer>
 								</AlertDialog.Content>
 							</AlertDialog.Root>
@@ -275,7 +288,7 @@
 								<span class="font-bold italic">New high score: {score}</span>
 							</p>
 						{/if}
-						<Button class="mt-16" on:click={() => resetGame(true)}>Start a new game</Button>
+						<Button class="mt-16" onclick={() => resetGame(true)}>Start a new game</Button>
 					</div>
 				{:else}
 					<!-- Game configuration -->
@@ -287,12 +300,15 @@
 							<!-- Grid size -->
 							<p><span class="font-bold">Grid size:</span> {gridWidth}x{gridHeight}</p>
 							<Slider
+								type="multiple"
 								max={Object.keys(gridPossibilities).length - 1}
 								step={1}
 								value={[Object.keys(gridPossibilities).indexOf(`${gridWidth}x${gridHeight}`)]}
 								onValueChange={([value]) => {
 									[gridWidth, gridHeight] =
-										gridPossibilities[Object.keys(gridPossibilities)[value]];
+										gridPossibilities[
+											Object.keys(gridPossibilities)[value] as typeof gridPossibilities
+										];
 									resetGame();
 								}}
 								class="mt-4"
@@ -300,11 +316,13 @@
 							<!-- Cooldown -->
 							<p class="mt-8"><span class="font-bold">Cooldown:</span> {cooldown / 1000}s</p>
 							<Slider
+								type="multiple"
 								min={500}
 								max={5000}
 								step={500}
 								value={[cooldown]}
 								onValueChange={([value]) => {
+									if (!value) return;
 									cooldown = value;
 								}}
 								class="mt-4"

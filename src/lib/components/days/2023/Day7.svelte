@@ -75,16 +75,12 @@
 			.join(" ");
 	}
 
-	let message = "";
-	$: morseMessage = translateToMorseCode(message);
-	$: if (message || !message) {
-		stop();
-	}
+	let message = $state("");
 
 	// Audio transcription of the Morse code
-	let isPlaying = false;
-	let elapsedTime = "0:00";
-	let totalTime = "0:00";
+	let isPlaying = $state(false);
+	let elapsedTime = $state("0:00");
+	let totalTime = $state("0:00");
 	let intervalId: ReturnType<typeof setInterval>;
 	const [send, receive] = crossfade({
 		duration: 800
@@ -170,6 +166,7 @@
 	}
 
 	onDestroy(() => clearInterval(intervalId));
+	let morseMessage = $derived(translateToMorseCode(message));
 </script>
 
 <Card.Root>
@@ -181,7 +178,13 @@
 		<Card.Description>Translate your message to Morse code to send it to Sven.</Card.Description>
 	</Card.Header>
 	<Card.Content class="flex flex-col gap-4">
-		<Input name="message" placeholder="Your message" class="bg-background" bind:value={message} />
+		<Input
+			name="message"
+			placeholder="Your message"
+			class="bg-background"
+			bind:value={message}
+			oninput={stop}
+		/>
 		<div>
 			{#if message.length > 0}
 				<p class="text-sm text-muted-foreground">Your message in Morse code:</p>
@@ -204,7 +207,7 @@
 									)}
 									in:send={{ key }}
 									out:receive={{ key }}
-									on:click={stop}
+									onclick={stop}
 								>
 									<Square class="text-primary" />
 								</button>
@@ -219,7 +222,7 @@
 									)}
 									in:send={{ key }}
 									out:receive={{ key }}
-									on:click={play}
+									onclick={play}
 								>
 									<Play class="text-primary" />
 								</button>

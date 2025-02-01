@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
 	import { localStorageStore } from "$lib/localStorageStore";
 
 	export let maxParticles = localStorageStore("snowMaxParticles", 100);
@@ -7,10 +7,15 @@
 
 <script lang="ts">
 	import { onMount, tick } from "svelte";
+	type Props = {
+		[key: string]: any;
+	};
 
-	let width: number;
-	let height: number;
-	let snowflakes: HTMLCanvasElement;
+	let { ...props }: Props = $props();
+
+	let width = $state(0);
+	let height = $state(0);
+	let snowflakes = $state<HTMLCanvasElement>();
 	let particles: {
 		x: number;
 		y: number;
@@ -141,6 +146,6 @@
 	});
 </script>
 
-<svelte:window on:resize={debounceResize} />
+<svelte:window onresize={debounceResize} />
 
-<canvas aria-hidden="true" bind:this={snowflakes} {width} {height} class={$$props.class}></canvas>
+<canvas aria-hidden="true" bind:this={snowflakes} {width} {height} class={props.class}></canvas>

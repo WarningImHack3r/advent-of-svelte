@@ -4,10 +4,10 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 
-	let cookiesCount = 0;
-	let lastAdjustmentPositive = false;
-	let cookiesLabel = "Cookie";
-	let comment = "Santa hasn't eaten any cookies yet.";
+	let cookiesCount = $state(0);
+	let lastAdjustmentPositive = $state(false);
+	let cookiesLabel = $state("Cookie");
+	let comment = $state("Santa hasn't eaten any cookies yet.");
 	function updateCookiesCount(adjustment: number) {
 		lastAdjustmentPositive = adjustment > 0;
 		cookiesCount += adjustment;

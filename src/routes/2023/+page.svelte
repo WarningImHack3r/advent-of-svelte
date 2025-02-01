@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { ChevronRight, Paintbrush } from "lucide-svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Tabs from "$lib/components/ui/tabs";
@@ -14,13 +14,13 @@
 	import Day9 from "$lib/components/days/2023/Day9.svelte";
 	import Day11 from "$lib/components/days/2023/Day11.svelte";
 
-	export let data;
+	let { data } = $props();
 
 	const dashboards = {
 		santa: "Santa's",
 		elves: "Elves"
 	} as const;
-	let currentDashboard: keyof typeof dashboards = "santa";
+	let currentDashboard: keyof typeof dashboards = $state("santa");
 </script>
 
 <div class="container my-8">
@@ -29,7 +29,7 @@
 			<span class="text-primary">{dashboards[currentDashboard]}</span>
 			Dashboard
 		</h2>
-		<Button href={$page.url + "/diy"} class="group ml-auto xs:ml-0">
+		<Button href={page.url + "/diy"} class="group ml-auto xs:ml-0">
 			<Paintbrush class="mr-2 size-6" />
 			<span class="hidden sm:block">DIYs</span>
 			<ChevronRight

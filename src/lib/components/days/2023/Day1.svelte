@@ -8,9 +8,13 @@
 	import * as Command from "$lib/components/ui/command";
 	import * as Popover from "$lib/components/ui/popover";
 
-	export let kids: Promise<{ name: string; tally: number }[]>;
-	let search = "";
-	let open = false;
+	type Props = {
+		kids: Promise<{ name: string; tally: number }[]>;
+	};
+
+	let { kids }: Props = $props();
+	let search = $state("");
+	let open = $state(false);
 
 	// We want to refocus the trigger button when the user selects
 	// an item from the list so users can continue navigating the
@@ -43,51 +47,55 @@
 				<Skeleton class="h-32 w-full" />
 			</div>
 		{:then kids}
-			<Popover.Root bind:open let:ids>
-				<Popover.Trigger asChild let:builder>
-					<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-						<Button
-							builders={[builder]}
-							variant="outline"
-							role="combobox"
-							aria-expanded={open}
-							class="w-52 justify-between"
-						>
-							{kids.find(f => f.name === search)?.name ?? "Select a child..."}
-							<ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
-						</Button>
-						<p class="text-muted-foreground">
-							<span class="font-semibold text-accent-foreground">
-								{kids.filter(f => f.tally > 0).length}
-							</span>
-							nice children •{" "}
-							<span class="font-semibold text-accent-foreground">
-								{kids.filter(f => f.tally < 0).length}
-							</span> naughty children
-						</p>
-					</div>
-				</Popover.Trigger>
-				<Popover.Content class="w-52 p-0">
-					<Command.Root>
-						<Command.Input placeholder="Search children..." />
-						<Command.Empty>No child found.</Command.Empty>
-						<Command.Group class="max-h-48 overflow-y-auto">
-							{#each kids as kid}
-								<Command.Item
-									value={kid.name}
-									onSelect={currentValue => {
-										search = currentValue;
-										closeAndFocusTrigger(ids.trigger);
-									}}
+			<Popover.Root bind:open>
+				{#snippet children({ ids })}
+					<Popover.Trigger asChild>
+						{#snippet children({ builder })}
+							<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+								<Button
+									builders={[builder]}
+									variant="outline"
+									role="combobox"
+									aria-expanded={open}
+									class="w-52 justify-between"
 								>
-									<Check class={cn("mr-2 size-4", search !== kid.name && "text-transparent")} />
-									{kid.name}
-									<span class="ml-auto text-muted-foreground">{kid.tally}</span>
-								</Command.Item>
-							{/each}
-						</Command.Group>
-					</Command.Root>
-				</Popover.Content>
+									{kids.find(f => f.name === search)?.name ?? "Select a child..."}
+									<ChevronsUpDown class="ml-2 size-4 shrink-0 opacity-50" />
+								</Button>
+								<p class="text-muted-foreground">
+									<span class="font-semibold text-accent-foreground">
+										{kids.filter(f => f.tally > 0).length}
+									</span>
+									nice children •{" "}
+									<span class="font-semibold text-accent-foreground">
+										{kids.filter(f => f.tally < 0).length}
+									</span> naughty children
+								</p>
+							</div>
+						{/snippet}
+					</Popover.Trigger>
+					<Popover.Content class="w-52 p-0">
+						<Command.Root>
+							<Command.Input placeholder="Search children..." />
+							<Command.Empty>No child found.</Command.Empty>
+							<Command.Group class="max-h-48 overflow-y-auto">
+								{#each kids as kid}
+									<Command.Item
+										value={kid.name}
+										onSelect={currentValue => {
+											search = currentValue;
+											closeAndFocusTrigger(ids.trigger);
+										}}
+									>
+										<Check class={cn("mr-2 size-4", search !== kid.name && "text-transparent")} />
+										{kid.name}
+										<span class="ml-auto text-muted-foreground">{kid.tally}</span>
+									</Command.Item>
+								{/each}
+							</Command.Group>
+						</Command.Root>
+					</Popover.Content>
+				{/snippet}
 			</Popover.Root>
 			{#if search}
 				{@const tally = kids.find(f => f.name === search)?.tally ?? 0}

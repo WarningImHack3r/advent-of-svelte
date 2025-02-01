@@ -13,7 +13,7 @@
 		alt: string;
 		show: boolean;
 	};
-	const imagesToShow: Image[] = [
+	const imagesToShow = $state<Image[]>([
 		{
 			src: "https://www.freeiconspng.com/uploads/snowman-png-29.png",
 			alt: "Snowman",
@@ -29,20 +29,22 @@
 			alt: "Santa Claus",
 			show: false
 		}
-	];
+	]);
 
-	let borderHex = "#000000";
-	let fillHex = "#ffffff";
+	let borderHex = $state("#000000");
+	let fillHex = $state("#ffffff");
 </script>
 
 <div class="container my-8">
 	<Card.Root>
 		<Card.Header class="flex flex-row items-center gap-4 space-y-0">
 			<Tooltip.Root>
-				<Tooltip.Trigger asChild let:builder>
-					<Button builders={[builder]} size="icon" href="." class="mr-6">
-						<ChevronLeft />
-					</Button>
+				<Tooltip.Trigger>
+					{#snippet child({ props })}
+						<Button {...props} size="icon" href="." class="mr-6">
+							<ChevronLeft />
+						</Button>
+					{/snippet}
 				</Tooltip.Trigger>
 				<Tooltip.Content>Back to the dashboard</Tooltip.Content>
 			</Tooltip.Root>
@@ -72,9 +74,9 @@
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-4">
 						<span class="font-semibold">Figures to show:</span>
-						{#each imagesToShow as { alt, show }, index}
+						{#each imagesToShow as { alt }, index}
 							<div class="flex items-center space-x-2">
-								<Checkbox id={index.toString()} bind:checked={show} />
+								<Checkbox id={index.toString()} bind:checked={imagesToShow[index]!.show} />
 								<Label for={index.toString()}>{alt}</Label>
 							</div>
 						{/each}
@@ -92,7 +94,7 @@
 						{/if}
 					</div>
 				</div>
-			</section></Card.Content
-		>
+			</section>
+		</Card.Content>
 	</Card.Root>
 </div>
