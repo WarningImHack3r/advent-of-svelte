@@ -20,7 +20,7 @@
 		santa: "Santa's",
 		elves: "Elves"
 	} as const;
-	let currentDashboard: keyof typeof dashboards = $state("santa");
+	let currentDashboard = $state<keyof typeof dashboards>("santa");
 </script>
 
 <div class="container my-8">

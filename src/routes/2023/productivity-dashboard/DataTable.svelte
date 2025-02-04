@@ -229,7 +229,7 @@
 	<div class="flex items-center justify-end space-x-2 py-4">
 		<div class="flex-1 text-sm text-muted-foreground">
 			{#if table.getColumn("elf")?.getFilterValue()}
-				<strong>{table.getPaginationRowModel().rows.length}</strong> out of
+				<strong>{table.getFilteredRowModel().rows.length}</strong> out of
 				<strong>{tableData.length}</strong> rows
 			{:else}
 				<strong>{table.getRowCount()}</strong> rows

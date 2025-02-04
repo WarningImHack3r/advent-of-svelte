@@ -15,7 +15,7 @@
 	const MAX_WEIGHT = 100;
 
 	// Day 3
-	let selectedPresents: Awaited<typeof presents> = $state([]);
+	let selectedPresents = $state<Awaited<typeof presents>>([]);
 	let sleighWeight = $derived(
 		Math.round(
 			(selectedPresents.reduce((acc, present) => acc + present.weight, 0) + Number.EPSILON) * 100
