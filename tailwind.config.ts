@@ -1,23 +1,10 @@
-import type { Config } from "tailwindcss";
-import defaultTheme from "tailwindcss/defaultTheme";
-import tailwindCss3d from "tailwindcss-3d";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
-	darkMode: ["class"],
-	content: ["./src/**/*.{html,js,svelte,ts}"],
-	safelist: ["dark"],
 	theme: {
 		container: {
 			center: true,
-			padding: "2rem",
-			screens: {
-				"2xl": "1400px"
-			}
-		},
-		screens: {
-			xs: "475px",
-			...defaultTheme.screens
+			padding: "2rem"
 		},
 		extend: {
 			colors: {
@@ -71,9 +58,6 @@ export default {
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)"
 			},
-			fontFamily: {
-				sans: [...defaultTheme.fontFamily.sans]
-			},
 			keyframes: {
 				"accordion-down": {
 					from: { height: "0" },
@@ -95,8 +79,5 @@ export default {
 			}
 		}
 	},
-	plugins: [tailwindcssAnimate, tailwindCss3d],
-	future: {
-		hoverOnlyWhenSupported: true
-	}
-} satisfies Config;
+	plugins: [tailwindcssAnimate]
+};
