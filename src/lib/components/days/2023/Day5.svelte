@@ -132,24 +132,24 @@
 		<div class="mb-16 grid w-full grid-cols-2 gap-8 xs:max-md:mb-10 lg:mb-10">
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{toysPerHour}</span>
-				<span class="uppercase text-muted-foreground">toys per hour</span>
+				<span class="text-muted-foreground uppercase">toys per hour</span>
 			</div>
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{minutesPerToy}</span>
-				<span class="uppercase text-muted-foreground">minutes per toy</span>
+				<span class="text-muted-foreground uppercase">minutes per toy</span>
 			</div>
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{mostProductiveElf}</span>
-				<span class="uppercase text-muted-foreground">most productive elf</span>
+				<span class="text-muted-foreground uppercase">most productive elf</span>
 			</div>
 			<div class="flex flex-col">
 				<span class="text-4xl font-semibold tracking-tighter">{completionRate}%</span>
-				<span class="uppercase text-muted-foreground">completion rate</span>
+				<span class="text-muted-foreground uppercase">completion rate</span>
 			</div>
 		</div>
 		<!-- Last activity marquee -->
 		<div
-			class="absolute bottom-0 left-0 right-0 rounded-b-lg border-t bg-background px-3 py-1.5 font-mono text-primary"
+			class="absolute right-0 bottom-0 left-0 rounded-b-lg border-t bg-background px-3 py-1.5 font-mono text-primary"
 		>
 			Last update: {lastUpdate}
 		</div>

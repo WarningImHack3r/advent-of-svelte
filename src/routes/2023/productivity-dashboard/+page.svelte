@@ -312,7 +312,7 @@
 								}}
 							/>
 						</VisXYContainer>
-						<div class="ml-8 mt-4 text-center">
+						<div class="mt-4 ml-8 text-center">
 							<VisBulletLegend items={[...elves].map(elf => ({ name: elf }))} />
 						</div>
 					</div>

@@ -45,8 +45,8 @@
 		<button
 			type="button"
 			class={[
-				"relative my-4 flex aspect-square h-52 select-none flex-col items-center justify-center gap-1 rounded-full bg-accent text-center text-2xl font-light tracking-tight shadow-md duration-300 transform-style-3d",
-				"before:absolute before:inset-0 before:animate-pulse before:rounded-full before:bg-accent/75 before:shadow-md before:content-[''] before:-translate-z-1 before:scale-110 after:absolute after:inset-0 after:animate-pulse after:rounded-full after:bg-accent/50 after:shadow-md after:content-[''] after:-translate-z-2 after:scale-[1.2] hover:scale-105 active:scale-95",
+				"transform-style-3d relative my-4 flex aspect-square h-52 flex-col items-center justify-center gap-1 rounded-full bg-accent text-center text-2xl font-light tracking-tight shadow-md duration-300 select-none",
+				"before:absolute before:inset-0 before:-translate-z-1 before:scale-110 before:animate-pulse before:rounded-full before:bg-accent/75 before:shadow-md before:content-[''] after:absolute after:inset-0 after:-translate-z-2 after:scale-[1.2] after:animate-pulse after:rounded-full after:bg-accent/50 after:shadow-md after:content-[''] hover:scale-105 active:scale-95",
 				{
 					"text-6xl !font-semibold": bpmText !== defaultBPMText
 				}
@@ -55,7 +55,7 @@
 		>
 			{bpmText}
 			{#if bpmText !== defaultBPMText}
-				<span class="text-lg font-normal uppercase tracking-normal text-muted-foreground">BPM</span>
+				<span class="text-lg font-normal tracking-normal text-muted-foreground uppercase">BPM</span>
 			{/if}
 		</button>
 		<span class="mt-6 text-center tracking-tight text-muted-foreground">

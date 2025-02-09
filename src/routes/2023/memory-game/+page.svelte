@@ -180,7 +180,7 @@
 								}
 							}}
 							class={[
-								"aspect-[7/10] h-32 shadow-lg duration-200 perspective-1000 [&:not(:disabled)]:hover:scale-105",
+								"perspective-1000 aspect-[7/10] h-32 shadow-lg duration-200 [&:not(:disabled)]:hover:scale-105",
 								{
 									"brightness-75": firstCard !== null && secondCard !== null && !isFlipped
 								}
@@ -193,7 +193,7 @@
 						>
 							<div
 								class={[
-									"relative size-full transition-transform duration-700 transform-style-3d",
+									"transform-style-3d relative size-full transition-transform duration-700",
 									isFlipped && "rotate-y-180"
 								]}
 							>
@@ -330,7 +330,7 @@
 								}}
 								class="mt-4"
 							/>
-							<p class="mt-12 text-lg italic text-muted-foreground">
+							<p class="mt-12 text-lg text-muted-foreground italic">
 								Start the game by flipping a card.
 							</p>
 						</Card.Content>

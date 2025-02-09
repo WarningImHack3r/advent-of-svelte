@@ -177,7 +177,7 @@
 				>
 					My Advent of Code
 					<ArrowUpRight
-						class="ml-2 size-4 transition-transform duration-300 group-hover:text-primary group-hover:-translate-y-1 group-hover:translate-x-1"
+						class="ml-2 size-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary"
 					/>
 				</Button>
 				<Dialog.Root bind:open={settingsOpen}>
@@ -259,10 +259,10 @@
 							<Button {...props} variant="ghost" size="icon" class="w-14 gap-1">
 								<div class="flex items-center">
 									<Sun
-										class="size-5 transition-all rotate-0 scale-100 dark:-rotate-90 dark:scale-0"
+										class="size-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90"
 									/>
 									<Moon
-										class="absolute size-5 transition-all rotate-90 scale-0 dark:rotate-0 dark:scale-100"
+										class="absolute size-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
 									/>
 								</div>
 								<ChevronDown

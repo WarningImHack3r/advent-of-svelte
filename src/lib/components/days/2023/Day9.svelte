@@ -67,21 +67,21 @@
 				</div>
 			{:else}
 				{#if days !== 0}
-					<span class="tabular-nums tracking-tighter">{days < 0 ? "--" : days}</span><span
+					<span class="tracking-tighter tabular-nums">{days < 0 ? "--" : days}</span><span
 						class="text-3xl font-light text-muted-foreground"
 					>
 						d
 					</span>
 				{/if}
 				{#if days !== 0 || hours !== 0}
-					<span class="tabular-nums tracking-tighter">{hours < 0 ? "--" : hours}</span><span
+					<span class="tracking-tighter tabular-nums">{hours < 0 ? "--" : hours}</span><span
 						class="text-3xl font-light text-muted-foreground"
 					>
 						h
 					</span>
 				{/if}
 				{#if days !== 0 || hours !== 0 || minutes !== 0}
-					<span class="tabular-nums tracking-tighter"
+					<span class="tracking-tighter tabular-nums"
 						>{minutes < 0
 							? "--"
 							: minutes.toLocaleString("en", {
@@ -90,7 +90,7 @@
 								})}</span
 					><span class="text-3xl font-light text-muted-foreground">m</span>
 				{/if}
-				<span class="tabular-nums tracking-tighter"
+				<span class="tracking-tighter tabular-nums"
 					>{seconds < 0
 						? "--"
 						: seconds.toLocaleString("en", {
