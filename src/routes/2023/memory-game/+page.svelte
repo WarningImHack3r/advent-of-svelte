@@ -180,7 +180,7 @@
 								}
 							}}
 							class={[
-								"perspective-1000 aspect-[7/10] h-32 shadow-lg duration-200 [&:not(:disabled)]:hover:scale-105",
+								"aspect-7/10 h-32 shadow-lg duration-200 perspective-normal enabled:hover:scale-105",
 								{
 									"brightness-75": firstCard !== null && secondCard !== null && !isFlipped
 								}
@@ -193,7 +193,7 @@
 						>
 							<div
 								class={[
-									"transform-style-3d relative size-full transition-transform duration-700",
+									"relative size-full transition-transform duration-700 transform-3d",
 									isFlipped && "rotate-y-180"
 								]}
 							>

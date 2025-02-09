@@ -152,7 +152,7 @@
 									? SquareCheck
 									: Square}
 								<div
-									class="relative rounded-lg border bg-card text-card-foreground shadow-sm has-[:checked]:border-primary"
+									class="relative rounded-lg border bg-card text-card-foreground shadow-sm has-checked:border-primary"
 								>
 									<input
 										name="Present {i + 1}"

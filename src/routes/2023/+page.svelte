@@ -45,7 +45,7 @@
 		<Tabs.Content value="santa">
 			<div
 				class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4
-				lg:[&>*:nth-child(2)]:col-span-2"
+				lg:*:nth-2:col-span-2"
 			>
 				<Day2 />
 				<Day3 presents={data.presents} presents_v2={data.presents_v2} />
@@ -58,7 +58,7 @@
 		<Tabs.Content value="elves">
 			<div
 				class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4
-				lg:[&>*:nth-child(1)]:col-span-2 lg:[&>*:nth-child(2)]:col-span-2"
+				lg:*:first:col-span-2 lg:*:nth-2:col-span-2"
 			>
 				<Day1 kids={data.kids} />
 				<Day5 />
