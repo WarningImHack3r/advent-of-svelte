@@ -229,7 +229,7 @@
 							{/if}
 						</div>
 						{#if isPlaying}
-							<p class="tabular-nums text-muted-foreground">{elapsedTime}/{totalTime}</p>
+							<p class="text-muted-foreground tabular-nums">{elapsedTime}/{totalTime}</p>
 						{/if}
 					</div>
 				</div>

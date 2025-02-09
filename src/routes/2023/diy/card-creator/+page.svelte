@@ -307,7 +307,7 @@
 			<!-- Card -->
 			<section>
 				<div
-					class="mx-auto grid aspect-[3/2] max-w-4xl grid-cols-6 grid-rows-4 rounded-2xl border-2 outline-offset-8"
+					class="mx-auto grid aspect-3/2 max-w-4xl grid-cols-6 grid-rows-4 rounded-2xl border-2 outline-offset-8"
 					style="
 					background-color: color-mix(in srgb, {cardBackgroundColors[
 						currentCardBackground

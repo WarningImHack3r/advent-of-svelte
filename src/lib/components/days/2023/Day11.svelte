@@ -90,7 +90,7 @@
 			<p class="text-red-500">{error}</p>
 		{:else if elfName}
 			<div class="flex flex-col gap-1">
-				<h4 class="uppercase text-muted-foreground">Your elf name:</h4>
+				<h4 class="text-muted-foreground uppercase">Your elf name:</h4>
 				<p class="text-2xl">{elfName}</p>
 			</div>
 		{/if}

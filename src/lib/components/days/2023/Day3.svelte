@@ -111,7 +111,7 @@
 										{#key sleighWeight}
 											<span
 												class={[
-													"col-start-1 col-end-1 row-start-1 row-end-1 text-5xl font-semibold tabular-nums tracking-tighter text-accent-foreground",
+													"col-start-1 col-end-1 row-start-1 row-end-1 text-5xl font-semibold tracking-tighter text-accent-foreground tabular-nums",
 													{
 														"text-red-500": sleighWeight > MAX_WEIGHT
 													}
@@ -152,12 +152,12 @@
 									? SquareCheck
 									: Square}
 								<div
-									class="relative rounded-lg border bg-card text-card-foreground shadow-sm has-[:checked]:border-primary"
+									class="relative rounded-lg border bg-card text-card-foreground shadow-sm has-checked:border-primary"
 								>
 									<input
 										name="Present {i + 1}"
 										type="checkbox"
-										class="peer absolute left-0 top-0 size-full cursor-pointer opacity-0"
+										class="peer absolute top-0 left-0 size-full cursor-pointer opacity-0"
 										onchange={e => {
 											const checked = e.target?.checked ?? false;
 											wasLastAdded = checked;
@@ -207,16 +207,16 @@
 					</div>
 				{:then data}
 					<!-- Deliveries list -->
-					<div class="flex max-h-[12.5rem] flex-col gap-2 overflow-y-auto overflow-x-hidden">
+					<div class="flex max-h-[12.5rem] flex-col gap-2 overflow-x-hidden overflow-y-auto">
 						{#each data.slice(0, 100) as delivery, i}
 							<Card.Root class="bg-accent/75 py-4">
-								<Card.Header class="flex-row items-baseline gap-1.5 space-y-0 px-4 pb-2 pt-0">
+								<Card.Header class="flex-row items-baseline gap-1.5 space-y-0 px-4 pt-0 pb-2">
 									<Card.Title>Delivery {i + 1}</Card.Title> •
 									<Card.Description class="text-base text-primary">
 										{delivery.reduce((acc, present) => acc + present.weight, 0).toFixed(2)}kg
 									</Card.Description>
 								</Card.Header>
-								<Card.Content class="overflow-x-auto text-nowrap p-0 px-4">
+								<Card.Content class="overflow-x-auto p-0 px-4 text-nowrap">
 									{#each delivery as present, i}
 										{#if i > 0}
 											<span class="text-muted-foreground"> • </span>
@@ -226,7 +226,7 @@
 								</Card.Content>
 							</Card.Root>
 						{/each}
-						<p class="mx-auto pb-2 text-center italic text-muted-foreground">
+						<p class="mx-auto pb-2 text-center text-muted-foreground italic">
 							For performance reasons, only the first 100 deliveries are displayed.
 						</p>
 					</div>
@@ -245,13 +245,13 @@
 								</span>
 								<span class="text-3xl font-medium text-muted-foreground">kg</span>
 							</span>
-							<span class="uppercase text-muted-foreground">avg. sled weight</span>
+							<span class="text-muted-foreground uppercase">avg. sled weight</span>
 						</div>
 						<div class="flex flex-col">
 							<span class="text-4xl font-semibold tracking-tighter">
 								{data.length}
 							</span>
-							<span class="uppercase text-muted-foreground">number of deliveries</span>
+							<span class="text-muted-foreground uppercase">number of deliveries</span>
 						</div>
 					</div>
 				{:catch error}
