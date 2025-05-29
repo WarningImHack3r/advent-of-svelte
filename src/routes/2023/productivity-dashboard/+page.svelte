@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronLeft, Gauge } from "lucide-svelte";
+	import { ChevronLeft, Gauge } from "@lucide/svelte";
 	import {
 		VisAxis,
 		VisBulletLegend,
@@ -125,8 +125,7 @@
 					<!-- Stats -->
 					<Skeleton class="h-10 w-28" />
 					<div class="mt-8 flex flex-wrap justify-center gap-8">
-						<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-						{#each Array(8) as _}
+						{#each Array(8), i (i)}
 							<Skeleton class="h-28 w-56" />
 						{/each}
 					</div>
@@ -206,14 +205,15 @@
 										<VisGroupedBar
 											orientation="horizontal"
 											roundedCorners={5}
-											x={d => d.id}
-											y={d => d.numberOfTasks}
-											color={d => ["#c9b037", "#b4b4b4", "#6a3805"][d.id]}
+											x={(d: ReturnType<typeof tasksToByElf>[number]) => d.id}
+											y={(d: ReturnType<typeof tasksToByElf>[number]) => d.numberOfTasks}
+											color={(d: ReturnType<typeof tasksToByElf>[number]) =>
+												["#c9b037", "#b4b4b4", "#6a3805"][d.id]}
 										/>
 									</VisXYContainer>
 								</div>
 								<div class="my-6 flex flex-col gap-8">
-									{#each orderedElves.slice(0, 3) as rank}
+									{#each orderedElves.slice(0, 3) as rank (rank.id)}
 										<div class="flex flex-col">
 											<p class="text-xl font-bold">{rank.elf}</p>
 											<p class="text-gray-500">{rank.numberOfTasks} tasks</p>
@@ -227,7 +227,7 @@
 							<h2 class="text-3xl font-bold">Least productive elves</h2>
 							<div class="flex justify-end gap-8">
 								<div class="my-6 flex flex-col gap-8">
-									{#each orderedElves.slice(-3).reverse() as rank}
+									{#each orderedElves.slice(-3).reverse() as rank (rank.id)}
 										<div class="flex flex-col">
 											<p class="text-xl font-bold">{rank.elf}</p>
 											<p class="text-gray-500">{rank.numberOfTasks} tasks</p>
@@ -239,9 +239,10 @@
 										<VisGroupedBar
 											orientation="horizontal"
 											roundedCorners={5}
-											x={d => d.id}
-											y={d => d.numberOfTasks}
-											color={d => ["#ef4444", "#b91c1c", "#7f1d1d"][d.id - orderedElves.length + 3]}
+											x={(d: ReturnType<typeof tasksToByElf>[number]) => d.id}
+											y={(d: ReturnType<typeof tasksToByElf>[number]) => d.numberOfTasks}
+											color={(d: ReturnType<typeof tasksToByElf>[number]) =>
+												["#ef4444", "#b91c1c", "#7f1d1d"][d.id - orderedElves.length + 3]}
 										/>
 									</VisXYContainer>
 								</div>
@@ -252,7 +253,7 @@
 					<!-- Stats -->
 					<h2 class="text-3xl font-bold">Stats</h2>
 					<div class="mt-8 flex flex-wrap justify-center gap-8">
-						{#each stats as stat}
+						{#each stats as stat, i (i)}
 							<Card.Root class="max-w-fit bg-accent/75">
 								<Card.Header>
 									<Card.Title class="text-nowrap text-muted-foreground">{stat.title}</Card.Title>
@@ -269,16 +270,17 @@
 					<div class="mt-8 w-full">
 						<VisXYContainer data={orderedDays}>
 							<VisLine
-								x={d => new Date(d.dayHour).getTime()}
+								x={(d: (typeof orderedDays)[number]) => new Date(d.dayHour).getTime()}
 								y={[...elves].map(elf => {
-									return d => d.tasks.find(task => task.elf === elf)?.numberOfTasks ?? 0;
+									return (d: (typeof orderedDays)[number]) =>
+										d.tasks.find(task => task.elf === elf)?.numberOfTasks ?? 0;
 								})}
 							/>
 							<VisAxis
 								type="x"
 								label="Date"
-								x={d => d.dayHour}
-								tickFormat={d =>
+								x={(d: (typeof orderedDays)[number]) => d.dayHour}
+								tickFormat={(d: (typeof orderedDays)[number]["dayHour"]) =>
 									new Date(d).toLocaleTimeString([], {
 										year: "numeric",
 										month: "numeric",
@@ -290,7 +292,9 @@
 							<VisAxis type="y" label="Production" numTicks={8} />
 							<VisTooltip {container} />
 							<VisCrosshair
-								template={d => {
+								x={undefined}
+								y={undefined}
+								template={(d: (typeof orderedDays)[number]) => {
 									const date = new Date(d.dayHour).toLocaleTimeString([], {
 										year: "numeric",
 										month: "numeric",

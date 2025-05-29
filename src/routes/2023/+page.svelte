@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { ChevronRight, Paintbrush } from "lucide-svelte";
+	import { ChevronRight, Paintbrush } from "@lucide/svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Tabs from "$lib/components/ui/tabs";
 	import Day1 from "$lib/components/days/2023/Day1.svelte";

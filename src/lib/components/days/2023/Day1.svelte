@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { tick } from "svelte";
-	import { Check, ChevronsUpDown, Frown, Gift } from "lucide-svelte";
+	import { Check, ChevronsUpDown, Frown, Gift } from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";
@@ -55,7 +54,7 @@
 								<span class="font-semibold text-accent-foreground">
 									{kids.filter(f => f.tally > 0).length}
 								</span>
-								nice children •{" "}
+								nice children •
 								<span class="font-semibold text-accent-foreground">
 									{kids.filter(f => f.tally < 0).length}
 								</span> naughty children
@@ -68,7 +67,7 @@
 						<Command.Input placeholder="Search children..." />
 						<Command.Empty>No child found.</Command.Empty>
 						<Command.Group class="max-h-48 overflow-y-auto">
-							{#each kids as kid}
+							{#each kids as kid, i (i)}
 								<Command.Item
 									value={kid.name}
 									onSelect={() => {

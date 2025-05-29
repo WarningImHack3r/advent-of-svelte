@@ -12,7 +12,7 @@
 		getPaginationRowModel,
 		getSortedRowModel
 	} from "@tanstack/table-core";
-	import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-svelte";
+	import { ChevronDown, ChevronLeft, ChevronRight } from "@lucide/svelte";
 	import type { Task } from "$lib/components/days/2023/Day5.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import {
@@ -255,7 +255,7 @@
 								<Pagination.Ellipsis />
 							</Pagination.Item>
 						{:else}
-							<Pagination.Item isVisible={currentPage === page.value}>
+							<Pagination.Item>
 								<Pagination.Link {page} isActive={currentPage === page.value}>
 									{page.value}
 								</Pagination.Link>

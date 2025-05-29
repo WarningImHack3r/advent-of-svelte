@@ -7,8 +7,11 @@
 
 <script lang="ts">
 	import { onMount, tick } from "svelte";
+	import type { ClassValue } from "svelte/elements";
+
 	type Props = {
-		[key: string]: any;
+		class?: ClassValue;
+		[key: string]: unknown;
 	};
 
 	let { ...props }: Props = $props();

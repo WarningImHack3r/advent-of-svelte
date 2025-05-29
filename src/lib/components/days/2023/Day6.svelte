@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onDestroy } from "svelte";
-	import { BoomBox } from "lucide-svelte";
+	import { BoomBox } from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import * as Card from "$lib/components/ui/card";
 	import { buttonVariants } from "$lib/components/ui/button";

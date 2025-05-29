@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronLeft, Snowflake } from "lucide-svelte";
+	import { ChevronLeft, Snowflake } from "@lucide/svelte";
 	import Snowflakes from "$lib/components/Snowflakes.svelte";
 	import Day15 from "$lib/components/days/2023/Day15.svelte";
 	import { Button } from "$lib/components/ui/button";
@@ -63,7 +63,7 @@
 			<Day15 class="relative mx-auto h-96 w-[22rem]" fill={fillHex} color={borderHex}>
 				<Snowflakes class="size-full rounded-full" />
 				<div class="absolute inset-0 mb-6 flex items-end justify-center">
-					{#each imagesToShow as { src, alt, show }}
+					{#each imagesToShow as { src, alt, show }, i (i)}
 						{#if show}
 							<img {src} {alt} class="h-12 align-bottom" />
 						{/if}
@@ -76,7 +76,7 @@
 				<div class="flex flex-col gap-4">
 					<div class="flex items-center gap-4">
 						<span class="font-semibold">Figures to show:</span>
-						{#each imagesToShow as { alt }, index}
+						{#each imagesToShow as { alt }, index (index)}
 							<div class="flex items-center space-x-2">
 								<Checkbox id={index.toString()} bind:checked={imagesToShow[index]!.show} />
 								<Label for={index.toString()}>{alt}</Label>

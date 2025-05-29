@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { blur, fly } from "svelte/transition";
-	import { Square, SquareCheck, Weight } from "lucide-svelte";
+	import { Square, SquareCheck, Weight } from "@lucide/svelte";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import * as Card from "$lib/components/ui/card";
 	import * as Tabs from "$lib/components/ui/tabs";
@@ -93,8 +93,7 @@
 					<div class="flex flex-col gap-4 lg:flex-row">
 						<Skeleton class="mr-6 aspect-square h-44 lg:mr-0" />
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
-							<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-							{#each Array(8) as _}
+							{#each Array(8), i (i)}
 								<Skeleton class="h-full w-32" />
 							{/each}
 						</div>
@@ -145,7 +144,7 @@
 							</Card.Content>
 						</Card.Root>
 						<div class="grid grid-flow-col grid-rows-2 gap-2 overflow-x-auto pr-6">
-							{#each presents as present, i}
+							{#each presents as present, i (i)}
 								{@const CheckComponent = selectedPresents.some(selected =>
 									arePresentsEqual(selected, present)
 								)
@@ -159,7 +158,7 @@
 										type="checkbox"
 										class="peer absolute top-0 left-0 size-full cursor-pointer opacity-0"
 										onchange={e => {
-											const checked = e.target?.checked ?? false;
+											const checked = e.currentTarget.checked ?? false;
 											wasLastAdded = checked;
 											if (checked) {
 												selectedPresents.push(present);
@@ -190,8 +189,7 @@
 			<Card.Content class="flex flex-col gap-8 pb-0 xs:flex-row">
 				{#await autoCompute()}
 					<div class="flex flex-1 flex-col gap-2 overflow-hidden">
-						<!-- eslint-disable-next-line @typescript-eslint/no-unused-vars -->
-						{#each Array(2) as _}
+						{#each Array(2), i (i)}
 							<Skeleton class="h-[5.6rem] w-full" />
 						{/each}
 					</div>
@@ -208,7 +206,7 @@
 				{:then data}
 					<!-- Deliveries list -->
 					<div class="flex max-h-[12.5rem] flex-col gap-2 overflow-x-hidden overflow-y-auto">
-						{#each data.slice(0, 100) as delivery, i}
+						{#each data.slice(0, 100) as delivery, i (i)}
 							<Card.Root class="bg-accent/75 py-4">
 								<Card.Header class="flex-row items-baseline gap-1.5 space-y-0 px-4 pt-0 pb-2">
 									<Card.Title>Delivery {i + 1}</Card.Title> •
@@ -217,8 +215,8 @@
 									</Card.Description>
 								</Card.Header>
 								<Card.Content class="overflow-x-auto p-0 px-4 text-nowrap">
-									{#each delivery as present, i}
-										{#if i > 0}
+									{#each delivery as present, j (j)}
+										{#if j > 0}
 											<span class="text-muted-foreground"> • </span>
 										{/if}
 										<span>{present.name} ({present.weight}kg)</span>

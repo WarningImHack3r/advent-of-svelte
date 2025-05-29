@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ComponentProps } from "svelte";
-	import { ArrowDownAZ, ArrowDownZA, ArrowUpDown } from "lucide-svelte";
+	import { ArrowDownAZ, ArrowDownZA, ArrowUpDown } from "@lucide/svelte";
 	import { type SortDirection } from "@tanstack/table-core";
 	import { Button } from "$lib/components/ui/button";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { ChevronRight, type Component, ScrollText, Snowflake } from "lucide-svelte";
+	import { ChevronRight, type Component, ScrollText, Snowflake } from "@lucide/svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Separator } from "$lib/components/ui/separator";
 	import * as Card from "$lib/components/ui/card";
@@ -34,7 +34,7 @@
 	<Card.Root class="mt-4 pt-6">
 		<Card.Content>
 			<ul>
-				{#each diys as diy, index}
+				{#each diys as diy, index (diy.url)}
 					<li class="flex flex-col justify-between gap-4 sm:flex-row">
 						<div class="flex gap-6">
 							<diy.icon class="size-12 min-w-8 text-primary" />

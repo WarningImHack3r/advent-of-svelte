@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from "svelte";
-	import { ChevronLeft, Club } from "lucide-svelte";
+	import { ChevronLeft, Club } from "@lucide/svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { Slider } from "$lib/components/ui/slider";
@@ -163,7 +163,7 @@
 					class="m-auto grid gap-4"
 					style="grid-template-columns: repeat({gridWidth}, max-content);"
 				>
-					{#each cards as number, index}
+					{#each cards as number, index (index)}
 						{@const isFlipped =
 							pairsFoundIndex.includes(index) ||
 							firstCardIndex === index ||
@@ -308,10 +308,10 @@
 								step={1}
 								value={[Object.keys(gridPossibilities).indexOf(`${gridWidth}x${gridHeight}`)]}
 								onValueChange={([value]) => {
-									[gridWidth, gridHeight] =
-										gridPossibilities[
-											Object.keys(gridPossibilities)[value] as typeof gridPossibilities
-										];
+									if (!value) return;
+									const s = Object.keys(gridPossibilities)[value];
+									if (!s) return;
+									[gridWidth, gridHeight] = gridPossibilities[s as keyof typeof gridPossibilities];
 									resetGame();
 								}}
 								class="mt-4"

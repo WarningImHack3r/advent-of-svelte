@@ -1,10 +1,18 @@
 <script lang="ts">
 	import "../app.css";
-	import { onMount, type SvelteComponent } from "svelte";
-	import type { SvelteHTMLElements } from "svelte/elements";
+	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-	import { ArrowUpRight, ChevronDown, Hammer, Moon, Monitor, Settings2, Sun } from "lucide-svelte";
+	import {
+		ArrowUpRight,
+		ChevronDown,
+		Hammer,
+		Moon,
+		Monitor,
+		Settings2,
+		Sun,
+		type Icon
+	} from "@lucide/svelte";
 	import { toast } from "svelte-sonner";
 	import { ModeWatcher, resetMode, setMode } from "mode-watcher";
 	import { cn } from "$lib/utils";
@@ -43,7 +51,7 @@
 	type Theme = {
 		value: typeof theme;
 		label: string;
-		icon: typeof SvelteComponent<SvelteHTMLElements["svg"]>;
+		icon: typeof Icon;
 	};
 	const themes: Theme[] = [
 		{
@@ -125,7 +133,7 @@
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="start">
 					<DropdownMenu.RadioGroup bind:value={selectedYear}>
-						{#each data.years as { year, components }}
+						{#each data.years as { year, components } (year)}
 							{@const progressPercentage = (components / maxComponents) * 100}
 							<DropdownMenu.RadioItem
 								class={"group flex cursor-pointer flex-col items-start [&>*:first-child]:top-[0.7rem] [&>*:not(:nth-child(2))]:z-10" +
@@ -177,7 +185,7 @@
 				>
 					My Advent of Code
 					<ArrowUpRight
-						class="ml-2 size-4 transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary"
+						class="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-primary"
 					/>
 				</Button>
 				<Dialog.Root bind:open={settingsOpen}>
@@ -204,7 +212,7 @@
 								max="1000"
 								bind:value={unsavedMaxParticles}
 								oninput={e => {
-									isMaxParticlesValid = e.target?.checkValidity() ?? false;
+									isMaxParticlesValid = e.currentTarget.checkValidity() ?? false;
 								}}
 								placeholder="Snowflakes quantity"
 							/>
@@ -221,7 +229,7 @@
 								max="5000"
 								bind:value={unsavedSpeed}
 								oninput={e => {
-									isSpeedValid = e.target?.checkValidity() ?? false;
+									isSpeedValid = e.currentTarget.checkValidity() ?? false;
 								}}
 								placeholder="Snowflakes speed"
 							/>
@@ -278,16 +286,13 @@
 						<DropdownMenu.Label>Theme</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.RadioGroup bind:value={theme}>
-							{#each themes as availableTheme}
+							{#each themes as availableTheme (availableTheme.label)}
 								<DropdownMenu.RadioItem
 									class="cursor-pointer data-[disabled]:opacity-75"
 									value={availableTheme.value}
 									disabled={theme === availableTheme.value}
-									onclick={() => {
-										return availableTheme.value === "system"
-											? resetMode()
-											: setMode(availableTheme.value);
-									}}
+									onclick={() =>
+										availableTheme.value === "system" ? resetMode() : setMode(availableTheme.value)}
 								>
 									<availableTheme.icon class="mr-2 size-4" />
 									<span>{availableTheme.label}</span>

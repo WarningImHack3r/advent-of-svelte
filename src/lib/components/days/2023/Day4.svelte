@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { blur } from "svelte/transition";
-	import { Heart, HeartPulse } from "lucide-svelte";
+	import { Heart, HeartPulse } from "@lucide/svelte";
 	import { VisLine, VisXYContainer } from "@unovis/svelte";
 	import * as Card from "$lib/components/ui/card";
 
@@ -56,7 +56,7 @@
 		<Heart class="size-12 text-pink-500 motion-safe:animate-pulse" />
 		<div class="absolute right-0 bottom-8 w-full overflow-x-hidden" dir="rtl">
 			<VisXYContainer {data} width={data.length * 10} height={40}>
-				<VisLine {x} {y} duration={0} color={"rgb(236 72 153 / .2)"} />
+				<VisLine {x} {y} duration={0} color="rgb(236 72 153 / .2)" />
 			</VisXYContainer>
 		</div>
 	</Card.Content>

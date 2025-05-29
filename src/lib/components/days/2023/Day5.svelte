@@ -10,7 +10,7 @@
 <script lang="ts">
 	import { onDestroy, onMount } from "svelte";
 	import { page } from "$app/state";
-	import { ArrowRight, Gauge } from "lucide-svelte";
+	import { ArrowRight, Gauge } from "@lucide/svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 
@@ -27,7 +27,7 @@
 		let obj: Record<string, number> = {};
 		let maxCount, maxElf;
 		for (let task of tasks) {
-			obj[task.elf] = ++obj[task.elf] || 1;
+			obj[task.elf] = (obj[task.elf] || 0) + 1;
 			if (!maxCount || obj[task.elf]! > maxCount) {
 				maxElf = task.elf;
 				maxCount = obj[task.elf];

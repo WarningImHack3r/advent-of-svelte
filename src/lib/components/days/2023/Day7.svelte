@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onDestroy } from "svelte";
 	import { crossfade } from "svelte/transition";
-	import { Languages, Play, Square } from "lucide-svelte";
+	import { Languages, Play, Square } from "@lucide/svelte";
 	import { cn } from "$lib/utils";
 	import { buttonVariants } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";

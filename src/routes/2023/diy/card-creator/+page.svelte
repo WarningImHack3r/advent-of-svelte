@@ -9,7 +9,7 @@
 		SHADOW_ITEM_MARKER_PROPERTY_NAME,
 		TRIGGERS
 	} from "svelte-dnd-action";
-	import { ChevronLeft, ScrollText } from "lucide-svelte";
+	import { ChevronLeft, ScrollText } from "@lucide/svelte";
 	import defaultTheme from "tailwindcss/defaultTheme";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
@@ -219,7 +219,11 @@
 	function updateTextAreaStyle(textArea: NonNullable<typeof focusedTextArea>) {
 		textArea.element.style.fontFamily = styles.fonts[textArea.settings.fontFamily].join(", ");
 		textArea.element.style.color = textArea.settings.textColor;
-		textArea.element.style.fontSize = styles.fontSizes[textArea.settings.fontSize][1].lineHeight;
+		const fontSizeElement = styles.fontSizes[textArea.settings.fontSize][1];
+		textArea.element.style.fontSize =
+			typeof fontSizeElement === "string"
+				? fontSizeElement
+				: (fontSizeElement?.lineHeight ?? textArea.element.style.fontSize);
 	}
 
 	function textAreaUnfocused() {
@@ -290,7 +294,7 @@
 			<!-- Card background picker -->
 			<div class="mx-auto flex items-center gap-4">
 				<span class="font-semibold">Background color:</span>
-				{#each cardBackgroundColors.entries() as [index, borderColor]}
+				{#each cardBackgroundColors.entries() as [index, borderColor] (index)}
 					<button
 						aria-label="Background color"
 						class={[
@@ -365,7 +369,7 @@
 					<div class="flex flex-col gap-4">
 						<div class="flex items-center gap-4">
 							<span class="font-semibold">Font:</span>
-							{#each Object.keys(styles["fonts"]) as style}
+							{#each Object.keys(styles["fonts"]) as style, i (i)}
 								<button
 									class={[
 										"underline-offset-4 hover:underline hover:decoration-foreground",
@@ -387,7 +391,7 @@
 						</div>
 						<div class="flex items-center gap-4">
 							<span class="font-semibold">Text color:</span>
-							{#each styles["colors"] as color}
+							{#each styles["colors"] as color (color)}
 								<button
 									aria-label="Text color"
 									class={[
@@ -408,7 +412,7 @@
 						</div>
 						<div class="flex items-center gap-4">
 							<span class="font-semibold">Font size:</span>
-							{#each Object.keys(styles["fontSizes"]) as size}
+							{#each Object.keys(styles["fontSizes"]) as size (size)}
 								<button
 									class={[
 										"underline-offset-4 hover:underline hover:decoration-foreground",
